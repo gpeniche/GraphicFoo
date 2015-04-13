@@ -115,6 +115,14 @@
     </Compile>
     <Compile Include="Parser.cs" />
     <Compile Include="Scanner.cs" />
+    <Compile Include="Memory\Variable.cs" />
+    <Compile Include="Memory\Procedure.cs" />
+    <Compile Include="Memory\GraphicFooType.cs" />
+    <Compile Include="Memory\ProgramMemory.cs" />
+    <Compile Include="Memory\VariableBlock.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Memory\" />
+  </ItemGroup>
 </Project>
