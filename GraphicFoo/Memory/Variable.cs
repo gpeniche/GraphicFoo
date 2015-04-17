@@ -2,17 +2,20 @@
 
 namespace GraphicFoo
 {
-	public class Variable
+	public class Variable : Identifier
 	{
 		public string name;
 		public GraphicFooType type;
-		public int dir;
 
-		public Variable (string name, GraphicFooType type, int dir)
+		public Variable (string name, string rawType)
 		{
 			this.name = name;
-			this.type = type;
-			this.dir = dir;
+			this.type = ParseType (rawType);
+		}
+
+		public override string ToString ()
+		{
+			return type.ToString () + " " + name;
 		}
 	}
 }

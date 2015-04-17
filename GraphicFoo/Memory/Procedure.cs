@@ -3,21 +3,30 @@ using System.Collections.Generic;
 
 namespace GraphicFoo
 {
-	public class Procedure
+	public class Procedure : Identifier
 	{
 		public string name;
 		public GraphicFooType type;
-		public int dir;
-		public VariableBlock procedureVariables;
-		public VariableBlock temporalVariables;
+		private VariableBlock procedureVariables;
 
-		public Procedure (string name, GraphicFooType type, int dir)
+		public Procedure (string name, string rawType, VariableBlock variableBlock)
 		{
 			this.name = name;
-			this.type = type;
-			this.dir = dir;
-			this.procedureVariables = new VariableBlock ();
-			this.temporalVariables = new VariableBlock ();
+			this.type = ParseType (rawType);
+			this.procedureVariables = 
+				(variableBlock == null) ? new VariableBlock () : variableBlock;
+		}
+
+		public void AddVariable (string id, string type)
+		{
+			Variable variable = new Variable (id, type);
+			procedureVariables.AddVariable (variable);
+		}
+
+		public override string ToString ()
+		{
+			return "Function: " + type.ToString () + " " + name +
+				"\nFunction variables: " + procedureVariables.ToString ();
 		}
 	}
 }

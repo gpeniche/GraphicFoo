@@ -12,14 +12,24 @@ namespace GraphicFoo
 			variables = new Dictionary <string, Variable> ();
 		}
 
-		private void AddVariable (Variable variable)
+		public void AddVariable (Variable variable)
 		{
 			variables.Add (variable.name, variable);
 		}
 
-		private Variable ReadVariable (string variableName)
+		public Variable ReadVariable (string variableName)
 		{
 			return variables [variableName];
+		}
+
+		public override string ToString () 
+		{
+			string output = "\n";
+			foreach (Variable variable in variables.Values)
+			{
+				output += variable.ToString () + "\n";
+			}
+			return output;
 		}
 	}
 }
