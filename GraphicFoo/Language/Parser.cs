@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 namespace GraphicFoo
 {
 	public class Parser
 	{
+		#region Parser Main
+
 		public const int _EOF = 0;
 		public const int _id = 1;
 		public const int _number = 2;
@@ -25,10 +28,16 @@ namespace GraphicFoo
 		// lookahead token
 		int errDist = minErrDist;
 
+		// Memory
+		public ProgramMemory programMemory;
+
 		public Parser (Scanner scanner)
 		{
 			this.scanner = scanner;
 			errors = new Errors ();
+
+			// Memory
+			this.programMemory = new ProgramMemory ();
 		}
 
 		void SynErr (int n)
@@ -101,30 +110,46 @@ namespace GraphicFoo
 				return StartOf (syFol);
 			}
 		}
+
+		#endregion
+
+		#region FOO Language
 	
 		void FOO ()
 		{
 			Program ();
-			Expect (0);
+			Expect ((int)TokenEnum.EOF);
 		}
 
 		void Program ()
 		{
-			while (StartOf (1)) {
+			while (StartOf ((int)TokenEnum.Id)) {
 				Declaration ();
 			}
 			Function ();
+			while (la.kind == (int)TokenEnum.Function) {
+				Function();
+			}
 		}
 
-		void Declaration ()
+		void Declaration (Procedure procedure = null)
 		{
 			Type ();
-			Assignation ();
+			string type = GetLastTokenValue ();
+			string id = Assignation ();
+			if (procedure == null) {
+				programMemory.AddGlobalVariable (id, type);
+			} else {
+				procedure.AddVariable (id, type);
+			}
 		}
 
 		void Function ()
 		{
-			FunctionHeader ();
+			Procedure procedure = FunctionHeader ();
+			while (StartOf ((int)TokenEnum.Id)) {
+				Declaration (procedure);
+			}
 			while (StartOf (2)) {
 				Statute ();
 			}
@@ -132,28 +157,43 @@ namespace GraphicFoo
 			EndFunction ();
 		}
 
-		void FunctionHeader ()
+		Procedure FunctionHeader ()
 		{
-			Expect (9);
-			Expect (1);
-			Expect (10);
-			if (StartOf (1)) {
+			Expect ((int)TokenEnum.Function);
+			Expect ((int)TokenEnum.Id);
+			string id = GetLastTokenValue ();
+			Expect ((int)TokenEnum.LeftParenthesis);
+
+			VariableBlock variables = null;
+
+			if (StartOf ((int)TokenEnum.Id)) {
+				variables = new VariableBlock ();
 				Type ();
-				Expect (1);
-				while (la.kind == 11) {
+				string varType = GetLastTokenValue ();
+				Expect ((int)TokenEnum.Id);
+				string varId = GetLastTokenValue ();
+				Variable variable = new Variable (varId, varType);
+				variables.AddVariable (variable);
+				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
 					Type ();
-					Expect (1);
+					varType = GetLastTokenValue ();
+					Expect ((int)TokenEnum.Id);
+					varId = GetLastTokenValue ();
+					variable = new Variable (varId, varType);
+					variables.AddVariable (variable);
 				}
 			}
-			Expect (12);
-			Expect (24);
+			Expect ((int)TokenEnum.RightParenthesis);
+			Expect ((int)TokenEnum.Colon);
 			Type ();
+			string type = GetLastTokenValue ();
+			return programMemory.AddProcedure (id, type, variables);
 		}
 
 		void Statute ()
 		{
-			if (la.kind == 1) {
+			if (la.kind == (int)TokenEnum.Id) {
 				Assignation ();
 			} else if (la.kind == 22) {
 				Condition ();
@@ -161,7 +201,7 @@ namespace GraphicFoo
 				Loop ();
 			} else if (la.kind == 20) {
 				Print ();
-			} else if (la.kind == 9) {
+			} else if (la.kind == (int)TokenEnum.Function) {
 				CallFunction ();
 			} else
 				SynErr (37);
@@ -181,7 +221,7 @@ namespace GraphicFoo
 
 		void Var ()
 		{
-			if (la.kind == 1) {
+			if (la.kind == (int)TokenEnum.Id) {
 				Get ();
 			} else if (la.kind == 2) {
 				Get ();
@@ -195,14 +235,16 @@ namespace GraphicFoo
 				SynErr (38);
 		}
 
-		void Assignation ()
+		string Assignation ()
 		{
-			Expect (1);
+			Expect ((int)TokenEnum.Id);
+			string id = GetLastTokenValue ();
 			if (la.kind == 8) {
 				Get ();
 				Expression ();
 			}
 			Expect (7);
+			return id;
 		}
 
 		void Condition ()
@@ -232,25 +274,25 @@ namespace GraphicFoo
 		void Print ()
 		{
 			Expect (20);
-			Expect (10);
+			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
-			Expect (12);
+			Expect ((int)TokenEnum.RightParenthesis);
 			Expect (7);
 		}
 
 		void CallFunction ()
 		{
-			Expect (9);
-			Expect (1);
-			Expect (10);
+			Expect ((int)TokenEnum.Function);
+			Expect ((int)TokenEnum.Id);
+			Expect ((int)TokenEnum.LeftParenthesis);
 			if (StartOf (3)) {
 				Expression ();
-				while (la.kind == 11) {
+				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
 					Expression ();
 				}
 			}
-			Expect (12);
+			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
 		void Type ()
@@ -299,17 +341,17 @@ namespace GraphicFoo
 		void LoopHeader ()
 		{
 			Expect (21);
-			Expect (10);
+			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
-			Expect (12);
+			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
 		void IfHeader ()
 		{
 			Expect (22);
-			Expect (10);
+			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
-			Expect (12);
+			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
 		void Exp ()
@@ -344,10 +386,10 @@ namespace GraphicFoo
 
 		void Factor ()
 		{
-			if (la.kind == 10) {
+			if (la.kind == (int)TokenEnum.LeftParenthesis) {
 				Get ();
 				Expression ();
-				Expect (12);
+				Expect ((int)TokenEnum.RightParenthesis);
 			} else if (StartOf (5)) {
 				if (la.kind == 30 || la.kind == 31) {
 					if (la.kind == 30) {
@@ -361,13 +403,36 @@ namespace GraphicFoo
 				SynErr (40);
 		}
 
+		#endregion
+
+		#region Token Utils
+
+		void DebugTokens () 
+		{
+			Console.WriteLine ("last:" + t.val + " lookahead:" + la.val);
+		}
+
+		string GetLastTokenValue () 
+		{
+			return t.val;
+		}
+
+		string GetNextTokenValue ()
+		{
+			return la.val;
+		}
+
+		#endregion
+
+		#region Parse Utils
+
 		public void Parse ()
 		{
 			la = new Token ();
 			la.val = "";		
 			Get ();
 			FOO ();
-			Expect (0);
+			Expect ((int)TokenEnum.EOF);
 
 		}
 
@@ -609,7 +674,10 @@ namespace GraphicFoo
 
 		};
 	}
-	// end Parser
+
+	#endregion
+
+	#region Errors
 
 	public class Errors
 	{
@@ -625,10 +693,10 @@ namespace GraphicFoo
 		{
 			string s;
 			switch (n) {
-			case 0:
+			case (int)TokenEnum.EOF:
 				s = "EOF expected";
 				break;
-			case 1:
+			case (int)TokenEnum.Id:
 				s = "id expected";
 				break;
 			case 2:
@@ -652,16 +720,16 @@ namespace GraphicFoo
 			case 8:
 				s = "\"=\" expected";
 				break;
-			case 9:
+			case (int)TokenEnum.Function:
 				s = "\"function\" expected";
 				break;
-			case 10:
+			case (int)TokenEnum.LeftParenthesis:
 				s = "\"(\" expected";
 				break;
-			case 11:
+			case (int)TokenEnum.Comma:
 				s = "\",\" expected";
 				break;
-			case 12:
+			case (int)TokenEnum.RightParenthesis:
 				s = "\")\" expected";
 				break;
 			case 13:
@@ -697,7 +765,7 @@ namespace GraphicFoo
 			case 23:
 				s = "\"else\" expected";
 				break;
-			case 24:
+			case (int)TokenEnum.Colon:
 				s = "\":\" expected";
 				break;
 			case 25:
@@ -788,4 +856,6 @@ namespace GraphicFoo
 		{
 		}
 	}
+
+	#endregion
 }
