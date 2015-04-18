@@ -42,7 +42,7 @@ namespace GraphicFoo
 
 		public UIView BlockView {
 			get {
-				var blockView = new UIView (new RectangleF(0, 0, 400, 100));
+				var blockView = new UIView (new RectangleF(260, 200, 400, 100));
 				//blockView.BackgroundColor = UIColor.Blue;
 
 				var backgroundImage = new UIImageView (new RectangleF(-36, -9, 400, 132));
