@@ -121,8 +121,15 @@
     <Compile Include="Main.cs" />
     <Compile Include="RootViewController.cs" />
     <Compile Include="SideMenuController.cs" />
-    <Compile Include="Parser.cs" />
-    <Compile Include="Scanner.cs" />
+    <Compile Include="Memory\Variable.cs" />
+    <Compile Include="Memory\Procedure.cs" />
+    <Compile Include="Memory\GraphicFooType.cs" />
+    <Compile Include="Memory\ProgramMemory.cs" />
+    <Compile Include="Memory\VariableBlock.cs" />
+    <Compile Include="Language\Parser.cs" />
+    <Compile Include="Language\Scanner.cs" />
+    <Compile Include="Language\TokenEnum.cs" />
+    <Compile Include="Memory\Identifier.cs" />
     <Compile Include="GridLayout.cs" />
     <Compile Include="LineLayout.cs" />
     <Compile Include="SimpleCollectionViewController.cs" />
@@ -131,6 +138,8 @@
     <Compile Include="WhileHeader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Memory\" />
+    <Folder Include="Language\" />
     <BundleResource Include="monkey.png" />
     <BundleResource Include="placeholder.png" />
     <BundleResource Include="Declaration.png" />
