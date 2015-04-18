@@ -9,6 +9,12 @@ namespace GraphicFoo
 
 		string Syntax { get; }
 
+		string Example { get; }
+
+		int Type { get; }
+
 		UIImage Image { get; }
+
+		UIView BlockView { get; }
 	}
 }

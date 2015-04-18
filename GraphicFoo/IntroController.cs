@@ -3,6 +3,7 @@ using System.Drawing;
 using UIKit;
 using Foundation;
 using CoreGraphics;
+using System.Linq;
 
 namespace GraphicFoo
 {
@@ -11,6 +12,9 @@ namespace GraphicFoo
 		SimpleCollectionViewController simpleCollectionViewController;
 		LineLayout lineLayout;
 		UICollectionViewFlowLayout flowLayout;
+		UIScrollView scrollView;
+		float insertPosition = 1;
+		int[] blocksOnView = new int[2];
 
 		public IntroController() : base(null, null)
 		{
@@ -20,7 +24,7 @@ namespace GraphicFoo
 		{
 			base.ViewDidLoad();
 
-			UIScrollView scrollView = new UIScrollView ();
+			scrollView = new UIScrollView ();
 			scrollView.Frame = new RectangleF(0, 0, (float)View.Frame.Size.Width, (float)View.Frame.Size.Height);
 
 
@@ -76,7 +80,7 @@ You can also drag the menu open from the right side of the screen";
 			secondButton.Frame = new RectangleF(310, 520, 220, 30);
 			secondButton.SetTitle("Run", UIControlState.Normal);
 			secondButton.TouchUpInside += (sender, e) => {
-				AddBlock();
+				//AddBlock();
 				new UIAlertView ("secondButton", "second", null, "OK", null).Show ();
 			};
 
@@ -120,15 +124,28 @@ You can also drag the menu open from the right side of the screen";
 		/// <summary>
 		/// Adds a button to the current view.
 		/// </summary>
-		public void AddBlock(){
-			var titlet = new UILabel(new RectangleF(260, 550, 320, 30));
-			titlet.Font = UIFont.SystemFontOfSize(24.0f);
-			titlet.TextAlignment = UITextAlignment.Center;
-			titlet.TextColor = UIColor.Blue;
-			titlet.Text = "added";
-
-			View.Add(titlet);
-			//new UIAlertView ("Title", this.number.ToString(), null, "OK", null).Show ();
+		public void AddBlock(UIView blockView, int typeOfBlock){
+			if (insertPosition != -1 || blocksOnView.Sum() == 0) {
+				foreach(UIView view in blockView.Subviews){
+					if (view.Tag == 1) {
+						((UIButton)view).TouchUpInside += (sender, e) => {
+							insertPosition = (float) blockView.Frame.Location.Y + (float)blockView.Frame.Size.Height;
+							blocksOnView[typeOfBlock]++;
+							//new UIAlertView ("insertPosition", insertPosition.ToString(), null, "OK", null).Show ();
+						};
+					}else if(view.Tag == 2){
+						((UIButton)view).TouchUpInside += (sender, e) => {
+							blockView.RemoveFromSuperview();
+							blocksOnView[typeOfBlock]--;
+							//new UIAlertView ("removing", "removing", null, "OK", null).Show ();
+						};
+					}
+					//new UIAlertView ("secondButton", view.ToString(), null, "OK", null).Show ();
+				}
+				blockView.Frame = new CGRect (blockView.Frame.X, insertPosition, blockView.Frame.Width, blockView.Frame.Height);
+				View.AddSubview(blockView);
+			}
+			insertPosition = -1;
 		}
 	}
 }

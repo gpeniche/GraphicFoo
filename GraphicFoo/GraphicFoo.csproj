@@ -124,11 +124,15 @@
     <Compile Include="SimpleCollectionViewController.cs" />
     <Compile Include="IBlock.cs" />
     <Compile Include="Declaration.cs" />
+    <Compile Include="WhileHeader.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="monkey.png" />
     <BundleResource Include="placeholder.png" />
     <BundleResource Include="Declaration.png" />
     <BundleResource Include="Whileheader.png" />
+    <BundleResource Include="delete-icon.png" />
+    <BundleResource Include="circle-empty.png" />
+    <BundleResource Include="circle-full.png" />
   </ItemGroup>
 </Project>

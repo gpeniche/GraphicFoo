@@ -12,7 +12,7 @@ namespace GraphicFoo
     {
 		static NSString blockCellId = new NSString ("BlockCell");
         static NSString headerId = new NSString ("Header");
-        List<IBlock> blocks;
+		List<IBlock> blocks;
 		public IntroController introController;
 
 		public void SetParentController(IntroController intro){
@@ -22,9 +22,8 @@ namespace GraphicFoo
         public SimpleCollectionViewController (UICollectionViewLayout layout) : base (layout)
         {
             blocks = new List<IBlock> ();
-            for (int i = 0; i < 15; i++) {
-                blocks.Add (new Declaration ());
-            }
+            blocks.Add (new Declaration ());
+			blocks.Add (new WhileHeader ());
         }
 
         public override void ViewDidLoad ()
@@ -60,22 +59,19 @@ namespace GraphicFoo
 
 			Console.WriteLine(indexPath.Row);
 
-			switch (indexPath.Row) {
-			case 1: // Declaration
-				blockCell.title = "Declaration";
-				Console.WriteLine("Case 1");
-				break;
-			case 2: //Whileheader
-				blockCell.title = "Whileheader";
-				Console.WriteLine("Case 2");
-				break;
-			default:
-				blockCell.title = "Whileheader";
-				Console.WriteLine("Default case");
-				break;
-			}
+			blockCell.title = block.Name;
+			blockCell.SetTitle ();
 
-			blockCell.SetImage();
+			blockCell.example = block.Example;
+			blockCell.SetExample ();
+
+			blockCell.view.Add(block.BlockView);
+			//blockCell.view = block.BlockView;
+
+			blockCell.typeOfBlock = block.Type;
+
+			blockCell.imageView = block.Image;
+			blockCell.SetImage ();
 
 			blockCell.SetParentController (this.introController);
 
@@ -168,8 +164,11 @@ namespace GraphicFoo
         public UIImage imageView;
 		public NSIndexPath IndexPath;
 		public string title;
+		public string example;
 		UIButton blockAction;
 		public IntroController introController;
+		public List<UIView> view = new List<UIView>();
+		public int typeOfBlock;
 
         [Export ("initWithFrame:")]
 		public BlockCell (CGRect frame) : base (frame)
@@ -181,41 +180,49 @@ namespace GraphicFoo
             ContentView.Layer.BorderColor = UIColor.LightGray.CGColor;
             ContentView.Layer.BorderWidth = 2.0f;
             ContentView.BackgroundColor = UIColor.White;
-//			ContentView.Frame = new CGRect (0, 0, 260, 200);
             ContentView.Transform = CGAffineTransform.MakeScale (0.8f, 0.8f);
-
-			var titleLabel = new UILabel(new RectangleF(0, 50, 320, 30));
-			titleLabel.Font = UIFont.SystemFontOfSize(24.0f);
-			titleLabel.TextAlignment = UITextAlignment.Center;
-			titleLabel.TextColor = UIColor.Blue;
-			titleLabel.Text = "Block";
 
             /*imageView = new UIImageView (UIImage.FromBundle ("placeholder.png"));
             imageView.Center = ContentView.Center;
             imageView.Transform = CGAffineTransform.MakeScale (0.7f, 0.7f);*/
 
 			// add ok button
-			blockAction = UIButton.FromType(UIButtonType.RoundedRect);
-			blockAction.Frame = new System.Drawing.RectangleF(50, 100, 100, 100);
+			blockAction = UIButton.FromType(UIButtonType.Custom);
+			blockAction.Frame = new RectangleF(-10, 50, 280, 130);
 
 			ContentView.Add(blockAction);
-			ContentView.Add(titleLabel);
-
-			var titleTest = new UILabel(new CGRect(260, 500, 320, 30));
-			titleTest.Font = UIFont.SystemFontOfSize(24.0f);
-			titleTest.TextAlignment = UITextAlignment.Center;
-			titleTest.TextColor = UIColor.Blue;
-			titleTest.Text = "Sidebar Navigation";
 
 
 			blockAction.TouchUpInside += (sender, e) => {
-				introController.AddBlock();
-				//new UIAlertView ("Title", title, null, "OK", null).Show ();
+				UIView blockViewInstance = this.view[this.view.Count - 1];
+				this.view.Add(blockViewInstance);
+				introController.AddBlock(this.view[this.view.Count - 1], typeOfBlock);
+				new UIAlertView ("Title", sender.ToString(), null, "OK", null).Show ();
 			};
         } 
 
+		public void SetTitle(){
+			var titleLabel = new UILabel(new RectangleF(-50, 10, 320, 30));
+			titleLabel.Font = UIFont.SystemFontOfSize(24.0f);
+			titleLabel.TextAlignment = UITextAlignment.Center;
+			titleLabel.TextColor = UIColor.White;
+			titleLabel.Text = title;
+
+			ContentView.Add(titleLabel);
+		}
+
+		public void SetExample(){
+			var exampleLabel = new UILabel(new RectangleF(50, 90, 150, 50));
+			exampleLabel.Font = UIFont.SystemFontOfSize(18.0f);
+			exampleLabel.TextAlignment = UITextAlignment.Center;
+			exampleLabel.TextColor = UIColor.White;
+			exampleLabel.Text = example;
+
+			ContentView.Add(exampleLabel);
+		}
+
 		public void SetImage(){
-			blockAction.SetImage (UIImage.FromBundle (title + ".png"), UIControlState.Normal);
+			blockAction.SetImage (imageView, UIControlState.Normal);
 		}
 
 		public void SetParentController(IntroController intro){
