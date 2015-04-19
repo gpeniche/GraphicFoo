@@ -122,10 +122,13 @@
     <Compile Include="Language\Scanner.cs" />
     <Compile Include="Language\TokenEnum.cs" />
     <Compile Include="Memory\Identifier.cs" />
+    <Compile Include="Quadruple\Quadruple.cs" />
+    <Compile Include="Quadruple\Operators.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
+    <Folder Include="Quadruple\" />
   </ItemGroup>
 </Project>

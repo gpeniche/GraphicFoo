@@ -7,6 +7,12 @@ namespace GraphicFoo
 		public string name;
 		public GraphicFooType type;
 
+		public Variable (string name, GraphicFooType type)
+		{
+			this.name = name;
+			this.type = type;
+		}
+
 		public Variable (string name, string rawType)
 		{
 			this.name = name;

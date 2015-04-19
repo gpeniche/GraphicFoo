@@ -9,7 +9,10 @@ namespace GraphicFoo
 		public GraphicFooType type;
 		private VariableBlock procedureVariables;
 
-		public Procedure (string name, string rawType, VariableBlock variableBlock)
+		public Procedure (
+			string name, 
+			string rawType, 
+			VariableBlock variableBlock)
 		{
 			this.name = name;
 			this.type = ParseType (rawType);
@@ -23,10 +26,15 @@ namespace GraphicFoo
 			procedureVariables.AddVariable (variable);
 		}
 
+		public Variable ReadVariable (string id)
+		{
+			return procedureVariables.ReadVariable (id);
+		}
+
 		public override string ToString ()
 		{
 			return "Function: " + type.ToString () + " " + name +
-				"\nFunction variables: " + procedureVariables.ToString ();
+			"\nFunction variables: " + procedureVariables.ToString ();
 		}
 	}
 }

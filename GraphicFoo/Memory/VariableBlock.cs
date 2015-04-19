@@ -19,14 +19,23 @@ namespace GraphicFoo
 
 		public Variable ReadVariable (string variableName)
 		{
-			return variables [variableName];
+			Variable value = null;
+
+			if (variables.TryGetValue (variableName, out value)) {
+				return value;
+			}
+			return value;
 		}
 
-		public override string ToString () 
+		public bool Contains (string key)
+		{
+			return variables.ContainsKey (key);
+		}
+
+		public override string ToString ()
 		{
 			string output = "\n";
-			foreach (Variable variable in variables.Values)
-			{
+			foreach (Variable variable in variables.Values) {
 				output += variable.ToString () + "\n";
 			}
 			return output;

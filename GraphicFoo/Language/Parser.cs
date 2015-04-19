@@ -38,7 +38,14 @@ namespace GraphicFoo
 
 			// Memory
 			this.programMemory = new ProgramMemory ();
+
+			// Stacks
+			Quadruple.Initialize ();
 		}
+
+		#endregion
+
+		#region Match
 
 		void SynErr (int n)
 		{
@@ -103,7 +110,9 @@ namespace GraphicFoo
 				return false;
 			} else {
 				SynErr (n);
-				while (!(set [syFol, kind] || set [repFol, kind] || set [0, kind])) {
+				while (!(set [syFol, kind] || 
+					set [repFol, kind] || 
+					set [0, kind])) {
 					Get ();
 					kind = la.kind;
 				}
@@ -114,7 +123,7 @@ namespace GraphicFoo
 		#endregion
 
 		#region FOO Language
-	
+
 		void FOO ()
 		{
 			Program ();
@@ -128,7 +137,7 @@ namespace GraphicFoo
 			}
 			Function ();
 			while (la.kind == (int)TokenEnum.Function) {
-				Function();
+				Function ();
 			}
 		}
 
@@ -150,7 +159,7 @@ namespace GraphicFoo
 			while (StartOf ((int)TokenEnum.Id)) {
 				Declaration (procedure);
 			}
-			while (StartOf (2)) {
+			while (StartOf ((int)TokenEnum.Number)) {
 				Statute ();
 			}
 			Return ();
@@ -219,20 +228,31 @@ namespace GraphicFoo
 			Expect (13);
 		}
 
-		void Var ()
+		Variable Var ()
 		{
 			if (la.kind == (int)TokenEnum.Id) {
 				Get ();
-			} else if (la.kind == 2) {
+				string id = GetLastTokenValue ();
+				return programMemory.DebugFindVariable (id);
+			} else if (la.kind == (int)TokenEnum.Number ||
+			           la.kind == (int)TokenEnum.String ||
+			           la.kind == (int)TokenEnum.True ||
+			           la.kind == (int)TokenEnum.False) {
+				GraphicFooType type;
+				if (la.kind == (int)TokenEnum.Number) {
+					type = GraphicFooType.Number;
+				} else if (la.kind == (int)TokenEnum.String) {
+					type = GraphicFooType.String;
+				} else {
+					type = GraphicFooType.Boolean;
+				}
 				Get ();
-			} else if (la.kind == 3) {
-				Get ();
-			} else if (la.kind == 4) {
-				Get ();
-			} else if (la.kind == 5) {
-				Get ();
-			} else
+				string constant = GetLastTokenValue ();
+				return programMemory.AddConstant (constant, type);
+			} else {
 				SynErr (38);
+				return null;
+			}
 		}
 
 		string Assignation ()
@@ -250,12 +270,12 @@ namespace GraphicFoo
 		void Condition ()
 		{
 			IfHeader ();
-			while (StartOf (2)) {
+			while (StartOf ((int)TokenEnum.Number)) {
 				Statute ();
 			}
 			if (la.kind == 23) {
 				Get ();
-				while (StartOf (2)) {
+				while (StartOf ((int)TokenEnum.Number)) {
 					Statute ();
 				}
 			}
@@ -265,7 +285,7 @@ namespace GraphicFoo
 		void Loop ()
 		{
 			LoopHeader ();
-			while (StartOf (2)) {
+			while (StartOf ((int)TokenEnum.Number)) {
 				Statute ();
 			}
 			EndLoop ();
@@ -285,7 +305,7 @@ namespace GraphicFoo
 			Expect ((int)TokenEnum.Function);
 			Expect ((int)TokenEnum.Id);
 			Expect ((int)TokenEnum.LeftParenthesis);
-			if (StartOf (3)) {
+			if (StartOf ((int)TokenEnum.String)) {
 				Expression ();
 				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
@@ -312,19 +332,27 @@ namespace GraphicFoo
 		void Expression ()
 		{
 			Exp ();
-			if (StartOf (4)) {
-				if (la.kind == 25) {
+			if (StartOf ((int)TokenEnum.True)) {
+				Operators op;
+				if (la.kind == (int)TokenEnum.Greater) {
 					Get ();
-				} else if (la.kind == 26) {
+					op = Operators.Greater;
+				} else if (la.kind == (int)TokenEnum.Lesser) {
 					Get ();
-				} else if (la.kind == 27) {
+					op = Operators.Lesser;
+				} else if (la.kind == (int)TokenEnum.Unequal) {
 					Get ();
-				} else if (la.kind == 28) {
+					op = Operators.Unequal;
+				} else if (la.kind == (int)TokenEnum.Equals) {
 					Get ();
+					op = Operators.Equal;
 				} else {
 					Get ();
+					op = Operators.Concatenation;
 				}
+				Quadruple.operatorStack.Push (op);
 				Exp ();
+				Quadruple.CreateRelationalQuadruple ();
 			}
 		}
 
@@ -357,48 +385,73 @@ namespace GraphicFoo
 		void Exp ()
 		{
 			Term ();
-			while (la.kind == 30 || la.kind == 31 || la.kind == 32) {
-				if (la.kind == 30) {
+			Quadruple.CreateAdditiveQuadruple ();
+			while (la.kind == (int)TokenEnum.Plus || 
+				la.kind == (int)TokenEnum.Minus || 
+				la.kind == (int)TokenEnum.Or) {
+				Operators op;
+				if (la.kind == (int)TokenEnum.Plus) {
 					Get ();
-				} else if (la.kind == 31) {
+					op = Operators.Plus;
+				} else if (la.kind == (int)TokenEnum.Minus) {
 					Get ();
+					op = Operators.Minus;
 				} else {
 					Get ();
+					op = Operators.Or;
 				}
+				Quadruple.operatorStack.Push (op);
 				Term ();
+				Quadruple.CreateAdditiveQuadruple ();
+
 			}
 		}
 
 		void Term ()
 		{
 			Factor ();
-			while (la.kind == 33 || la.kind == 34 || la.kind == 35) {
-				if (la.kind == 33) {
+			Quadruple.CreateMultiplicativeQuadruple ();
+			while (la.kind == (int)TokenEnum.Multiplication || 
+				la.kind == (int)TokenEnum.Division || 
+				la.kind == (int)TokenEnum.And) {
+				Operators op;
+				if (la.kind == (int)TokenEnum.Multiplication) {
 					Get ();
-				} else if (la.kind == 34) {
+					op = Operators.Multiplication;
+				} else if (la.kind == (int)TokenEnum.Division) {
 					Get ();
+					op = Operators.Division;
 				} else {
 					Get ();
+					op = Operators.And;
 				}
+				Quadruple.operatorStack.Push (op);
 				Factor ();
+				Quadruple.CreateMultiplicativeQuadruple ();
 			}
 		}
 
 		void Factor ()
 		{
 			if (la.kind == (int)TokenEnum.LeftParenthesis) {
+				Quadruple.hierarchyStack.Push (Quadruple.operatorStack.Count);
 				Get ();
 				Expression ();
 				Expect ((int)TokenEnum.RightParenthesis);
-			} else if (StartOf (5)) {
-				if (la.kind == 30 || la.kind == 31) {
-					if (la.kind == 30) {
+				Quadruple.hierarchyStack.Pop ();
+			} else if (StartOf ((int)TokenEnum.False)) {
+				if (la.kind == (int)TokenEnum.Plus || 
+					la.kind == (int)TokenEnum.Minus) {
+					if (la.kind == (int)TokenEnum.Plus) {
 						Get ();
 					} else {
 						Get ();
 					}
 				}
-				Var ();
+				Variable variable = Var ();
+				Quadruple.operandStack.Push (variable.name);
+				Quadruple.typeStack.Push (variable.type);
+
 			} else
 				SynErr (40);
 		}
@@ -407,12 +460,12 @@ namespace GraphicFoo
 
 		#region Token Utils
 
-		void DebugTokens () 
+		void DebugTokens ()
 		{
 			Console.WriteLine ("last:" + t.val + " lookahead:" + la.val);
 		}
 
-		string GetLastTokenValue () 
+		string GetLastTokenValue ()
 		{
 			return t.val;
 		}
@@ -699,16 +752,16 @@ namespace GraphicFoo
 			case (int)TokenEnum.Id:
 				s = "id expected";
 				break;
-			case 2:
+			case (int)TokenEnum.Number:
 				s = "number expected";
 				break;
-			case 3:
+			case (int)TokenEnum.String:
 				s = "string expected";
 				break;
-			case 4:
+			case (int)TokenEnum.True:
 				s = "true expected";
 				break;
-			case 5:
+			case (int)TokenEnum.False:
 				s = "false expected";
 				break;
 			case 6:
@@ -768,37 +821,37 @@ namespace GraphicFoo
 			case (int)TokenEnum.Colon:
 				s = "\":\" expected";
 				break;
-			case 25:
+			case (int)TokenEnum.Greater:
 				s = "\">\" expected";
 				break;
-			case 26:
+			case (int)TokenEnum.Lesser:
 				s = "\"<\" expected";
 				break;
-			case 27:
+			case (int)TokenEnum.Unequal:
 				s = "\"!=\" expected";
 				break;
-			case 28:
+			case (int)TokenEnum.Equals:
 				s = "\"==\" expected";
 				break;
 			case 29:
 				s = "\".\" expected";
 				break;
-			case 30:
+			case (int)TokenEnum.Plus:
 				s = "\"+\" expected";
 				break;
-			case 31:
+			case (int)TokenEnum.Minus:
 				s = "\"-\" expected";
 				break;
-			case 32:
+			case (int)TokenEnum.Or:
 				s = "\"or\" expected";
 				break;
-			case 33:
+			case (int)TokenEnum.Multiplication:
 				s = "\"*\" expected";
 				break;
-			case 34:
+			case (int)TokenEnum.Division:
 				s = "\"/\" expected";
 				break;
-			case 35:
+			case (int)TokenEnum.And:
 				s = "\"and\" expected";
 				break;
 			case 36:
@@ -822,7 +875,8 @@ namespace GraphicFoo
 				break;
 			}
 			errorStream.WriteLine (errMsgFormat, line, col, s);
-			errorMessage += "line:" + line + " col:" + col + " error:" + s + "\n";
+			errorMessage += 
+				"line:" + line + " col:" + col + " error:" + s + "\n";
 			count++;
 		}
 

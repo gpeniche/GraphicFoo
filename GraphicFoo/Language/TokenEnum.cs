@@ -37,9 +37,9 @@ namespace GraphicFoo
 		Plus,
 		Minus,
 		Or,
-		Multiply,
-		Divide,
-		And
+		Multiplication,
+		Division,
+		And,
 	}
 }
 
