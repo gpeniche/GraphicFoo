@@ -135,7 +135,8 @@
     <Compile Include="SimpleCollectionViewController.cs" />
     <Compile Include="IBlock.cs" />
     <Compile Include="Declaration.cs" />
-    <Compile Include="WhileHeader.cs" />
+    <Compile Include="LoopHeader.cs" />
+    <Compile Include="EndLoop.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
@@ -143,9 +144,11 @@
     <BundleResource Include="monkey.png" />
     <BundleResource Include="placeholder.png" />
     <BundleResource Include="Declaration.png" />
-    <BundleResource Include="Whileheader.png" />
     <BundleResource Include="delete-icon.png" />
     <BundleResource Include="circle-empty.png" />
     <BundleResource Include="circle-full.png" />
+    <BundleResource Include="menu.png" />
+    <BundleResource Include="Loopheader.png" />
+    <BundleResource Include="Endloop.png" />
   </ItemGroup>
 </Project>

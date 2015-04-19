@@ -23,16 +23,16 @@ namespace GraphicFoo
         {
             blocks = new List<IBlock> ();
             blocks.Add (new Declaration ());
-			blocks.Add (new WhileHeader ());
+			blocks.Add (new LoopHeader ());
+			blocks.Add (new EndLoop ());
         }
 
         public override void ViewDidLoad ()
         {
             base.ViewDidLoad ();
-//			CollectionView.DataSource = SimpleCollectionViewController;
 			CollectionView.RegisterClassForCell (typeof(BlockCell), blockCellId);
 			CollectionView.Frame = new CGRect (0, 0, 260, introController.View.Frame.Size.Height);
-			CollectionView.BackgroundColor = UIColor.Blue;
+			CollectionView.BackgroundColor = UIColor.LightGray;
             CollectionView.RegisterClassForSupplementaryView (typeof(Header), UICollectionElementKindSection.Header, headerId);
 
 			/*UIMenuController.SharedMenuController.MenuItems = new UIMenuItem[] {
@@ -190,7 +190,7 @@ namespace GraphicFoo
 			var nameLabel = new UILabel(new RectangleF(-50, 10, 320, 30));
 			nameLabel.Font = UIFont.SystemFontOfSize(24.0f);
 			nameLabel.TextAlignment = UITextAlignment.Center;
-			nameLabel.TextColor = UIColor.White;
+			nameLabel.TextColor = UIColor.DarkGray;
 			nameLabel.Text = blockCell.Name;
 
 			ContentView.Add(nameLabel);
@@ -247,7 +247,7 @@ namespace GraphicFoo
         [Export ("initWithFrame:")]
         public Header (CGRect frame) : base (frame)
         {
-            label = new UILabel (){Frame = new CGRect (30,0,250,50), BackgroundColor = UIColor.Yellow};
+			label = new UILabel (){Frame = new CGRect (30,0,250,50), BackgroundColor = UIColor.FromRGB (55f,55f,55f)};
             AddSubview (label);
         }
     }

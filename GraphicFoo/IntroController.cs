@@ -9,11 +9,13 @@ namespace GraphicFoo
 {
 	public partial class IntroController : BaseController
 	{
-		SimpleCollectionViewController simpleCollectionViewController;
+		SimpleCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
 		UIScrollView scrollView;
-		float insertPosition = 1;
+		float insertPositionY = 50;
+		float insertPositionX = 0;
 		int[] blocksOnView = new int[2];
+		UIButton lastSelected;
 
 		public IntroController() : base(null, null)
 		{
@@ -29,30 +31,15 @@ namespace GraphicFoo
 
 			View.BackgroundColor = UIColor.White;
 
-			var title = new UILabel(new RectangleF(260, 50, 320, 30));
+			var title = new UILabel(new RectangleF(260, 20, 320, 30));
 			title.Font = UIFont.SystemFontOfSize(24.0f);
 			title.TextAlignment = UITextAlignment.Center;
 			title.TextColor = UIColor.Blue;
-			title.Text = "Sidebar Navigation";
-
-			var unified = new UILabel(new RectangleF(260, 80, 320, 30));
-			unified.Font = UIFont.SystemFontOfSize(24.0f);
-			unified.TextAlignment = UITextAlignment.Center;
-			unified.TextColor = UIColor.Blue;
-			unified.Text = "Unified";
-
-			var body = new UILabel(new RectangleF(310, 120, 220, 100));
-			body.Font = UIFont.SystemFontOfSize(12.0f);
-			body.TextAlignment = UITextAlignment.Center;
-			body.Lines = 0;
-			body.Text = @"This is the intro view controller. 
-Click the button below to open the menu to switch controllers.
-
-You can also drag the menu open from the right side of the screen";
+			title.Text = "Graphic Foo";
 
 			var menuButton = new UIButton(UIButtonType.System);
-			menuButton.Frame = new RectangleF(310, 250, 220, 30);
-			menuButton.SetTitle("Toggle Side Menu", UIControlState.Normal);
+			menuButton.Frame = new RectangleF(700, 20, 50, 50);
+			menuButton.SetImage(UIImage.FromBundle ("menu.png"), UIControlState.Normal);
 			menuButton.TouchUpInside += (sender, e) => {
 				SidebarController.ToggleMenu();
 			};
@@ -75,17 +62,8 @@ You can also drag the menu open from the right side of the screen";
 				new UIAlertView ("Errors", errorMessage, null, "OK", null).Show ();
 			};
 
-			var secondButton = new UIButton(UIButtonType.System);
-			secondButton.Frame = new RectangleF(310, 520, 220, 30);
-			secondButton.SetTitle("Run", UIControlState.Normal);
-			secondButton.TouchUpInside += (sender, e) => {
-				//AddBlock();
-				new UIAlertView ("secondButton", "second", null, "OK", null).Show ();
-			};
-
 			var blocksView = new UIView ();
 			blocksView.Frame = new RectangleF (0, 0, 260f, 600);
-			blocksView.BackgroundColor = UIColor.Black;
 
 			// Line Layout
 			lineLayout = new LineLayout (){
@@ -93,14 +71,12 @@ You can also drag the menu open from the right side of the screen";
 				ScrollDirection = UICollectionViewScrollDirection.Vertical
 			};
 
-			simpleCollectionViewController = new SimpleCollectionViewController (lineLayout);
-			simpleCollectionViewController.SetParentController (this);
+			blocksCollectionViewController = new SimpleCollectionViewController (lineLayout);
+			blocksCollectionViewController.SetParentController (this);
 
-			blocksView.Add (simpleCollectionViewController.View);
+			blocksView.Add (blocksCollectionViewController.View);
 			scrollView.Add(blocksView);
 			scrollView.Add(title);
-			scrollView.Add(unified);
-			scrollView.Add(secondButton);
 			scrollView.Add(menuButton);
 			scrollView.Add (CodeTextField);
 			scrollView.Add (runButton);
@@ -113,26 +89,43 @@ You can also drag the menu open from the right side of the screen";
 		/// Adds a button to the current view.
 		/// </summary>
 		public void AddBlock(UIView blockView, int typeOfBlock){
-			if (insertPosition != -1 || blocksOnView.Sum() == 0) {
-				foreach(UIView view in blockView.Subviews){
+			if (insertPositionY != 49 || blocksOnView.Sum () == 0) {
+				foreach (UIView view in blockView.Subviews) {
 					if (view.Tag == 1) {
 						((UIButton)view).TouchUpInside += (sender, e) => {
-							insertPosition = (float) blockView.Frame.Location.Y + (float)blockView.Frame.Size.Height;
+							insertPositionY = (float)blockView.Frame.Location.Y + (float)blockView.Frame.Size.Height;
+							if(blockView.Tag > 0){
+								insertPositionX = (float)blockView.Frame.Location.X - 260f + blockView.Tag;
+							}else{
+								insertPositionX = (float)blockView.Frame.Location.X - 260f;
+							}
+
+							((UIButton)sender).Selected = true;
+							lastSelected = ((UIButton)sender);
 						};
-					}else if(view.Tag == 2){
+					} else if (view.Tag == 2) {
 						((UIButton)view).TouchUpInside += (sender, e) => {
-							blockView.RemoveFromSuperview();
-							blocksOnView[typeOfBlock]--;
+							blockView.RemoveFromSuperview ();
+							blocksOnView [typeOfBlock]--;
 						};
 					}
 				}
-				blockView.Frame = new CGRect (blockView.Frame.X, insertPosition, blockView.Frame.Width, blockView.Frame.Height);
-				Console.WriteLine("adding", "x: " + blockView.Frame.X + ", y: " + blockView.Frame.Y);
-				blocksOnView[typeOfBlock]++;
-				View.AddSubview(blockView);
+				if (blockView.Tag < 0) {
+					insertPositionX += blockView.Tag;
+				}
+				blockView.Frame = new CGRect (blockView.Frame.X + insertPositionX, insertPositionY, blockView.Frame.Width, blockView.Frame.Height);
+				blocksOnView [typeOfBlock]++;
+				if (lastSelected != null) {
+					((UIButton)lastSelected).Selected = false;
+				}
+				View.AddSubview (blockView);
+				if (blockView.Tag > 0) {
+					insertPositionX += blockView.Tag;
+				}
+			} else if(blocksOnView.Sum () == 0){
+				insertPositionX = 0;
 			}
-			Console.WriteLine (blocksOnView.Sum ());
-			insertPosition = -1;
+			insertPositionY = 49;
 		}
 	}
 }
