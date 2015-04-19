@@ -3,18 +3,18 @@ using System.Drawing;
 using UIKit;
 using Foundation;
 using CoreGraphics;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace GraphicFoo
 {
 	public partial class IntroController : BaseController
 	{
-		SimpleCollectionViewController blocksCollectionViewController;
+		BlocksCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
 		UIScrollView scrollView;
 		float insertPositionY = 50;
 		float insertPositionX = 0;
-		int[] blocksOnView = new int[2];
+		List<UIView> blocksOnView = new List<UIView>();
 		UIButton lastSelected;
 
 		public IntroController() : base(null, null)
@@ -71,7 +71,7 @@ namespace GraphicFoo
 				ScrollDirection = UICollectionViewScrollDirection.Vertical
 			};
 
-			blocksCollectionViewController = new SimpleCollectionViewController (lineLayout);
+			blocksCollectionViewController = new BlocksCollectionViewController (lineLayout);
 			blocksCollectionViewController.SetParentController (this);
 
 			blocksView.Add (blocksCollectionViewController.View);
@@ -89,7 +89,7 @@ namespace GraphicFoo
 		/// Adds a button to the current view.
 		/// </summary>
 		public void AddBlock(UIView blockView, int typeOfBlock){
-			if (insertPositionY != 49 || blocksOnView.Sum () == 0) {
+			if (insertPositionY != 49 || blocksOnView.Count == 0) {
 				foreach (UIView view in blockView.Subviews) {
 					if (view.Tag == 1) {
 						((UIButton)view).TouchUpInside += (sender, e) => {
@@ -99,33 +99,53 @@ namespace GraphicFoo
 							}else{
 								insertPositionX = (float)blockView.Frame.Location.X - 260f;
 							}
-
 							((UIButton)sender).Selected = true;
+							if(lastSelected != null){
+								lastSelected.Selected = false;
+							}
 							lastSelected = ((UIButton)sender);
 						};
 					} else if (view.Tag == 2) {
 						((UIButton)view).TouchUpInside += (sender, e) => {
+							ArrangeElementsOnView(blocksOnView.IndexOf(blockView), -100);
 							blockView.RemoveFromSuperview ();
-							blocksOnView [typeOfBlock]--;
+							blocksOnView.Remove(blockView);
 						};
 					}
 				}
 				if (blockView.Tag < 0) {
 					insertPositionX += blockView.Tag;
 				}
-				blockView.Frame = new CGRect (blockView.Frame.X + insertPositionX, insertPositionY, blockView.Frame.Width, blockView.Frame.Height);
-				blocksOnView [typeOfBlock]++;
+
 				if (lastSelected != null) {
 					((UIButton)lastSelected).Selected = false;
+				}
+				blockView.Frame = new CGRect (blockView.Frame.X + insertPositionX, insertPositionY, blockView.Frame.Width, blockView.Frame.Height);
+				if (lastSelected != null && blocksOnView.IndexOf (lastSelected.Superview) + 1 < blocksOnView.Count) {
+					ArrangeElementsOnView (blocksOnView.IndexOf (lastSelected.Superview), 100);
+					blocksOnView.Insert(blocksOnView.IndexOf (lastSelected.Superview) + 1, blockView);
+				} else {
+					blocksOnView.Add(blockView);
 				}
 				View.AddSubview (blockView);
 				if (blockView.Tag > 0) {
 					insertPositionX += blockView.Tag;
 				}
-			} else if(blocksOnView.Sum () == 0){
+			} else if(blocksOnView.Count == 0){
 				insertPositionX = 0;
 			}
 			insertPositionY = 49;
+		}
+
+		/// <summary>
+		/// Arranges the elements on view after adding or deleting an element.
+		/// </summary>
+		private void ArrangeElementsOnView(int elementToUpdate, int offset){
+			for (int index = elementToUpdate + 1; index < blocksOnView.Count; index++) {
+				Console.WriteLine ("index: " + index);
+				blocksOnView[index].Frame = new CGRect (blocksOnView [index].Frame.X, blocksOnView [index].Frame.Y + offset, blocksOnView [index].Frame.Width, blocksOnView [index].Frame.Height); 
+				View.AddSubview (blocksOnView[index]);
+			}
 		}
 	}
 }

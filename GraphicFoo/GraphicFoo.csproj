@@ -132,11 +132,11 @@
     <Compile Include="Memory\Identifier.cs" />
     <Compile Include="GridLayout.cs" />
     <Compile Include="LineLayout.cs" />
-    <Compile Include="SimpleCollectionViewController.cs" />
     <Compile Include="IBlock.cs" />
     <Compile Include="Declaration.cs" />
     <Compile Include="LoopHeader.cs" />
     <Compile Include="EndLoop.cs" />
+    <Compile Include="BlocksCollectionViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />

@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace GraphicFoo
 {
-    public class SimpleCollectionViewController : UICollectionViewController
+    public class BlocksCollectionViewController : UICollectionViewController
     {
 		static NSString blockCellId = new NSString ("BlockCell");
         static NSString headerId = new NSString ("Header");
@@ -19,7 +19,7 @@ namespace GraphicFoo
 			this.introController = intro;
 		}
 
-        public SimpleCollectionViewController (UICollectionViewLayout layout) : base (layout)
+		public BlocksCollectionViewController (UICollectionViewLayout layout) : base (layout)
         {
             blocks = new List<IBlock> ();
             blocks.Add (new Declaration ());
@@ -35,9 +35,9 @@ namespace GraphicFoo
 			CollectionView.BackgroundColor = UIColor.LightGray;
             CollectionView.RegisterClassForSupplementaryView (typeof(Header), UICollectionElementKindSection.Header, headerId);
 
-			/*UIMenuController.SharedMenuController.MenuItems = new UIMenuItem[] {
-				new UIMenuItem ("Custom", new Selector ("custom"))
-			};*/
+			UIMenuController.SharedMenuController.MenuItems = new UIMenuItem[] {
+				new UIMenuItem ("More info", new Selector ("custom"))
+			};
 		}
 
         public override nint NumberOfSections (UICollectionView collectionView)
