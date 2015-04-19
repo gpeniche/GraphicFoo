@@ -57,22 +57,11 @@ namespace GraphicFoo
 
             var block = blocks [indexPath.Row];
 
-			Console.WriteLine(indexPath.Row);
+			blockCell.blockCell = block;
 
-			blockCell.title = block.Name;
 			blockCell.SetTitle ();
-
-			blockCell.example = block.Example;
 			blockCell.SetExample ();
-
-			blockCell.view.Add(block.BlockView);
-			//blockCell.view = block.BlockView;
-
-			blockCell.typeOfBlock = block.Type;
-
-			blockCell.imageView = block.Image;
 			blockCell.SetImage ();
-
 			blockCell.SetParentController (this.introController);
 
 			return blockCell;
@@ -161,14 +150,10 @@ namespace GraphicFoo
 
     public class BlockCell : UICollectionViewCell
     {
-        public UIImage imageView;
 		public NSIndexPath IndexPath;
-		public string title;
-		public string example;
 		UIButton blockAction;
 		public IntroController introController;
-		public List<UIView> view = new List<UIView>();
-		public int typeOfBlock;
+		public IBlock blockCell;
 
         [Export ("initWithFrame:")]
 		public BlockCell (CGRect frame) : base (frame)
@@ -194,21 +179,21 @@ namespace GraphicFoo
 
 
 			blockAction.TouchUpInside += (sender, e) => {
-				UIView blockViewInstance = this.view[this.view.Count - 1];
-				this.view.Add(blockViewInstance);
-				introController.AddBlock(this.view[this.view.Count - 1], typeOfBlock);
-				new UIAlertView ("Title", sender.ToString(), null, "OK", null).Show ();
+				//UIView blockViewInstance = this.view[this.view.Count - 1];
+				//this.view.Add(blockViewInstance);
+				introController.AddBlock(blockCell.BlockView, blockCell.Type);
+				//new UIAlertView ("Title", sender.ToString(), null, "OK", null).Show ();
 			};
         } 
 
 		public void SetTitle(){
-			var titleLabel = new UILabel(new RectangleF(-50, 10, 320, 30));
-			titleLabel.Font = UIFont.SystemFontOfSize(24.0f);
-			titleLabel.TextAlignment = UITextAlignment.Center;
-			titleLabel.TextColor = UIColor.White;
-			titleLabel.Text = title;
+			var nameLabel = new UILabel(new RectangleF(-50, 10, 320, 30));
+			nameLabel.Font = UIFont.SystemFontOfSize(24.0f);
+			nameLabel.TextAlignment = UITextAlignment.Center;
+			nameLabel.TextColor = UIColor.White;
+			nameLabel.Text = blockCell.Name;
 
-			ContentView.Add(titleLabel);
+			ContentView.Add(nameLabel);
 		}
 
 		public void SetExample(){
@@ -216,13 +201,13 @@ namespace GraphicFoo
 			exampleLabel.Font = UIFont.SystemFontOfSize(18.0f);
 			exampleLabel.TextAlignment = UITextAlignment.Center;
 			exampleLabel.TextColor = UIColor.White;
-			exampleLabel.Text = example;
+			exampleLabel.Text = blockCell.Example;
 
 			ContentView.Add(exampleLabel);
 		}
 
 		public void SetImage(){
-			blockAction.SetImage (imageView, UIControlState.Normal);
+			blockAction.SetImage (blockCell.Image, UIControlState.Normal);
 		}
 
 		public void SetParentController(IntroController intro){

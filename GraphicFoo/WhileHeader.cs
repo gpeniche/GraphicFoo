@@ -75,7 +75,7 @@ namespace GraphicFoo
 				deleteBlock.Tag = 2;
 
 				var insertPositionBtn = UIButton.FromType(UIButtonType.Custom);
-				insertPositionBtn.Frame = new System.Drawing.RectangleF(250, 20, 80, 80);
+				insertPositionBtn.Frame = new RectangleF(265, 35, 50, 50);
 				insertPositionBtn.SetImage(UIImage.FromFile ("circle-empty.png"), UIControlState.Normal);
 				insertPositionBtn.SetImage(UIImage.FromFile ("circle-full.png"), UIControlState.Selected);
 				insertPositionBtn.SetImage(UIImage.FromFile ("circle-full.png"), UIControlState.Highlighted);

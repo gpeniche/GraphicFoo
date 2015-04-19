@@ -11,7 +11,6 @@ namespace GraphicFoo
 	{
 		SimpleCollectionViewController simpleCollectionViewController;
 		LineLayout lineLayout;
-		UICollectionViewFlowLayout flowLayout;
 		UIScrollView scrollView;
 		float insertPosition = 1;
 		int[] blocksOnView = new int[2];
@@ -88,23 +87,12 @@ You can also drag the menu open from the right side of the screen";
 			blocksView.Frame = new RectangleF (0, 0, 260f, 600);
 			blocksView.BackgroundColor = UIColor.Black;
 
-
-			// Flow Layout
-			flowLayout = new UICollectionViewFlowLayout (){
-				HeaderReferenceSize = new CGSize (100, 100),
-				SectionInset = new UIEdgeInsets (20,20,20,20),
-				ScrollDirection = UICollectionViewScrollDirection.Vertical,
-				MinimumInteritemSpacing = 50, // minimum spacing between cells
-				MinimumLineSpacing = 50 // minimum spacing between rows if ScrollDirection is Vertical or between columns if Horizontal
-			};
-
 			// Line Layout
 			lineLayout = new LineLayout (){
 				HeaderReferenceSize = new CGSize (260, 100),
 				ScrollDirection = UICollectionViewScrollDirection.Vertical
 			};
 
-			//            simpleCollectionViewController = new SimpleCollectionViewController (flowLayout);
 			simpleCollectionViewController = new SimpleCollectionViewController (lineLayout);
 			simpleCollectionViewController.SetParentController (this);
 
@@ -130,21 +118,20 @@ You can also drag the menu open from the right side of the screen";
 					if (view.Tag == 1) {
 						((UIButton)view).TouchUpInside += (sender, e) => {
 							insertPosition = (float) blockView.Frame.Location.Y + (float)blockView.Frame.Size.Height;
-							blocksOnView[typeOfBlock]++;
-							//new UIAlertView ("insertPosition", insertPosition.ToString(), null, "OK", null).Show ();
 						};
 					}else if(view.Tag == 2){
 						((UIButton)view).TouchUpInside += (sender, e) => {
 							blockView.RemoveFromSuperview();
 							blocksOnView[typeOfBlock]--;
-							//new UIAlertView ("removing", "removing", null, "OK", null).Show ();
 						};
 					}
-					//new UIAlertView ("secondButton", view.ToString(), null, "OK", null).Show ();
 				}
 				blockView.Frame = new CGRect (blockView.Frame.X, insertPosition, blockView.Frame.Width, blockView.Frame.Height);
+				Console.WriteLine("adding", "x: " + blockView.Frame.X + ", y: " + blockView.Frame.Y);
+				blocksOnView[typeOfBlock]++;
 				View.AddSubview(blockView);
 			}
+			Console.WriteLine (blocksOnView.Sum ());
 			insertPosition = -1;
 		}
 	}

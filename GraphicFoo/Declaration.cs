@@ -61,12 +61,12 @@ namespace GraphicFoo
 				varValue.Placeholder = "add value";
 
 				var deleteBlock = UIButton.FromType(UIButtonType.Custom);
-				deleteBlock.Frame = new System.Drawing.RectangleF(290, 8, 20, 20);
+				deleteBlock.Frame = new RectangleF(290, 8, 20, 20);
 				deleteBlock.SetImage(UIImage.FromFile ("delete-icon.png"), UIControlState.Normal);
 				deleteBlock.Tag = 2;
 
 				var insertPositionBtn = UIButton.FromType(UIButtonType.Custom);
-				insertPositionBtn.Frame = new System.Drawing.RectangleF(250, 20, 80, 80);
+				insertPositionBtn.Frame = new RectangleF(265, 35, 50, 50);
 				insertPositionBtn.SetImage(UIImage.FromBundle ("circle-empty.png"), UIControlState.Normal);
 				insertPositionBtn.SetImage(UIImage.FromBundle ("circle-full.png"), UIControlState.Selected);
 				insertPositionBtn.SetImage(UIImage.FromBundle ("circle-full.png"), UIControlState.Highlighted);
