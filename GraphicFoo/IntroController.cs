@@ -47,19 +47,20 @@ namespace GraphicFoo
 						activeview = view;
 				}
 			}
+			if (activeview != null) {
+				// Bottom of the controller = initial position + height + offset      
+				bottom = ((float)activeview.Frame.Y + (float)activeview.Frame.Height + offsetKeyboard);
 
-			// Bottom of the controller = initial position + height + offset      
-			bottom = ((float)activeview.Frame.Y + (float)activeview.Frame.Height + offsetKeyboard);
+				// Calculate how far we need to scroll
+				scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom));
 
-			// Calculate how far we need to scroll
-			scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom));
-
-			// Perform the scrolling
-			if (scrollamount > 0) {
-				moveViewUp = true;
-				ScrollTheView (moveViewUp);
-			} else {
-				moveViewUp = false;
+				// Perform the scrolling
+				if (scrollamount > 0) {
+					moveViewUp = true;
+					ScrollTheView (moveViewUp);
+				} else {
+					moveViewUp = false;
+				}
 			}
 		}
 
