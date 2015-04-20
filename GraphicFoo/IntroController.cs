@@ -70,9 +70,11 @@ namespace GraphicFoo
 				ScrollTheView (false);
 			}
 
-			foreach (UIView view in activeview.Subviews) {
-				if (view.Class.Name == "UITextFiled") {
-					//Update string to send to parser and scanner
+			if (activeview != null) {
+				foreach (UIView view in activeview.Subviews) {
+					if (view.Class.Name == "UITextFiled") {
+						//Update string to send to parser and scanner
+					}
 				}
 			}
 		}
