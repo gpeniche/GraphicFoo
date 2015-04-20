@@ -57,6 +57,10 @@ namespace GraphicFoo
 
 				var varName = new UITextField (new RectangleF (10, 5, 100, 100));
 				varName.Placeholder = "var name";
+				varName.ShouldReturn += (textField) => { 
+					varName.ResignFirstResponder();
+					return true; 
+				};
 
 				UILabel equalLabel = 
 					new UILabel (new RectangleF (120, 0, 50, 100));
@@ -68,6 +72,10 @@ namespace GraphicFoo
 				UITextField varValue = 
 					new UITextField (new RectangleF (170, 5, 220, 100));
 				varValue.Placeholder = "add value";
+				varValue.ShouldReturn += (textField) => { 
+					varValue.ResignFirstResponder();
+					return true; 
+				};
 
 				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
 				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);

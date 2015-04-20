@@ -8,10 +8,7 @@ namespace GraphicFoo
 {
 	public partial class SideMenuController : BaseController
 	{
-		// the sidebar controller for the app
-		SidebarNavigation.SidebarController _sidebarController;
-
-
+		
 		public SideMenuController() : base(null, null)
 		{
 		}
@@ -27,15 +24,9 @@ namespace GraphicFoo
 			title.TextColor = UIColor.Blue;
 			title.Text = "Menu";
 
-			var body = new UILabel(new RectangleF(30, 70, 200, 100));
-			body.Font = UIFont.SystemFontOfSize(12.0f);
-			body.TextAlignment = UITextAlignment.Center;
-			body.Lines = 0;
-			body.Text = @"This is the side menu. You can use any UIViewController to put whatever you want here!";
-
 			var introButton = new UIButton(UIButtonType.System);
 			introButton.Frame = new RectangleF(0, 180, 260, 20);
-			introButton.SetTitle("Intro", UIControlState.Normal);
+			introButton.SetTitle("Reset", UIControlState.Normal);
 			introButton.TouchUpInside += (sender, e) => {
 				SidebarController.ChangeContentView(new IntroController());
 			};
@@ -48,7 +39,6 @@ namespace GraphicFoo
 			};
 
 			View.Add(title);
-			View.Add(body);
 			View.Add(introButton);
 			View.Add(contentButton);
 

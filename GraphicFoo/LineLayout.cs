@@ -2,7 +2,6 @@ using System;
 using CoreGraphics;
 using Foundation;
 using UIKit;
-using CoreGraphics;
 using CoreAnimation;
 
 namespace GraphicFoo

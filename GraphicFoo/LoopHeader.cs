@@ -73,6 +73,10 @@ namespace GraphicFoo
 				UITextField whileStatement = 
 					new UITextField (new RectangleF (90, 10, 200, 100));
 				whileStatement.Placeholder = "Add statement";
+				whileStatement.ShouldReturn += (textField) => { 
+					whileStatement.ResignFirstResponder();
+					return true; 
+				};
 
 				UILabel rightParenthesis = 
 					new UILabel (new RectangleF (220, 0, 70, 100));

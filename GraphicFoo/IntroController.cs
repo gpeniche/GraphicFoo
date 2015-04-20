@@ -17,13 +17,83 @@ namespace GraphicFoo
 		List<UIView> blocksOnView = new List<UIView> ();
 		UIButton lastSelected;
 
+
+		private UIView activeview;             // Controller that activated the keyboard
+		private float scrollamount = 0.0f;    // amount to scroll 
+		private float bottom = 0.0f;           // bottom point
+		private float offset = 0.0f;          // extra offset
+		private bool moveViewUp = false;       // which direction are we moving
+
 		public IntroController () : base (null, null)
 		{
+		}
+
+		private void KeyBoardUpNotification(NSNotification notification)
+		{
+			// get the keyboard size
+			/*NSValue val = new NSValue(notification.UserInfo.ValueForKey(UIKeyboard.FrameBeginUserInfoKey).Handle);
+			RectangleF r = val.RectangleFValue;*/
+			CGRect r = UIKeyboard.BoundsFromNotification (notification);
+
+			// Find what opened the keyboard
+			foreach (UIView view in blocksOnView) {
+				foreach (UIView inView in view.Subviews) {
+					if (inView.IsFirstResponder)
+						activeview = view;
+				}
+			}
+
+			// Bottom of the controller = initial position + height + offset      
+			bottom = ((float)activeview.Frame.Y + (float)activeview.Frame.Height + (float)offset);
+
+			// Calculate how far we need to scroll
+			scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom)) ;
+
+			// Perform the scrolling
+			if (scrollamount > 0) {
+				moveViewUp = true;
+				ScrollTheView (moveViewUp);
+			} else {
+				moveViewUp = false;
+			}
+		}
+
+		private void KeyBoardDownNotification(NSNotification notification)
+		{
+			if(moveViewUp){ScrollTheView(false);}
+		}
+
+		private void ScrollTheView(bool move)
+		{
+
+			// scroll the view up or down
+			UIView.BeginAnimations (string.Empty, System.IntPtr.Zero);
+			UIView.SetAnimationDuration (0.3);
+
+			CGRect frame = View.Frame;
+
+			if (move) {
+				frame.Y -= scrollamount;
+			} else {
+				frame.Y += scrollamount;
+				scrollamount = 0;
+			}
+
+			View.Frame = frame;
+			UIView.CommitAnimations();
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+
+			// Keyboard popup
+			NSNotificationCenter.DefaultCenter.AddObserver
+			(UIKeyboard.DidShowNotification,KeyBoardUpNotification);
+
+			// Keyboard Down
+			NSNotificationCenter.DefaultCenter.AddObserver
+			(UIKeyboard.WillHideNotification,KeyBoardDownNotification);
 
 			var uIScrollView = new UIScrollView ();
 			uIScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
@@ -164,7 +234,6 @@ namespace GraphicFoo
 		private void ArrangeElementsOnView (int elementToUpdate, int offset)
 		{
 			for (int index = elementToUpdate + 1; index < blocksOnView.Count; index++) {
-				Console.WriteLine ("index: " + index);
 				blocksOnView [index].Frame = new CGRect (
 					blocksOnView [index].Frame.X,
 					blocksOnView [index].Frame.Y + offset,
