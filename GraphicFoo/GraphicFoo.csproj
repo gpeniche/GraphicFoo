@@ -141,8 +141,6 @@
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
-    <BundleResource Include="monkey.png" />
-    <BundleResource Include="placeholder.png" />
     <BundleResource Include="Declaration.png" />
     <BundleResource Include="delete-icon.png" />
     <BundleResource Include="circle-empty.png" />
