@@ -6,9 +6,6 @@ namespace GraphicFoo
 {
 	public class LoopHeader : IBlock
 	{
-		public LoopHeader ()
-		{
-		}
 
 		public int Type {
 			get {
@@ -54,7 +51,7 @@ namespace GraphicFoo
 
 				UIImageView backgroundImage = 
 					new UIImageView (new RectangleF (-36, -9, 400, 132));
-				backgroundImage.Image = this.Image;
+				backgroundImage.Image = Image;
 
 				UILabel whileText = 
 					new UILabel (new RectangleF (-10, 10, 100, 100));
@@ -73,8 +70,8 @@ namespace GraphicFoo
 				UITextField whileStatement = 
 					new UITextField (new RectangleF (90, 10, 200, 100));
 				whileStatement.Placeholder = "Add statement";
-				whileStatement.ShouldReturn += (textField) => { 
-					whileStatement.ResignFirstResponder();
+				whileStatement.ShouldReturn += textField => { 
+					whileStatement.ResignFirstResponder ();
 					return true; 
 				};
 

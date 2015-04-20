@@ -6,10 +6,6 @@ namespace GraphicFoo
 {
 	public class EndLoop : IBlock
 	{
-		public EndLoop ()
-		{
-		}
-
 		public int Type {
 			get {
 				return 1;
@@ -54,7 +50,7 @@ namespace GraphicFoo
 
 				UIImageView backgroundImage = 
 					new UIImageView (new RectangleF (-36, -9, 400, 132));
-				backgroundImage.Image = this.Image;
+				backgroundImage.Image = Image;
 
 				UILabel whileFooterText = 
 					new UILabel (new RectangleF (-10, 10, 300, 100));

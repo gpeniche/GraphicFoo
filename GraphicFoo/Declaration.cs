@@ -6,9 +6,6 @@ namespace GraphicFoo
 {
 	public class Declaration : IBlock
 	{
-		public Declaration ()
-		{
-		}
 
 		public int Type {
 			get {
@@ -53,12 +50,12 @@ namespace GraphicFoo
 
 				UIImageView backgroundImage = 
 					new UIImageView (new RectangleF (-36, -9, 400, 132));
-				backgroundImage.Image = this.Image;
+				backgroundImage.Image = Image;
 
-				var varName = new UITextField (new RectangleF (10, 5, 100, 100));
+				UITextField varName = new UITextField (new RectangleF (10, 5, 100, 100));
 				varName.Placeholder = "var name";
-				varName.ShouldReturn += (textField) => { 
-					varName.ResignFirstResponder();
+				varName.ShouldReturn += textField => { 
+					varName.ResignFirstResponder ();
 					return true; 
 				};
 
@@ -72,8 +69,8 @@ namespace GraphicFoo
 				UITextField varValue = 
 					new UITextField (new RectangleF (170, 5, 220, 100));
 				varValue.Placeholder = "add value";
-				varValue.ShouldReturn += (textField) => { 
-					varValue.ResignFirstResponder();
+				varValue.ShouldReturn += textField => { 
+					varValue.ResignFirstResponder ();
 					return true; 
 				};
 

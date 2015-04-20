@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace GraphicFoo
 {
-	public partial class IntroController : BaseController
+	public class IntroController : BaseController
 	{
 		BlocksCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
@@ -16,19 +16,24 @@ namespace GraphicFoo
 		float insertPositionX = 0;
 		List<UIView> blocksOnView = new List<UIView> ();
 		UIButton lastSelected;
+		string programToCompile = "";
 
-
-		private UIView activeview;             // Controller that activated the keyboard
-		private float scrollamount = 0.0f;    // amount to scroll 
-		private float bottom = 0.0f;           // bottom point
-		private float offset = 0.0f;          // extra offset
-		private bool moveViewUp = false;       // which direction are we moving
+		private UIView activeview;
+		// Controller that activated the keyboard
+		private float scrollamount = 0.0f;
+		// amount to scroll
+		private float bottom = 0.0f;
+		// bottom point
+		private float offsetKeyboard = 10.0f;
+		// extra offset
+		private bool moveViewUp = false;
+		// which direction are we moving
 
 		public IntroController () : base (null, null)
 		{
 		}
 
-		private void KeyBoardUpNotification(NSNotification notification)
+		private void KeyBoardUpNotification (NSNotification notification)
 		{
 			// get the keyboard size
 			/*NSValue val = new NSValue(notification.UserInfo.ValueForKey(UIKeyboard.FrameBeginUserInfoKey).Handle);
@@ -44,10 +49,10 @@ namespace GraphicFoo
 			}
 
 			// Bottom of the controller = initial position + height + offset      
-			bottom = ((float)activeview.Frame.Y + (float)activeview.Frame.Height + (float)offset);
+			bottom = ((float)activeview.Frame.Y + (float)activeview.Frame.Height + offsetKeyboard);
 
 			// Calculate how far we need to scroll
-			scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom)) ;
+			scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom));
 
 			// Perform the scrolling
 			if (scrollamount > 0) {
@@ -58,16 +63,24 @@ namespace GraphicFoo
 			}
 		}
 
-		private void KeyBoardDownNotification(NSNotification notification)
+		private void KeyBoardDownNotification (NSNotification notification)
 		{
-			if(moveViewUp){ScrollTheView(false);}
+			if (moveViewUp) {
+				ScrollTheView (false);
+			}
+
+			foreach (UIView view in activeview.Subviews) {
+				if (view.Class.Name == "UITextFiled") {
+					//Update string to send to parser and scanner
+				}
+			}
 		}
 
-		private void ScrollTheView(bool move)
+		private void ScrollTheView (bool move)
 		{
 
 			// scroll the view up or down
-			UIView.BeginAnimations (string.Empty, System.IntPtr.Zero);
+			UIView.BeginAnimations (string.Empty, IntPtr.Zero);
 			UIView.SetAnimationDuration (0.3);
 
 			CGRect frame = View.Frame;
@@ -80,7 +93,7 @@ namespace GraphicFoo
 			}
 
 			View.Frame = frame;
-			UIView.CommitAnimations();
+			UIView.CommitAnimations ();
 		}
 
 		public override void ViewDidLoad ()
@@ -89,13 +102,13 @@ namespace GraphicFoo
 
 			// Keyboard popup
 			NSNotificationCenter.DefaultCenter.AddObserver
-			(UIKeyboard.DidShowNotification,KeyBoardUpNotification);
+			(UIKeyboard.DidShowNotification, KeyBoardUpNotification);
 
 			// Keyboard Down
 			NSNotificationCenter.DefaultCenter.AddObserver
-			(UIKeyboard.WillHideNotification,KeyBoardDownNotification);
+			(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
-			var uIScrollView = new UIScrollView ();
+			UIScrollView uIScrollView = new UIScrollView ();
 			uIScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
 			scrollView = uIScrollView;
 			scrollView.Frame = new RectangleF (
@@ -148,7 +161,7 @@ namespace GraphicFoo
 			blocksView.Frame = new RectangleF (0, 0, 260f, 600);
 
 			// Line Layout
-			lineLayout = new LineLayout () {
+			lineLayout = new LineLayout {
 				HeaderReferenceSize = new CGSize (260, 100),
 				ScrollDirection = UICollectionViewScrollDirection.Vertical
 			};
@@ -171,13 +184,14 @@ namespace GraphicFoo
 		/// <summary>
 		/// Adds a button to the current view.
 		/// </summary>
-		public void AddBlock (UIView blockView, int typeOfBlock)
+		public void AddBlock (UIView blockView)
 		{
 			if (insertPositionY != 49 || blocksOnView.Count == 0) {
 				foreach (UIView view in blockView.Subviews) {
 					if (view.Tag == 1) {
 						((UIButton)view).TouchUpInside += (sender, e) => {
-							insertPositionY = (float)blockView.Frame.Location.Y + (float)blockView.Frame.Size.Height;
+							insertPositionY = (float)blockView.Frame.Location.Y +
+							(float)blockView.Frame.Size.Height;
 							if (blockView.Tag > 0) {
 								insertPositionX = (float)blockView.Frame.Location.X - 260f + blockView.Tag;
 							} else {
@@ -202,7 +216,7 @@ namespace GraphicFoo
 				}
 
 				if (lastSelected != null) {
-					((UIButton)lastSelected).Selected = false;
+					lastSelected.Selected = false;
 				}
 				blockView.Frame = new CGRect (
 					blockView.Frame.X + insertPositionX,

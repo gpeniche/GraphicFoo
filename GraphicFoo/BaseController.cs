@@ -16,14 +16,14 @@ namespace GraphicFoo
 			} 
 		}
 
-		public BaseController(string nibName, NSBundle bundle) : base(nibName, bundle)
+		public BaseController (string nibName, NSBundle bundle) : base (nibName, bundle)
 		{
 		}
 
 
-		public override void ViewDidLoad()
+		public override void ViewDidLoad ()
 		{
-			base.ViewDidLoad();
+			base.ViewDidLoad ();
 		}
 	}
 }

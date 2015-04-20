@@ -5,32 +5,32 @@ using UIKit;
 
 namespace GraphicFoo
 {
-    public class GridLayout : UICollectionViewFlowLayout
-    {
-        public GridLayout ()
-        {
-        }
+	public class GridLayout : UICollectionViewFlowLayout
+	{
+		public GridLayout ()
+		{
+		}
 
-        public override bool ShouldInvalidateLayoutForBoundsChange (CGRect newBounds)
-        {
-            return true;
-        }
+		public override bool ShouldInvalidateLayoutForBoundsChange (CGRect newBounds)
+		{
+			return true;
+		}
 
-        public override UICollectionViewLayoutAttributes LayoutAttributesForItem (NSIndexPath path)
-        {
-            return base.LayoutAttributesForItem (path);
-        }
+		public override UICollectionViewLayoutAttributes LayoutAttributesForItem (NSIndexPath path)
+		{
+			return base.LayoutAttributesForItem (path);
+		}
 
-        public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect (CGRect rect)
-        {
-            return base.LayoutAttributesForElementsInRect (rect);
-        }
+		public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect (CGRect rect)
+		{
+			return base.LayoutAttributesForElementsInRect (rect);
+		}
 
-//        public override SizeF CollectionViewContentSize {
-//            get {
-//                return CollectionView.Bounds.Size;
-//            }
-//        }
-    }
+		//        public override SizeF CollectionViewContentSize {
+		//            get {
+		//                return CollectionView.Bounds.Size;
+		//            }
+		//        }
+	}
 }
 

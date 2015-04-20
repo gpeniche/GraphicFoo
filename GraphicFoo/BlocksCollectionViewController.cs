@@ -17,7 +17,7 @@ namespace GraphicFoo
 
 		public void SetParentController (IntroController intro)
 		{
-			this.introController = intro;
+			introController = intro;
 		}
 
 		public BlocksCollectionViewController (UICollectionViewLayout layout) : base (layout)
@@ -45,7 +45,7 @@ namespace GraphicFoo
 				headerId
 			);
 
-			UIMenuController.SharedMenuController.MenuItems = new UIMenuItem[] {
+			UIMenuController.SharedMenuController.MenuItems = new [] {
 				new UIMenuItem ("More info", new Selector ("custom"))
 			};
 		}
@@ -65,19 +65,19 @@ namespace GraphicFoo
 			UICollectionView collectionView, NSIndexPath indexPath)
 		{
 
-			var blockCell = (BlockCell)collectionView.DequeueReusableCell (
-				                blockCellId,
-				                indexPath
-			                );
+			BlockCell blockCell = (BlockCell)collectionView.DequeueReusableCell (
+				                      blockCellId,
+				                      indexPath
+			                      );
 
-			var block = blocks [indexPath.Row];
+			IBlock block = blocks [indexPath.Row];
 
 			blockCell.blockCell = block;
 
 			blockCell.SetTitle ();
 			blockCell.SetExample ();
 			blockCell.SetImage ();
-			blockCell.SetParentController (this.introController);
+			blockCell.SetParentController (introController);
 
 			return blockCell;
 		}
@@ -88,10 +88,10 @@ namespace GraphicFoo
 			NSIndexPath indexPath)
 		{
 			Header headerView = (Header)collectionView.DequeueReusableSupplementaryView (
-				elementKind,
-				headerId,
-				indexPath
-			);
+				                    elementKind,
+				                    headerId,
+				                    indexPath
+			                    );
 			headerView.Text = "Your blocks to choose";
 			return headerView;
 		}
@@ -168,7 +168,7 @@ namespace GraphicFoo
 		{
 			base.WillRotate (toInterfaceOrientation, duration);
 
-			var lineLayout = CollectionView.CollectionViewLayout as LineLayout;
+			LineLayout lineLayout = CollectionView.CollectionViewLayout as LineLayout;
 			if (lineLayout != null) {
 				if ((toInterfaceOrientation == UIInterfaceOrientation.Portrait) ||
 				    (toInterfaceOrientation == UIInterfaceOrientation.PortraitUpsideDown))
@@ -209,7 +209,7 @@ namespace GraphicFoo
 			ContentView.Add (blockAction);
 
 			blockAction.TouchUpInside += (sender, e) =>
-				introController.AddBlock (blockCell.BlockView, blockCell.Type);
+				introController.AddBlock (blockCell.BlockView);
 		}
 
 		public void SetTitle ()
@@ -242,7 +242,7 @@ namespace GraphicFoo
 
 		public void SetParentController (IntroController intro)
 		{
-			this.introController = intro;
+			introController = intro;
 		}
 
 		[Export ("custom")]
@@ -264,9 +264,15 @@ namespace GraphicFoo
 		}
 	}
 
-	public class Header : UICollectionReusableView
+	public sealed class Header : UICollectionReusableView
 	{
-		UILabel label;
+		readonly UILabel label;
+
+		public UILabel Label {
+			get {
+				return label;
+			}
+		}
 
 		public string Text {
 			get {
@@ -281,7 +287,7 @@ namespace GraphicFoo
 		[Export ("initWithFrame:")]
 		public Header (CGRect frame) : base (frame)
 		{
-			label = new UILabel () {
+			label = new UILabel {
 				Frame = new CGRect (30, 0, 250, 50),
 				BackgroundColor = UIColor.FromRGB (55f, 55f, 55f)
 			};

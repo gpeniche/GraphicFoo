@@ -11,7 +11,7 @@ namespace GraphicFoo
 	// The UIApplicationDelegate for the application. This class is responsible for launching the
 	// User Interface of the application, as well as listening (and optionally responding) to
 	// application events from iOS.
-	[Register("AppDelegate")]
+	[Register ("AppDelegate")]
 	public partial class AppDelegate : UIApplicationDelegate
 	{
 		// class-level declarations
@@ -26,16 +26,16 @@ namespace GraphicFoo
 		//
 		// You have 17 seconds to return from this method, or iOS will terminate your application.
 		//
-		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
 			// create a new window instance based on the screen size
-			window = new UIWindow(UIScreen.MainScreen.Bounds);
+			window = new UIWindow (UIScreen.MainScreen.Bounds);
 			
 			// If you have defined a root view controller, set it here:
-			window.RootViewController = new RootViewController();
+			window.RootViewController = new RootViewController ();
 			
 			// make the window visible
-			window.MakeKeyAndVisible();
+			window.MakeKeyAndVisible ();
 			
 			return true;
 		}

@@ -26,12 +26,13 @@ namespace GraphicFoo
 		}
 
 		public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect (CGRect rect)
-		{
-			var array = base.LayoutAttributesForElementsInRect (rect);
-			var visibleRect = new CGRect (
-				                  CollectionView.ContentOffset,
-				                  CollectionView.Bounds.Size
-			                  );
+		{ 
+			UICollectionViewLayoutAttributes[] array;
+			array = base.LayoutAttributesForElementsInRect (rect);
+			CGRect visibleRect = new CGRect (
+				                     CollectionView.ContentOffset,
+				                     CollectionView.Bounds.Size
+			                     );
 			foreach (var attributes in array) {
 				if (attributes.Frame.IntersectsWith (rect)) {
 					float distance = (float)(visibleRect.GetMidX () - attributes.Center.X);
@@ -52,14 +53,14 @@ namespace GraphicFoo
 		{
 			float offSetAdjustment = float.MaxValue;
 			float horizontalCenter = (float)(proposedContentOffset.X +
-			                         (this.CollectionView.Bounds.Size.Width / 2.0));
+			                         (CollectionView.Bounds.Size.Width / 2.0));
 			CGRect targetRect = new CGRect (
 				                    proposedContentOffset.X, 0.0f,
-				                    this.CollectionView.Bounds.Size.Width,
-				                    this.CollectionView.Bounds.Size.Height
+				                    CollectionView.Bounds.Size.Width,
+				                    CollectionView.Bounds.Size.Height
 			                    );
 			var array = base.LayoutAttributesForElementsInRect (targetRect);
-			foreach (var layoutAttributes in array) {
+			foreach (UICollectionViewLayoutAttributes layoutAttributes in array) {
 				float itemHorizontalCenter = (float)layoutAttributes.Center.X;
 				if (Math.Abs (itemHorizontalCenter - horizontalCenter) < Math.Abs (offSetAdjustment)) {
 					offSetAdjustment = itemHorizontalCenter - horizontalCenter;

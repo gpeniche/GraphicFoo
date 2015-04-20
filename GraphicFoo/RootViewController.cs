@@ -12,17 +12,17 @@ namespace GraphicFoo
 		// the sidebar controller for the app
 		public SidebarController SidebarController { get; private set; }
 
-		public RootViewController() : base(null, null)
+		public RootViewController () : base (null, null)
 		{
 
 		}
 
-		public override void ViewDidLoad()
+		public override void ViewDidLoad ()
 		{
-			base.ViewDidLoad();
+			base.ViewDidLoad ();
 
 			// create a slideout navigation controller with the top navigation controller and the menu view controller
-			SidebarController = new SidebarController(this, new IntroController(), new SideMenuController());
+			SidebarController = new SidebarController (this, new IntroController (), new SideMenuController ());
 			SidebarController.MenuLocation = SidebarController.MenuLocations.Right;
 		}
 	}
