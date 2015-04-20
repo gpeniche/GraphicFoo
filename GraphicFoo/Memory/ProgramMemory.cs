@@ -35,7 +35,7 @@ namespace GraphicFoo
 		public Procedure AddProcedure (
 			string id, 
 			string type, 
-			VariableBlock variableBlock = null)
+			VariableBlock variableBlock)
 		{
 			Procedure procedure = new Procedure (id, type, variableBlock);
 			procedures.Add (procedure.name, procedure);
@@ -47,9 +47,34 @@ namespace GraphicFoo
 			return procedures [procedureName];
 		}
 
+		public Variable FindVariable (Procedure scope, string id)
+		{
+			Variable variable = null;
+
+			if (scope != null) {
+				variable = scope.ReadVariable (id);
+				if (variable != null) {
+					return variable;
+				}
+			}
+
+			variable = globalVariables.ReadVariable (id);
+			if (variable != null) {
+				return variable;
+			}
+
+			Console.WriteLine (
+				"Variable {0} not found on scope {1}", 
+				id, 
+				scope.name
+			);
+			return variable;
+		}
+
 		public Variable DebugFindVariable (string id)
 		{
-			Variable variable;
+			Variable variable = null;
+
 			foreach (Procedure procedure in procedures.Values) {
 				variable = procedure.ReadVariable (id);
 				if (variable != null) {
@@ -58,12 +83,11 @@ namespace GraphicFoo
 			}
 
 			variable = globalVariables.ReadVariable (id);
-
 			if (variable != null) {
 				return variable;
 			}
 
-			return null;
+			return variable;
 		}
 
 		public override string ToString ()

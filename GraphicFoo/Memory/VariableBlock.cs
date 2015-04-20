@@ -32,6 +32,11 @@ namespace GraphicFoo
 			return variables.ContainsKey (key);
 		}
 
+		public int Count ()
+		{
+			return variables.Count;
+		}
+
 		public override string ToString ()
 		{
 			string output = "\n";

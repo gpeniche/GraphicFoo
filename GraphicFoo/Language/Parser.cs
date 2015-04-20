@@ -30,6 +30,8 @@ namespace GraphicFoo
 
 		// Memory
 		public ProgramMemory programMemory;
+		// Scope
+		public Procedure scope = null;
 
 		public Parser (Scanner scanner)
 		{
@@ -141,23 +143,24 @@ namespace GraphicFoo
 			}
 		}
 
-		void Declaration (Procedure procedure = null)
+		void Declaration ()
 		{
 			Type ();
 			string type = GetLastTokenValue ();
 			string id = Assignation ();
-			if (procedure == null) {
+			if (scope == null) {
 				programMemory.AddGlobalVariable (id, type);
 			} else {
-				procedure.AddVariable (id, type);
+				scope.AddVariable (id, type);
 			}
 		}
 
 		void Function ()
 		{
-			Procedure procedure = FunctionHeader ();
+			scope = FunctionHeader ();
+			Quadruple.scope = scope;
 			while (StartOf ((int)TokenEnum.Id)) {
-				Declaration (procedure);
+				Declaration ();
 			}
 			while (StartOf ((int)TokenEnum.Number)) {
 				Statute ();
@@ -233,7 +236,7 @@ namespace GraphicFoo
 			if (la.kind == (int)TokenEnum.Id) {
 				Get ();
 				string id = GetLastTokenValue ();
-				return programMemory.DebugFindVariable (id);
+				return programMemory.FindVariable (scope, id);
 			} else if (la.kind == (int)TokenEnum.Number ||
 			           la.kind == (int)TokenEnum.String ||
 			           la.kind == (int)TokenEnum.True ||

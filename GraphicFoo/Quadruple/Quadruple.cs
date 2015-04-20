@@ -6,6 +6,7 @@ namespace GraphicFoo
 {
 	public class Quadruple
 	{
+		public static Procedure scope = null;
 		public static Stack<string> operandStack;
 		public static Stack<GraphicFooType> typeStack;
 		public static Stack<Operators> operatorStack;
@@ -36,9 +37,10 @@ namespace GraphicFoo
 			hierarchyStack = new Stack<int> ();
 		}
 
-		private static Quadruple CreateExpressionQuadruple (Operators[] operators)
+		private static Quadruple CreateExpressionQuadruple (
+			Operators[] operators)
 		{
-			int index = (hierarchyStack.Count > 0) ? hierarchyStack.Peek (): 0;
+			int index = (hierarchyStack.Count > 0) ? hierarchyStack.Peek () : 0;
 			if (operatorStack.Count > index && 
 				 operators.Contains (operatorStack.Peek ())) {
 				GraphicFooType t2 = typeStack.Pop ();
@@ -49,7 +51,7 @@ namespace GraphicFoo
 					string v2 = operandStack.Pop ();
 					string v1 = operandStack.Pop ();
 
-					Variable temp = new Variable ("t", t1);
+					Variable temp = scope.AddTemporalVariable (t1);
 					operandStack.Push (temp.name);
 					typeStack.Push (temp.type);
 
