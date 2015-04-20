@@ -17,7 +17,7 @@ namespace GraphicFoo
 		{
 			ItemSize = new CGSize (ITEM_SIZE, ITEM_SIZE);
 			ScrollDirection = UICollectionViewScrollDirection.Vertical;
-            SectionInset = new UIEdgeInsets (0,0,0,0);
+			SectionInset = new UIEdgeInsets (0, 0, 0, 0);
 			MinimumLineSpacing = 0.0f;
 		}
 
@@ -29,9 +29,10 @@ namespace GraphicFoo
 		public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect (CGRect rect)
 		{
 			var array = base.LayoutAttributesForElementsInRect (rect);
-            var visibleRect = new CGRect (CollectionView.ContentOffset, CollectionView.Bounds.Size);
-			//var visibleRect = new CGRect (0, 0 , 260, CollectionView.Bounds.Size.Height);
-
+			var visibleRect = new CGRect (
+				                  CollectionView.ContentOffset,
+				                  CollectionView.Bounds.Size
+			                  );
 			foreach (var attributes in array) {
 				if (attributes.Frame.IntersectsWith (rect)) {
 					float distance = (float)(visibleRect.GetMidX () - attributes.Center.X);
@@ -46,13 +47,18 @@ namespace GraphicFoo
 			return array;
 		}
 
-		public override CGPoint TargetContentOffset (CGPoint proposedContentOffset, CGPoint scrollingVelocity)
+		public override CGPoint TargetContentOffset (
+			CGPoint proposedContentOffset, 
+			CGPoint scrollingVelocity)
 		{
 			float offSetAdjustment = float.MaxValue;
-			float horizontalCenter = (float)(proposedContentOffset.X + (this.CollectionView.Bounds.Size.Width / 2.0));
-			//float horizontalCenter = (float)(proposedContentOffset.X + (260f / 2.0));
-			CGRect targetRect = new CGRect (proposedContentOffset.X, 0.0f, this.CollectionView.Bounds.Size.Width, this.CollectionView.Bounds.Size.Height);
-			//CGRect targetRect = new CGRect (proposedContentOffset.X, 0.0f, 260f, this.CollectionView.Bounds.Size.Height);
+			float horizontalCenter = (float)(proposedContentOffset.X +
+			                         (this.CollectionView.Bounds.Size.Width / 2.0));
+			CGRect targetRect = new CGRect (
+				                    proposedContentOffset.X, 0.0f,
+				                    this.CollectionView.Bounds.Size.Width,
+				                    this.CollectionView.Bounds.Size.Height
+			                    );
 			var array = base.LayoutAttributesForElementsInRect (targetRect);
 			foreach (var layoutAttributes in array) {
 				float itemHorizontalCenter = (float)layoutAttributes.Center.X;
@@ -60,7 +66,7 @@ namespace GraphicFoo
 					offSetAdjustment = itemHorizontalCenter - horizontalCenter;
 				}
 			}
-            return new CGPoint (proposedContentOffset.X + offSetAdjustment, proposedContentOffset.Y);
+			return new CGPoint (proposedContentOffset.X + offSetAdjustment, proposedContentOffset.Y);
 		}
 
 	}

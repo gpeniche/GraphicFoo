@@ -11,6 +11,8 @@ namespace GraphicFoo
 
 		string Example { get; }
 
+		string Explanation { get; }
+
 		int Type { get; }
 
 		UIImage Image { get; }

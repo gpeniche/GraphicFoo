@@ -10,8 +10,8 @@ namespace GraphicFoo
 		{
 		}
 
-		public int Type{
-			get{
+		public int Type {
+			get {
 				return 0;
 			}
 		}
@@ -34,6 +34,12 @@ namespace GraphicFoo
 			}
 		}
 
+		public string Explanation {
+			get {
+				return "myFirstFoo = 5";
+			}
+		}
+
 		public UIImage Image {
 			get {
 				return UIImage.FromBundle ("Declaration.png");
@@ -42,37 +48,50 @@ namespace GraphicFoo
 
 		public UIView BlockView {
 			get {
-				var blockView = new UIView (new RectangleF(260, 200, 400, 100));
-				//blockView.BackgroundColor = UIColor.Blue;
+				UIView blockView = 
+					new UIView (new RectangleF (260, 200, 400, 100));
 
-				var backgroundImage = new UIImageView (new RectangleF(-36, -9, 400, 132));
+				UIImageView backgroundImage = 
+					new UIImageView (new RectangleF (-36, -9, 400, 132));
 				backgroundImage.Image = this.Image;
 
-				var varName = new UITextField(new RectangleF(10, 5, 100, 100));
+				var varName = new UITextField (new RectangleF (10, 5, 100, 100));
 				varName.Placeholder = "var name";
 
-				var equalLabel = new UILabel(new RectangleF(120, 0, 50, 100));
-				equalLabel.Font = UIFont.SystemFontOfSize(80.0f);
+				UILabel equalLabel = 
+					new UILabel (new RectangleF (120, 0, 50, 100));
+				equalLabel.Font = UIFont.SystemFontOfSize (80.0f);
 				equalLabel.TextAlignment = UITextAlignment.Center;
 				equalLabel.TextColor = UIColor.White;
 				equalLabel.Text = "=";
 
-				var varValue = new UITextField(new RectangleF(170, 5, 220, 100));
+				UITextField varValue = 
+					new UITextField (new RectangleF (170, 5, 220, 100));
 				varValue.Placeholder = "add value";
 
-				var deleteBlock = UIButton.FromType(UIButtonType.Custom);
-				deleteBlock.Frame = new RectangleF(290, 8, 20, 20);
-				deleteBlock.SetImage(UIImage.FromFile ("delete-icon.png"), UIControlState.Normal);
+				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
+				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);
+				deleteBlock.SetImage (
+					UIImage.FromFile ("delete-icon.png"),
+					UIControlState.Normal
+				);
 				deleteBlock.Tag = 2;
 
-				var insertPositionBtn = UIButton.FromType(UIButtonType.Custom);
-				insertPositionBtn.Frame = new RectangleF(265, 35, 50, 50);
-				insertPositionBtn.SetImage(UIImage.FromBundle ("circle-empty.png"), UIControlState.Normal);
-				insertPositionBtn.SetImage(UIImage.FromBundle ("circle-full.png"), UIControlState.Selected);
-				insertPositionBtn.SetImage(UIImage.FromBundle ("circle-full.png"), UIControlState.Highlighted);
+				UIButton insertPositionBtn = UIButton.FromType (UIButtonType.Custom);
+				insertPositionBtn.Frame = new RectangleF (265, 35, 50, 50);
+				insertPositionBtn.SetImage (
+					UIImage.FromBundle ("circle-empty.png"),
+					UIControlState.Normal
+				);
+				insertPositionBtn.SetImage (
+					UIImage.FromBundle ("circle-full.png"),
+					UIControlState.Selected
+				);
+				insertPositionBtn.SetImage (
+					UIImage.FromBundle ("circle-full.png"),
+					UIControlState.Highlighted
+				);
 				insertPositionBtn.Tag = 1;
-
-				//var lineImage = new UIImageView (UIImage.FromFile ("circle-full.png"));
 
 				blockView.Add (backgroundImage);
 				blockView.Add (varName);
@@ -80,7 +99,6 @@ namespace GraphicFoo
 				blockView.Add (varValue);
 				blockView.Add (deleteBlock);
 				blockView.Add (insertPositionBtn);
-				//blockView.Add (lineImage);
 
 				return blockView;
 			}
