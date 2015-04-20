@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,6 +22,10 @@
     <MtouchArch>i386</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>full</DebugType>
@@ -94,25 +98,29 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Xamarin-Sidebar-Unified">
+      <HintPath>..\..\..\Downloads\SidebarNavigation-1.7\lib\ios-unified\Xamarin-Sidebar-Unified.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
-    <InterfaceDefinition Include="MainStoryboard.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="GraphicFooViewController.cs" />
-    <Compile Include="GraphicFooViewController.designer.cs">
-      <DependentUpon>GraphicFooViewController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="BaseController.cs" />
+    <Compile Include="ContentController.cs" />
+    <Compile Include="IntroController.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="RootViewController.cs" />
+    <Compile Include="SideMenuController.cs" />
     <Compile Include="Memory\Variable.cs" />
     <Compile Include="Memory\Procedure.cs" />
     <Compile Include="Memory\GraphicFooType.cs" />
@@ -122,10 +130,23 @@
     <Compile Include="Language\Scanner.cs" />
     <Compile Include="Language\TokenEnum.cs" />
     <Compile Include="Memory\Identifier.cs" />
+    <Compile Include="GridLayout.cs" />
+    <Compile Include="LineLayout.cs" />
+    <Compile Include="IBlock.cs" />
+    <Compile Include="Declaration.cs" />
+    <Compile Include="LoopHeader.cs" />
+    <Compile Include="EndLoop.cs" />
+    <Compile Include="BlocksCollectionViewController.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
+    <BundleResource Include="Declaration.png" />
+    <BundleResource Include="delete-icon.png" />
+    <BundleResource Include="circle-empty.png" />
+    <BundleResource Include="circle-full.png" />
+    <BundleResource Include="menu.png" />
+    <BundleResource Include="Loopheader.png" />
+    <BundleResource Include="Endloop.png" />
   </ItemGroup>
 </Project>
