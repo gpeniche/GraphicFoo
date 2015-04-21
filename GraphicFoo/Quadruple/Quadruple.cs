@@ -35,28 +35,34 @@ namespace GraphicFoo
 			typeStack = new Stack<GraphicFooType> ();
 			operatorStack = new Stack<Operators> ();
 			hierarchyStack = new Stack<int> ();
+			AssociationRules.Initialize ();
 		}
 
 		private static Quadruple CreateExpressionQuadruple (
 			Operators[] operators)
 		{
 			int index = (hierarchyStack.Count > 0) ? hierarchyStack.Peek () : 0;
-			if (operatorStack.Count > index && 
-				 operators.Contains (operatorStack.Peek ())) {
+			if (operatorStack.Count > index &&
+			    operators.Contains (operatorStack.Peek ())) {
 				GraphicFooType t2 = typeStack.Pop ();
 				GraphicFooType t1 = typeStack.Pop ();
 
-				if (t1 != GraphicFooType.Invalid && 
-					t2 != GraphicFooType.Invalid) {
+				if (t1 != GraphicFooType.Invalid &&
+				    t2 != GraphicFooType.Invalid) {
+
 					string v2 = operandStack.Pop ();
 					string v1 = operandStack.Pop ();
+					Operators op = operatorStack.Pop ();
 
-					Variable temp = scope.AddTemporalVariable (t1);
+					GraphicFooType resultingType = 
+						AssociationRules.GetOperationType (op, t1, t2);
+
+					Variable temp = scope.AddTemporalVariable (resultingType);
 					operandStack.Push (temp.name);
 					typeStack.Push (temp.type);
 
 					return new Quadruple (
-						operatorStack.Pop (), 
+						op, 
 						v1, 
 						v2,
 						temp	
@@ -103,7 +109,7 @@ namespace GraphicFoo
 			op.ToString () + " " +
 			v1.ToString () + " " +
 			v2.ToString () + " " +
-			target.name;
+			target.ToString ();
 		}
 	}
 }

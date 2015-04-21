@@ -21,7 +21,7 @@ namespace GraphicFoo
 
 		public override string ToString ()
 		{
-			return type.ToString () + " " + name;
+			return "[" +type.ToString () + " " + name + "]";
 		}
 	}
 }

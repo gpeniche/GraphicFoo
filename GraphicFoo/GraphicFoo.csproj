@@ -124,6 +124,7 @@
     <Compile Include="Memory\Identifier.cs" />
     <Compile Include="Quadruple\Quadruple.cs" />
     <Compile Include="Quadruple\Operators.cs" />
+    <Compile Include="Quadruple\AssociationRules.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
