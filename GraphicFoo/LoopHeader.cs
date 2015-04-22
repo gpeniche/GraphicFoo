@@ -21,7 +21,7 @@ namespace GraphicFoo
 
 		public string Syntax {
 			get {
-				return "LoopHeader ( %Expression% )";
+				return " loopHeader ( %Expression% ) ";
 			}
 		}
 
@@ -33,7 +33,7 @@ namespace GraphicFoo
 
 		public string Explanation {
 			get {
-				return "myFirstFoo = 5";
+				return "LoopHeader ()";
 			}
 		}
 
@@ -74,6 +74,7 @@ namespace GraphicFoo
 					whileStatement.ResignFirstResponder ();
 					return true; 
 				};
+				whileStatement.AccessibilityLabel = "Expression";
 
 				UILabel rightParenthesis = 
 					new UILabel (new RectangleF (220, 0, 70, 100));
@@ -94,15 +95,15 @@ namespace GraphicFoo
 					UIButton.FromType (UIButtonType.Custom);
 				insertPositionBtn.Frame = new RectangleF (265, 35, 50, 50);
 				insertPositionBtn.SetImage (
-					UIImage.FromFile ("circle-empty.png"),
+					UIImage.FromBundle ("circle-empty.png"),
 					UIControlState.Normal
 				);
 				insertPositionBtn.SetImage (
-					UIImage.FromFile ("circle-full.png"),
+					UIImage.FromBundle ("circle-full.png"),
 					UIControlState.Selected
 				);
 				insertPositionBtn.SetImage (
-					UIImage.FromFile ("circle-full.png"),
+					UIImage.FromBundle ("circle-full.png"),
 					UIControlState.Highlighted
 				);
 				insertPositionBtn.Tag = 1;

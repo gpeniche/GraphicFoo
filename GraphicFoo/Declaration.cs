@@ -21,7 +21,7 @@ namespace GraphicFoo
 
 		public string Syntax {
 			get {
-				return "myFirstFoo = 5";
+				return " %varName% = %varValue% ; ";
 			}
 		}
 
@@ -58,6 +58,7 @@ namespace GraphicFoo
 					varName.ResignFirstResponder ();
 					return true; 
 				};
+				varName.AccessibilityLabel = "varName";
 
 				UILabel equalLabel = 
 					new UILabel (new RectangleF (120, 0, 50, 100));
@@ -73,6 +74,7 @@ namespace GraphicFoo
 					varValue.ResignFirstResponder ();
 					return true; 
 				};
+				varValue.AccessibilityLabel = "varValue";
 
 				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
 				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);

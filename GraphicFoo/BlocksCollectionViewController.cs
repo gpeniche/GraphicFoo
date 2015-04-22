@@ -192,7 +192,9 @@ namespace GraphicFoo
 		{
 			BackgroundView = new UIView{ BackgroundColor = UIColor.Orange };
 
-			SelectedBackgroundView = new UIView{ BackgroundColor = UIColor.Green };
+			SelectedBackgroundView = new UIView { 
+				BackgroundColor = UIColor.Green 
+			};
 
 			ContentView.Layer.BorderColor = UIColor.LightGray.CGColor;
 			ContentView.Layer.BorderWidth = 2.0f;
@@ -208,8 +210,10 @@ namespace GraphicFoo
 
 			ContentView.Add (blockAction);
 
-			blockAction.TouchUpInside += (sender, e) =>
+			blockAction.TouchUpInside += (sender, e) => {
+				introController.AddTextToCompilingString (blockCell.Syntax);
 				introController.AddBlock (blockCell.BlockView);
+			};
 		}
 
 		public void SetTitle ()

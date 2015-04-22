@@ -20,19 +20,19 @@ namespace GraphicFoo
 
 		public string Syntax {
 			get {
-				return "} EndLoop";
+				return " endLoop ";
 			}
 		}
 
 		public string Example {
 			get {
-				return "} EndLoop";
+				return "EndLoop";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return "myFirstFoo = 5";
+				return "EndLoop";
 			}
 		}
 
@@ -71,15 +71,15 @@ namespace GraphicFoo
 					UIButton.FromType (UIButtonType.Custom);
 				insertPositionBtn.Frame = new RectangleF (265, 35, 50, 50);
 				insertPositionBtn.SetImage (
-					UIImage.FromFile ("circle-empty.png"), 
+					UIImage.FromBundle ("circle-empty.png"), 
 					UIControlState.Normal
 				);
 				insertPositionBtn.SetImage (
-					UIImage.FromFile ("circle-full.png"), 
+					UIImage.FromBundle ("circle-full.png"), 
 					UIControlState.Selected
 				);
 				insertPositionBtn.SetImage (
-					UIImage.FromFile ("circle-full.png"), 
+					UIImage.FromBundle ("circle-full.png"), 
 					UIControlState.Highlighted
 				);
 				insertPositionBtn.Tag = 1;
