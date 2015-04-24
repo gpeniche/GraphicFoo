@@ -32,7 +32,7 @@ namespace GraphicFoo
 
 			UIButton contentButton = new UIButton (UIButtonType.System);
 			contentButton.Frame = new RectangleF (0, 220, 260, 20);
-			contentButton.SetTitle ("Content", UIControlState.Normal);
+			contentButton.SetTitle ("TestView", UIControlState.Normal);
 			contentButton.TouchUpInside += (sender, e) => 
 				SidebarController.ChangeContentView (new ContentController ());
 

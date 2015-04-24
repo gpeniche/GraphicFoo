@@ -75,11 +75,7 @@ namespace GraphicFoo
 			menuButton.TouchUpInside += (sender, e) => {
 				SidebarController.ToggleMenu ();
 			};
-
-			UITextField CodeTextField = new UITextField ();
-			CodeTextField.Frame = new RectangleF (310, 350, 220, 30);
-			CodeTextField.Placeholder = "Add code";
-
+				
 			UIButton runButton = new UIButton (UIButtonType.Custom);
 			runButton.Frame = new RectangleF (600, 20, 60, 45);
 			runButton.SetTitle ("Run", UIControlState.Normal);
@@ -88,16 +84,6 @@ namespace GraphicFoo
 				UIControlState.Normal
 			);
 			runButton.TouchUpInside += (sender, e) => {
-				/*string input = CodeTextField.Text;
-				new UIAlertView ("Code", input, null, "OK", null).Show ();
-				Scanner scanner = new Scanner (input);
-				Parser parser = new Parser (scanner);
-				parser.Parse ();
-				string errorMessage = 
-					(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
-					parser.errors.errorMessage : 
-					"None";
-				new UIAlertView ("Errors", errorMessage, null, "OK", null).Show ();*/
 				SendToCompile ();
 			};
 
@@ -118,7 +104,6 @@ namespace GraphicFoo
 			scrollView.Add (blocksView);
 			scrollView.Add (title);
 			scrollView.Add (menuButton);
-			scrollView.Add (CodeTextField);
 			scrollView.Add (runButton);
 
 			View.Add (scrollView);

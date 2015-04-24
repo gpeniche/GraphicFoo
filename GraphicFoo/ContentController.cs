@@ -36,6 +36,33 @@ namespace GraphicFoo
 				SidebarController.ToggleMenu ();
 			};
 
+			UIButton runButton = new UIButton (UIButtonType.Custom);
+			runButton.Frame = new RectangleF (600, 20, 60, 45);
+			runButton.SetTitle ("Run", UIControlState.Normal);
+			runButton.SetImage (
+				UIImage.FromBundle ("play-button.png"),
+				UIControlState.Normal
+			);
+
+			UITextField codeTextField = new UITextField ();
+			codeTextField.Frame = new RectangleF (310, 350, 220, 30);
+			codeTextField.Placeholder = "Add code";
+
+			runButton.TouchUpInside += (sender, e) => {
+				string input = codeTextField.Text;
+				new UIAlertView ("Code", input, null, "OK", null).Show ();
+				Scanner scanner = new Scanner (input);
+				Parser parser = new Parser (scanner);
+				parser.Parse ();
+				string errorMessage = 
+					(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
+					parser.errors.errorMessage : 
+					"None";
+				new UIAlertView ("Errors", errorMessage, null, "OK", null).Show ();
+			};
+
+			View.Add (codeTextField);
+			View.Add (runButton);
 			View.Add (title);
 			View.Add (body);
 			View.Add (menuButton);
