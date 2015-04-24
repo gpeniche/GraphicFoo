@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -99,7 +99,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
     <Reference Include="Xamarin-Sidebar-Unified">
-      <HintPath>..\..\..\Downloads\SidebarNavigation-1.7\lib\ios-unified\Xamarin-Sidebar-Unified.dll</HintPath>
+      <HintPath>Xamarin-Sidebar-Unified.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -111,16 +111,12 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="Xamarin-Sidebar-Unified.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="BaseController.cs" />
-    <Compile Include="ContentController.cs" />
-    <Compile Include="IntroController.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="RootViewController.cs" />
-    <Compile Include="SideMenuController.cs" />
     <Compile Include="Memory\Variable.cs" />
     <Compile Include="Memory\Procedure.cs" />
     <Compile Include="Memory\GraphicFooType.cs" />
@@ -130,24 +126,37 @@
     <Compile Include="Language\Scanner.cs" />
     <Compile Include="Language\TokenEnum.cs" />
     <Compile Include="Memory\Identifier.cs" />
-    <Compile Include="GridLayout.cs" />
-    <Compile Include="LineLayout.cs" />
-    <Compile Include="IBlock.cs" />
-    <Compile Include="Declaration.cs" />
-    <Compile Include="LoopHeader.cs" />
-    <Compile Include="EndLoop.cs" />
-    <Compile Include="BlocksCollectionViewController.cs" />
+    <Compile Include="Quadruple\Quadruple.cs" />
+    <Compile Include="Quadruple\Operators.cs" />
+    <Compile Include="Quadruple\AssociationRules.cs" />
+    <Compile Include="Blocks\Declaration.cs" />
+    <Compile Include="Blocks\EndLoop.cs" />
+    <Compile Include="Blocks\IBlock.cs" />
+    <Compile Include="Blocks\LoopHeader.cs" />
+    <Compile Include="View\BlocksCollectionViewController.cs" />
+    <Compile Include="View\RootViewController.cs" />
+    <Compile Include="Controller\BaseController.cs" />
+    <Compile Include="Controller\ContentController.cs" />
+    <Compile Include="Controller\IntroController.cs" />
+    <Compile Include="Controller\SideMenuController.cs" />
+    <Compile Include="View\GridLayout.cs" />
+    <Compile Include="View\LineLayout.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
-    <BundleResource Include="Declaration.png" />
-    <BundleResource Include="delete-icon.png" />
-    <BundleResource Include="circle-empty.png" />
-    <BundleResource Include="circle-full.png" />
-    <BundleResource Include="menu.png" />
-    <BundleResource Include="Loopheader.png" />
-    <BundleResource Include="Endloop.png" />
-    <BundleResource Include="play-button.png" />
+    <Folder Include="Quadruple\" />
+    <Folder Include="Graphics\" />
+    <BundleResource Include="Graphics\Declaration.png" />
+    <BundleResource Include="Graphics\delete-icon.png" />
+    <BundleResource Include="Graphics\Endloop.png" />
+    <BundleResource Include="Graphics\Loopheader.png" />
+    <BundleResource Include="Graphics\menu.png" />
+    <BundleResource Include="Graphics\play-button.png" />
+    <BundleResource Include="Graphics\circle-empty.png" />
+    <BundleResource Include="Graphics\circle-full.png" />
+    <Folder Include="Blocks\" />
+    <Folder Include="View\" />
+    <Folder Include="Controller\" />
   </ItemGroup>
 </Project>
