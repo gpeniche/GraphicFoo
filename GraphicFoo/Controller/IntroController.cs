@@ -69,7 +69,7 @@ namespace GraphicFoo
 			UIButton menuButton = new UIButton (UIButtonType.System);
 			menuButton.Frame = new RectangleF (700, 20, 50, 50);
 			menuButton.SetImage (
-				UIImage.FromBundle ("menu.png"),
+				UIImage.FromBundle ("Graphics/menu.png"),
 				UIControlState.Normal
 			);
 			menuButton.TouchUpInside += (sender, e) => {
@@ -80,7 +80,7 @@ namespace GraphicFoo
 			runButton.Frame = new RectangleF (600, 20, 60, 45);
 			runButton.SetTitle ("Run", UIControlState.Normal);
 			runButton.SetImage (
-				UIImage.FromBundle ("play-button.png"),
+				UIImage.FromBundle ("Graphics/play-button.png"),
 				UIControlState.Normal
 			);
 			runButton.TouchUpInside += (sender, e) => {

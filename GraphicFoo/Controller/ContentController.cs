@@ -40,7 +40,7 @@ namespace GraphicFoo
 			runButton.Frame = new RectangleF (600, 20, 60, 45);
 			runButton.SetTitle ("Run", UIControlState.Normal);
 			runButton.SetImage (
-				UIImage.FromBundle ("play-button.png"),
+				UIImage.FromBundle ("Graphics/play-button.png"),
 				UIControlState.Normal
 			);
 

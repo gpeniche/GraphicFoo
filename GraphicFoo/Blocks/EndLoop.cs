@@ -38,7 +38,7 @@ namespace GraphicFoo
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Endloop.png");
+				return UIImage.FromBundle ("Graphics/Endloop.png");
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace GraphicFoo
 				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
 				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);
 				deleteBlock.SetImage (
-					UIImage.FromFile ("delete-icon.png"), 
+					UIImage.FromFile ("Graphics/delete-icon.png"), 
 					UIControlState.Normal
 				);
 				deleteBlock.Tag = 2;
@@ -71,15 +71,15 @@ namespace GraphicFoo
 					UIButton.FromType (UIButtonType.Custom);
 				insertPositionBtn.Frame = new RectangleF (265, 35, 50, 50);
 				insertPositionBtn.SetImage (
-					UIImage.FromBundle ("circle-empty.png"), 
+					UIImage.FromBundle ("Graphics/circle-empty.png"), 
 					UIControlState.Normal
 				);
 				insertPositionBtn.SetImage (
-					UIImage.FromBundle ("circle-full.png"), 
+					UIImage.FromBundle ("Graphics/circle-full.png"), 
 					UIControlState.Selected
 				);
 				insertPositionBtn.SetImage (
-					UIImage.FromBundle ("circle-full.png"), 
+					UIImage.FromBundle ("Graphics/circle-full.png"), 
 					UIControlState.Highlighted
 				);
 				insertPositionBtn.Tag = 1;
