@@ -22,6 +22,10 @@
     <MtouchArch>i386</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>full</DebugType>
@@ -94,25 +98,25 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Xamarin-Sidebar-Unified">
+      <HintPath>Xamarin-Sidebar-Unified.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
-    <InterfaceDefinition Include="MainStoryboard.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="Xamarin-Sidebar-Unified.dll" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="GraphicFooViewController.cs" />
-    <Compile Include="GraphicFooViewController.designer.cs">
-      <DependentUpon>GraphicFooViewController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Main.cs" />
     <Compile Include="Memory\Variable.cs" />
     <Compile Include="Memory\Procedure.cs" />
     <Compile Include="Memory\GraphicFooType.cs" />
@@ -125,11 +129,34 @@
     <Compile Include="Quadruple\Quadruple.cs" />
     <Compile Include="Quadruple\Operators.cs" />
     <Compile Include="Quadruple\AssociationRules.cs" />
+    <Compile Include="Blocks\Declaration.cs" />
+    <Compile Include="Blocks\EndLoop.cs" />
+    <Compile Include="Blocks\IBlock.cs" />
+    <Compile Include="Blocks\LoopHeader.cs" />
+    <Compile Include="View\BlocksCollectionViewController.cs" />
+    <Compile Include="View\RootViewController.cs" />
+    <Compile Include="Controller\BaseController.cs" />
+    <Compile Include="Controller\ContentController.cs" />
+    <Compile Include="Controller\IntroController.cs" />
+    <Compile Include="Controller\SideMenuController.cs" />
+    <Compile Include="View\GridLayout.cs" />
+    <Compile Include="View\LineLayout.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
     <Folder Include="Quadruple\" />
+    <Folder Include="Graphics\" />
+    <BundleResource Include="Graphics\Declaration.png" />
+    <BundleResource Include="Graphics\delete-icon.png" />
+    <BundleResource Include="Graphics\Endloop.png" />
+    <BundleResource Include="Graphics\Loopheader.png" />
+    <BundleResource Include="Graphics\menu.png" />
+    <BundleResource Include="Graphics\play-button.png" />
+    <BundleResource Include="Graphics\circle-empty.png" />
+    <BundleResource Include="Graphics\circle-full.png" />
+    <Folder Include="Blocks\" />
+    <Folder Include="View\" />
+    <Folder Include="Controller\" />
   </ItemGroup>
 </Project>
