@@ -112,9 +112,9 @@ namespace GraphicFoo
 				return false;
 			} else {
 				SynErr (n);
-				while (!(set [syFol, kind] || 
-					set [repFol, kind] || 
-					set [0, kind])) {
+				while (!(set [syFol, kind] ||
+				       set [repFol, kind] ||
+				       set [0, kind])) {
 					Get ();
 					kind = la.kind;
 				}
@@ -207,11 +207,11 @@ namespace GraphicFoo
 		{
 			if (la.kind == (int)TokenEnum.Id) {
 				Assignation ();
-			} else if (la.kind == 22) {
+			} else if (la.kind == (int)TokenEnum.If) {
 				Condition ();
-			} else if (la.kind == 21) {
+			} else if (la.kind == (int)TokenEnum.While) {
 				Loop ();
-			} else if (la.kind == 20) {
+			} else if (la.kind == (int)TokenEnum.Print) {
 				Print ();
 			} else if (la.kind == (int)TokenEnum.Function) {
 				CallFunction ();
@@ -276,8 +276,10 @@ namespace GraphicFoo
 			while (StartOf ((int)TokenEnum.Number)) {
 				Statute ();
 			}
-			if (la.kind == 23) {
+			if (la.kind == (int)TokenEnum.Else) {
 				Get ();
+				Quadruple.PopJump ();
+				Quadruple.CreateGotoQuadruple ();
 				while (StartOf ((int)TokenEnum.Number)) {
 					Statute ();
 				}
@@ -296,7 +298,7 @@ namespace GraphicFoo
 
 		void Print ()
 		{
-			Expect (20);
+			Expect ((int)TokenEnum.Print);
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
 			Expect ((int)TokenEnum.RightParenthesis);
@@ -361,7 +363,8 @@ namespace GraphicFoo
 
 		void EndIf ()
 		{
-			Expect (14);
+			Expect ((int)TokenEnum.EndIf);
+			Quadruple.PopJump ();
 		}
 
 		void EndLoop ()
@@ -371,7 +374,7 @@ namespace GraphicFoo
 
 		void LoopHeader ()
 		{
-			Expect (21);
+			Expect ((int)TokenEnum.While);
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
 			Expect ((int)TokenEnum.RightParenthesis);
@@ -379,9 +382,14 @@ namespace GraphicFoo
 
 		void IfHeader ()
 		{
-			Expect (22);
+			Expect ((int)TokenEnum.If);
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
+			GraphicFooType type = Quadruple.typeStack.Pop ();
+			if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
+				string id = Quadruple.operandStack.Pop ();
+				Quadruple.CreateGotoFalseQuadruple (id);
+			}
 			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
@@ -389,9 +397,9 @@ namespace GraphicFoo
 		{
 			Term ();
 			Quadruple.CreateAdditiveQuadruple ();
-			while (la.kind == (int)TokenEnum.Plus || 
-				la.kind == (int)TokenEnum.Minus || 
-				la.kind == (int)TokenEnum.Or) {
+			while (la.kind == (int)TokenEnum.Plus ||
+			       la.kind == (int)TokenEnum.Minus ||
+			       la.kind == (int)TokenEnum.Or) {
 				Operators op;
 				if (la.kind == (int)TokenEnum.Plus) {
 					Get ();
@@ -414,9 +422,9 @@ namespace GraphicFoo
 		{
 			Factor ();
 			Quadruple.CreateMultiplicativeQuadruple ();
-			while (la.kind == (int)TokenEnum.Multiplication || 
-				la.kind == (int)TokenEnum.Division || 
-				la.kind == (int)TokenEnum.And) {
+			while (la.kind == (int)TokenEnum.Multiplication ||
+			       la.kind == (int)TokenEnum.Division ||
+			       la.kind == (int)TokenEnum.And) {
 				Operators op;
 				if (la.kind == (int)TokenEnum.Multiplication) {
 					Get ();
@@ -443,8 +451,8 @@ namespace GraphicFoo
 				Expect ((int)TokenEnum.RightParenthesis);
 				Quadruple.hierarchyStack.Pop ();
 			} else if (StartOf ((int)TokenEnum.False)) {
-				if (la.kind == (int)TokenEnum.Plus || 
-					la.kind == (int)TokenEnum.Minus) {
+				if (la.kind == (int)TokenEnum.Plus ||
+				    la.kind == (int)TokenEnum.Minus) {
 					if (la.kind == (int)TokenEnum.Plus) {
 						Get ();
 					} else {
@@ -791,7 +799,7 @@ namespace GraphicFoo
 			case 13:
 				s = "\"endFunc\" expected";
 				break;
-			case 14:
+			case (int)TokenEnum.EndIf:
 				s = "\"endIf\" expected";
 				break;
 			case 15:
@@ -809,16 +817,16 @@ namespace GraphicFoo
 			case 19:
 				s = "\"string\" expected";
 				break;
-			case 20:
+			case (int)TokenEnum.Print:
 				s = "\"print\" expected";
 				break;
-			case 21:
+			case (int)TokenEnum.While:
 				s = "\"while\" expected";
 				break;
-			case 22:
+			case (int)TokenEnum.If:
 				s = "\"if\" expected";
 				break;
-			case 23:
+			case (int)TokenEnum.Else:
 				s = "\"else\" expected";
 				break;
 			case (int)TokenEnum.Colon:

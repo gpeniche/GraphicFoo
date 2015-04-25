@@ -141,6 +141,7 @@
     <Compile Include="Controller\SideMenuController.cs" />
     <Compile Include="View\GridLayout.cs" />
     <Compile Include="View\LineLayout.cs" />
+    <Compile Include="Language\Semantics.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
