@@ -161,6 +161,10 @@ namespace GraphicFoo
 		{
 			Quadruple quadruple = new Quadruple (goTo, condition);
 			PushQuadruple (quadruple);
+		}
+
+		public static void PushJump ()
+		{
 			jumpStack.Push (quadruples.Count - 1);
 		}
 
@@ -168,6 +172,14 @@ namespace GraphicFoo
 		{
 			int jumpIndex = jumpStack.Pop ();
 			quadruples [jumpIndex].jumpIndex = quadruples.Count;
+		}
+
+		public static void PopTwoJumps ()
+		{
+			int firstJump = jumpStack.Pop ();
+			int secondJump = jumpStack.Pop ();
+			quadruples [firstJump + 1].jumpIndex = quadruples.Count;
+			quadruples [quadruples.Count - 1].jumpIndex = secondJump + 1;
 		}
 
 		public static void CreateGotoQuadruple ()

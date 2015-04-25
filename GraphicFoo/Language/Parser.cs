@@ -223,7 +223,7 @@ namespace GraphicFoo
 		{
 			Expect (6);
 			Var ();
-			Expect (7);
+			Expect ((int)TokenEnum.Semicolon);
 		}
 
 		void EndFunction ()
@@ -266,7 +266,7 @@ namespace GraphicFoo
 				Get ();
 				Expression ();
 			}
-			Expect (7);
+			Expect ((int)TokenEnum.Semicolon);
 			return id;
 		}
 
@@ -280,6 +280,7 @@ namespace GraphicFoo
 				Get ();
 				Quadruple.PopJump ();
 				Quadruple.CreateGotoQuadruple ();
+				Quadruple.PushJump ();
 				while (StartOf ((int)TokenEnum.Number)) {
 					Statute ();
 				}
@@ -302,7 +303,7 @@ namespace GraphicFoo
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
 			Expect ((int)TokenEnum.RightParenthesis);
-			Expect (7);
+			Expect ((int)TokenEnum.Semicolon);
 		}
 
 		void CallFunction ()
@@ -369,14 +370,23 @@ namespace GraphicFoo
 
 		void EndLoop ()
 		{
-			Expect (15);
+			Expect ((int)TokenEnum.EndWhile);
+			Quadruple.CreateGotoQuadruple ();
+			Quadruple.PopTwoJumps ();
 		}
 
 		void LoopHeader ()
 		{
 			Expect ((int)TokenEnum.While);
+			Quadruple.PushJump ();
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
+			Quadruple.PushJump ();
+			GraphicFooType type = Quadruple.typeStack.Pop ();
+			if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
+				string id = Quadruple.operandStack.Pop ();
+				Quadruple.CreateGotoFalseQuadruple (id);
+			}
 			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
@@ -389,6 +399,7 @@ namespace GraphicFoo
 			if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
 				string id = Quadruple.operandStack.Pop ();
 				Quadruple.CreateGotoFalseQuadruple (id);
+				Quadruple.PushJump ();
 			}
 			Expect ((int)TokenEnum.RightParenthesis);
 		}
@@ -778,7 +789,7 @@ namespace GraphicFoo
 			case 6:
 				s = "\"return\" expected";
 				break;
-			case 7:
+			case (int)TokenEnum.Semicolon:
 				s = "\";\" expected";
 				break;
 			case 8:
@@ -802,7 +813,7 @@ namespace GraphicFoo
 			case (int)TokenEnum.EndIf:
 				s = "\"endIf\" expected";
 				break;
-			case 15:
+			case (int)TokenEnum.EndWhile:
 				s = "\"endWhile\" expected";
 				break;
 			case 16:
