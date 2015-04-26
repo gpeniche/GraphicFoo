@@ -24,16 +24,21 @@ namespace GraphicFoo
 			this.temporaryVariables = new VariableBlock ();
 		}
 
+		public Variable ReadVariable (string id)
+		{
+			Variable variable = procedureVariables.ReadVariable (id);
+			if (variable == null) {
+				variable = temporaryVariables.ReadVariable (id);
+			}
+			return variable;
+		}
+
 		public void AddVariable (string id, string type)
 		{
 			Variable variable = new Variable (id, type);
 			procedureVariables.AddVariable (variable);
 		}
 
-		public Variable ReadVariable (string id)
-		{
-			return procedureVariables.ReadVariable (id);
-		}
 
 		public Variable AddTemporaryVariable (GraphicFooType type)
 		{

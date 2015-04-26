@@ -33,6 +33,16 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		private Quadruple (
+			Operators op, 
+			string v1, 
+			Variable target)
+		{
+			this.op = op;
+			this.v1 = v1;
+			this.v2 = "";
+			this.target = target;
+		}
 
 		private Quadruple (
 			Operators op, 
@@ -57,10 +67,11 @@ namespace GraphicFoo
 
 		public static void DebugQuadruples ()
 		{
-			Console.WriteLine ("\n=====\nGenerated Quadruples\n=====");
+			string output = "\n=====\nGenerated Quadruples\n=====";
 			for (int i = 0; i < quadruples.Count; i++) {
-				Console.WriteLine ("\n[" + i + "] " + quadruples [i].ToString ());
+				output += "\n[" + i + "] " + quadruples [i].ToString ();
 			}
+			Console.WriteLine (output);
 		}
 
 		#endregion
@@ -84,6 +95,19 @@ namespace GraphicFoo
 			quadruples.Add (quaduple);
 		}
 
+		#region Assigantion Quadruples
+
+		public static void CreateAssignationQuadruple (
+			string variable, 
+			string target)
+		{
+			Quadruple quadruple = null;
+			//new Quadruple (Operators.Assignation, ;
+			PushQuadruple (quadruple);
+		}
+
+		#endregion
+
 		#region Expression Quadruples
 
 		private static void CreateExpressionQuadruple (
@@ -98,8 +122,12 @@ namespace GraphicFoo
 				if (t1 != GraphicFooType.Invalid &&
 				    t2 != GraphicFooType.Invalid) {
 
-					string v2 = operandStack.Pop ();
-					string v1 = operandStack.Pop ();
+					string id2 = operandStack.Pop ();
+					string id1 = operandStack.Pop ();
+
+					Variable v1 = ProgramMemory.FindVariable (scope, id1);
+					Variable v2 = ProgramMemory.FindVariable (scope, id2);
+
 					Operators op = operatorStack.Pop ();
 
 					GraphicFooType resultingType = 
@@ -116,8 +144,8 @@ namespace GraphicFoo
 
 					Quadruple qudruple = new Quadruple (
 						                     op, 
-						                     v1, 
-						                     v2,
+						                     id1, 
+						                     id2,
 						                     temp	
 					                     );
 					PushQuadruple (qudruple);

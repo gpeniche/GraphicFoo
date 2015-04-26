@@ -75,10 +75,20 @@ namespace GraphicFoo
 				return variable;
 			}
 
+			variable = globalTemporary.ReadVariable (id);
+			if (variable != null) {
+				return variable;
+			}
+
+			variable = constants.ReadVariable (id);
+			if (variable != null) {
+				return variable;
+			}
+
 			Console.WriteLine (
 				"Variable {0} not found on scope {1}", 
 				id, 
-				scope.name
+				(scope == null) ? "global" : scope.name
 			);
 			return variable;
 		}
@@ -104,7 +114,7 @@ namespace GraphicFoo
 
 		public static void DebugProgramMemory ()
 		{
-			string output = "\n";
+			string output = "\n=====\nProgram Memory\n=====\n";
 			output += "Constants: " + constants.ToString ();
 			output += "Global Variables: " + globalVariables.ToString ();
 			output += "Global Temporaries: " + globalTemporary.ToString ();
