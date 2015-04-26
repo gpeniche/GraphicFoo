@@ -218,14 +218,14 @@ namespace GraphicFoo
 
 		void Return ()
 		{
-			Expect (6);
+			Expect ((int)TokenEnum.Return);
 			Var ();
 			Expect ((int)TokenEnum.Semicolon);
 		}
 
 		void EndFunction ()
 		{
-			Expect (13);
+			Expect ((int)TokenEnum.EndFunction);
 		}
 
 		Variable Var ()
@@ -320,13 +320,13 @@ namespace GraphicFoo
 
 		void Type ()
 		{
-			if (la.kind == 16) {
+			if (la.kind == (int)TokenEnum.NumberType) {
 				Get ();
-			} else if (la.kind == 17) {
+			} else if (la.kind == (int)TokenEnum.BooleanType) {
 				Get ();
-			} else if (la.kind == 18) {
+			} else if (la.kind == (int)TokenEnum.VoidType) {
 				Get ();
-			} else if (la.kind == 19) {
+			} else if (la.kind == (int)TokenEnum.StringType) {
 				Get ();
 			} else
 				SynErr (39);
@@ -783,7 +783,7 @@ namespace GraphicFoo
 			case (int)TokenEnum.False:
 				s = "false expected";
 				break;
-			case 6:
+			case (int)TokenEnum.Return:
 				s = "\"return\" expected";
 				break;
 			case (int)TokenEnum.Semicolon:
@@ -804,7 +804,7 @@ namespace GraphicFoo
 			case (int)TokenEnum.RightParenthesis:
 				s = "\")\" expected";
 				break;
-			case 13:
+			case (int)TokenEnum.EndFunction:
 				s = "\"endFunc\" expected";
 				break;
 			case (int)TokenEnum.EndIf:
@@ -813,16 +813,16 @@ namespace GraphicFoo
 			case (int)TokenEnum.EndWhile:
 				s = "\"endWhile\" expected";
 				break;
-			case 16:
+			case (int)TokenEnum.NumberType:
 				s = "\"number\" expected";
 				break;
-			case 17:
+			case (int)TokenEnum.BooleanType:
 				s = "\"boolean\" expected";
 				break;
-			case 18:
+			case (int)TokenEnum.VoidType:
 				s = "\"void\" expected";
 				break;
-			case 19:
+			case (int)TokenEnum.StringType:
 				s = "\"string\" expected";
 				break;
 			case (int)TokenEnum.Print:
@@ -852,7 +852,7 @@ namespace GraphicFoo
 			case (int)TokenEnum.Equals:
 				s = "\"==\" expected";
 				break;
-			case 29:
+			case (int)TokenEnum.Concatenation:
 				s = "\".\" expected";
 				break;
 			case (int)TokenEnum.Plus:
