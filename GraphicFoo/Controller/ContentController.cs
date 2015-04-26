@@ -50,10 +50,12 @@ namespace GraphicFoo
 
 			runButton.TouchUpInside += (sender, e) => {
 				string input = codeTextField.Text;
-				new UIAlertView ("Code", input, null, "OK", null).Show ();
+				//new UIAlertView ("Code", input, null, "OK", null).Show ();
 				Scanner scanner = new Scanner (input);
 				Parser parser = new Parser (scanner);
 				parser.Parse ();
+				Quadruple.DebugQuadruples ();
+				ProgramMemory.DebugProgramMemory ();
 				string errorMessage = 
 					(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
 					parser.errors.errorMessage : 
