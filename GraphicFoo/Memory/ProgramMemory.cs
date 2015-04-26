@@ -3,20 +3,24 @@ using System.Collections.Generic;
 
 namespace GraphicFoo
 {
-	public class ProgramMemory
+	public static class ProgramMemory
 	{
-		private VariableBlock constants;
-		private VariableBlock globalVariables;
-		private Dictionary <string, Procedure> procedures;
+		private const string temporaryPrefix = "temp";
 
-		public ProgramMemory ()
+		private static VariableBlock constants;
+		private static VariableBlock globalTemporary;
+		private static VariableBlock globalVariables;
+		private static Dictionary <string, Procedure> procedures;
+
+		public static void Initialize ()
 		{
 			constants = new VariableBlock ();
+			globalTemporary = new VariableBlock ();
 			globalVariables = new VariableBlock ();
 			procedures = new Dictionary <string, Procedure> ();
 		}
 
-		public Variable AddConstant (string id, GraphicFooType type)
+		public static Variable AddConstant (string id, GraphicFooType type)
 		{
 			if (constants.Contains (id)) {
 				return constants.ReadVariable (id);
@@ -26,13 +30,21 @@ namespace GraphicFoo
 			return variable;
 		}
 
-		public void AddGlobalVariable (string id, string type)
+		public static void AddGlobalVariable (string id, string type)
 		{
 			Variable variable = new Variable (id, type);
 			globalVariables.AddVariable (variable);
 		}
 
-		public Procedure AddProcedure (
+		public static Variable AddGlobalTemporary (GraphicFooType type)
+		{
+			string id = temporaryPrefix + globalTemporary.Count ();
+			Variable variable = new Variable (id, type);
+			globalTemporary.AddVariable (variable);
+			return variable;
+		}
+
+		public static Procedure AddProcedure (
 			string id, 
 			string type, 
 			VariableBlock variableBlock)
@@ -42,12 +54,12 @@ namespace GraphicFoo
 			return procedure;
 		}
 
-		private Procedure ReadProcedure (string procedureName)
+		private static Procedure ReadProcedure (string procedureName)
 		{
 			return procedures [procedureName];
 		}
 
-		public Variable FindVariable (Procedure scope, string id)
+		public static Variable FindVariable (Procedure scope, string id)
 		{
 			Variable variable = null;
 
@@ -71,7 +83,7 @@ namespace GraphicFoo
 			return variable;
 		}
 
-		public Variable DebugFindVariable (string id)
+		public static Variable DebugFindVariable (string id)
 		{
 			Variable variable = null;
 
@@ -90,16 +102,17 @@ namespace GraphicFoo
 			return variable;
 		}
 
-		public override string ToString ()
+		public static void DebugProgramMemory ()
 		{
 			string output = "\n";
 			output += "Constants: " + constants.ToString ();
 			output += "Global Variables: " + globalVariables.ToString ();
+			output += "Global Temporaries: " + globalTemporary.ToString ();
 			output += "Procedures: \n";
 			foreach (Procedure procedure in procedures.Values) {
 				output += procedure.ToString () + "\n";
 			}
-			return output;
+			Console.WriteLine (output);
 		}
 	}
 }

@@ -59,7 +59,7 @@ namespace GraphicFoo
 		{
 			Console.WriteLine ("\n=====\nGenerated Quadruples\n=====");
 			for (int i = 0; i < quadruples.Count; i++) {
-				Console.WriteLine ("\n[" + i + "] " + quadruples[i].ToString ());
+				Console.WriteLine ("\n[" + i + "] " + quadruples [i].ToString ());
 			}
 		}
 
@@ -105,7 +105,12 @@ namespace GraphicFoo
 					GraphicFooType resultingType = 
 						AssociationRules.GetOperationType (op, t1, t2);
 
-					Variable temp = scope.AddTemporalVariable (resultingType);
+					Variable temp;
+					if (scope == null) {
+						temp = ProgramMemory.AddGlobalTemporary (resultingType);
+					} else {
+						temp = scope.AddTemporaryVariable (resultingType);
+					}
 					operandStack.Push (temp.name);
 					typeStack.Push (temp.type);
 

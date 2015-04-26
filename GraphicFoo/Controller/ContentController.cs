@@ -55,6 +55,7 @@ namespace GraphicFoo
 				Parser parser = new Parser (scanner);
 				parser.Parse ();
 				Quadruple.DebugQuadruples ();
+				ProgramMemory.DebugProgramMemory ();
 				string errorMessage = 
 					(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
 					parser.errors.errorMessage : 

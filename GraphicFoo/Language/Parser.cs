@@ -28,8 +28,6 @@ namespace GraphicFoo
 		// lookahead token
 		int errDist = minErrDist;
 
-		// Memory
-		public ProgramMemory programMemory;
 		// Scope
 		public Procedure scope = null;
 
@@ -39,8 +37,7 @@ namespace GraphicFoo
 			errors = new Errors ();
 
 			// Memory
-			this.programMemory = new ProgramMemory ();
-
+			ProgramMemory.Initialize ();
 			// Stacks
 			Quadruple.Initialize ();
 		}
@@ -149,7 +146,7 @@ namespace GraphicFoo
 			string type = GetLastTokenValue ();
 			string id = Assignation ();
 			if (scope == null) {
-				programMemory.AddGlobalVariable (id, type);
+				ProgramMemory.AddGlobalVariable (id, type);
 			} else {
 				scope.AddVariable (id, type);
 			}
@@ -200,7 +197,7 @@ namespace GraphicFoo
 			Expect ((int)TokenEnum.Colon);
 			Type ();
 			string type = GetLastTokenValue ();
-			return programMemory.AddProcedure (id, type, variables);
+			return ProgramMemory.AddProcedure (id, type, variables);
 		}
 
 		void Statute ()
@@ -236,7 +233,7 @@ namespace GraphicFoo
 			if (la.kind == (int)TokenEnum.Id) {
 				Get ();
 				string id = GetLastTokenValue ();
-				return programMemory.FindVariable (scope, id);
+				return ProgramMemory.FindVariable (scope, id);
 			} else if (la.kind == (int)TokenEnum.Number ||
 			           la.kind == (int)TokenEnum.String ||
 			           la.kind == (int)TokenEnum.True ||
@@ -251,7 +248,7 @@ namespace GraphicFoo
 				}
 				Get ();
 				string constant = GetLastTokenValue ();
-				return programMemory.AddConstant (constant, type);
+				return ProgramMemory.AddConstant (constant, type);
 			} else {
 				SynErr (38);
 				return null;
@@ -262,7 +259,7 @@ namespace GraphicFoo
 		{
 			Expect ((int)TokenEnum.Id);
 			string id = GetLastTokenValue ();
-			if (la.kind == 8) {
+			if (la.kind == (int)TokenEnum.Assignation) {
 				Get ();
 				Expression ();
 			}
@@ -792,7 +789,7 @@ namespace GraphicFoo
 			case (int)TokenEnum.Semicolon:
 				s = "\";\" expected";
 				break;
-			case 8:
+			case (int)TokenEnum.Assignation:
 				s = "\"=\" expected";
 				break;
 			case (int)TokenEnum.Function:
