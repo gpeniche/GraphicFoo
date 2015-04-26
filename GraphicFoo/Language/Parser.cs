@@ -144,12 +144,7 @@ namespace GraphicFoo
 		{
 			Type ();
 			string type = GetLastTokenValue ();
-			string id = Assignation ();
-			if (scope == null) {
-				ProgramMemory.AddGlobalVariable (id, type);
-			} else {
-				scope.AddVariable (id, type);
-			}
+			Assignation (type);
 		}
 
 		void Function ()
@@ -255,16 +250,30 @@ namespace GraphicFoo
 			}
 		}
 
-		string Assignation ()
+		void Assignation (string type = "")
 		{
+			bool assign = false;
 			Expect ((int)TokenEnum.Id);
 			string id = GetLastTokenValue ();
 			if (la.kind == (int)TokenEnum.Assignation) {
 				Get ();
 				Expression ();
+				assign = true;
 			}
 			Expect ((int)TokenEnum.Semicolon);
-			return id;
+
+			if (type != "") {
+				if (scope == null) {
+					ProgramMemory.AddGlobalVariable (id, type);
+				} else {
+					scope.AddVariable (id, type);
+				}
+			}
+
+			if (assign) {
+				string temp = Quadruple.operandStack.Pop ();
+				Quadruple.CreateAssignationQuadruple (temp, id);
+			}
 		}
 
 		void Condition ()

@@ -58,7 +58,7 @@ namespace GraphicFoo
 
 		public override string ToString ()
 		{
-			return "Quadruple:\n" +
+			return "" +
 			op.ToString () + " " +
 			((v1 == null) ? "" : v1.ToString ()) + " " +
 			((v2 == null) ? "" : v2.ToString ()) + " " +
@@ -98,11 +98,13 @@ namespace GraphicFoo
 		#region Assigantion Quadruples
 
 		public static void CreateAssignationQuadruple (
-			string variable, 
-			string target)
+			string variableId, 
+			string targetId)
 		{
-			Quadruple quadruple = null;
-			//new Quadruple (Operators.Assignation, ;
+			Variable variable = ProgramMemory.FindVariable (scope, variableId);
+			Variable target = ProgramMemory.FindVariable (scope, targetId);
+			Quadruple quadruple = 
+				new Quadruple (Operators.Assignation, variable, target);
 			PushQuadruple (quadruple);
 		}
 
