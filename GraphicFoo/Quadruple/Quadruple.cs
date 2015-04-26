@@ -16,7 +16,7 @@ namespace GraphicFoo
 		public static List<Quadruple> quadruples;
 
 		public Operators op;
-		public string v1, v2;
+		public Variable v1, v2;
 		public Variable target;
 		public int jumpIndex;
 
@@ -24,30 +24,30 @@ namespace GraphicFoo
 
 		private Quadruple (
 			Operators goTo,
-			string condition)
+			Variable condition)
 		{
 			this.op = goTo;
 			this.v1 = condition;
-			this.v2 = "";
+			this.v2 = null;
 			this.target = null;
 			this.jumpIndex = -1;
 		}
 
 		private Quadruple (
 			Operators op, 
-			string v1, 
+			Variable v1, 
 			Variable target)
 		{
 			this.op = op;
 			this.v1 = v1;
-			this.v2 = "";
+			this.v2 = null;
 			this.target = target;
 		}
 
 		private Quadruple (
 			Operators op, 
-			string v1, 
-			string v2, 
+			Variable v1, 
+			Variable v2, 
 			Variable target)
 		{
 			this.op = op;
@@ -60,8 +60,8 @@ namespace GraphicFoo
 		{
 			return "Quadruple:\n" +
 			op.ToString () + " " +
-			v1.ToString () + " " +
-			v2.ToString () + " " +
+			((v1 == null) ? "" : v1.ToString ()) + " " +
+			((v2 == null) ? "" : v2.ToString ()) + " " +
 			((target != null) ? target.ToString () : jumpIndex.ToString ());
 		}
 
@@ -144,8 +144,8 @@ namespace GraphicFoo
 
 					Quadruple qudruple = new Quadruple (
 						                     op, 
-						                     id1, 
-						                     id2,
+						                     v1, 
+						                     v2,
 						                     temp	
 					                     );
 					PushQuadruple (qudruple);
@@ -190,7 +190,7 @@ namespace GraphicFoo
 
 		private static void CreateJumpQuadruple (
 			Operators goTo, 
-			string condition = "")
+			Variable condition = null)
 		{
 			Quadruple quadruple = new Quadruple (goTo, condition);
 			PushQuadruple (quadruple);
@@ -220,8 +220,9 @@ namespace GraphicFoo
 			CreateJumpQuadruple (Operators.Goto);
 		}
 
-		public static void CreateGotoFalseQuadruple (string condition)
+		public static void CreateGotoFalseQuadruple (string id)
 		{
+			Variable condition = ProgramMemory.FindVariable (scope, id);
 			CreateJumpQuadruple (Operators.GotoF, condition);
 
 		}
