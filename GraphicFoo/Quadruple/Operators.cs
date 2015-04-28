@@ -39,7 +39,7 @@ namespace GraphicFoo
 		Return,
 		#endregion
 		#region Tools
-		Write,
+		Print,
 		#endregion
 	}
 }

@@ -23,11 +23,11 @@ namespace GraphicFoo
 		#region Class Methods
 
 		private Quadruple (
-			Operators goTo,
-			Variable condition)
+			Operators op,
+			Variable v1)
 		{
-			this.op = goTo;
-			this.v1 = condition;
+			this.op = op;
+			this.v1 = v1;
 			this.v2 = null;
 			this.target = null;
 			this.jumpIndex = -1;
@@ -42,6 +42,7 @@ namespace GraphicFoo
 			this.v1 = v1;
 			this.v2 = null;
 			this.target = target;
+			this.jumpIndex = -1;
 		}
 
 		private Quadruple (
@@ -54,6 +55,7 @@ namespace GraphicFoo
 			this.v1 = v1;
 			this.v2 = v2;
 			this.target = target;
+			this.jumpIndex = -1;
 		}
 
 		public override string ToString ()
@@ -227,6 +229,21 @@ namespace GraphicFoo
 			Variable condition = ProgramMemory.FindVariable (scope, id);
 			CreateJumpQuadruple (Operators.GotoF, condition);
 
+		}
+
+		#endregion
+
+		#region Procedure Quadruples
+
+		#endregion
+
+		#region Other Quadruples
+
+		public static void CreatePrintQuadruple (string exprId)
+		{
+			Variable expression = ProgramMemory.FindVariable (scope, exprId);
+			Quadruple quadruple = new Quadruple (Operators.Print, expression);
+			PushQuadruple (quadruple);
 		}
 
 		#endregion

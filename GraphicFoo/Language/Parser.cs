@@ -310,6 +310,9 @@ namespace GraphicFoo
 			Expression ();
 			Expect ((int)TokenEnum.RightParenthesis);
 			Expect ((int)TokenEnum.Semicolon);
+
+			string temp = Quadruple.operandStack.Pop ();
+			Quadruple.CreatePrintQuadruple (temp);
 		}
 
 		void CallFunction ()
