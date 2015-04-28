@@ -172,31 +172,31 @@ namespace GraphicFoo
 			string id = GetLastTokenValue ();
 			Expect ((int)TokenEnum.LeftParenthesis);
 
-			VariableBlock variables = null;
+			VariableBlock parameters = null;
 
 			if (StartOf ((int)TokenEnum.Id)) {
-				variables = new VariableBlock ();
+				parameters = new VariableBlock ();
 				Type ();
 				string varType = GetLastTokenValue ();
 				Expect ((int)TokenEnum.Id);
 				string varId = GetLastTokenValue ();
-				Variable variable = new Variable (varId, varType);
-				variables.AddVariable (variable);
+				Variable parameter = new Variable (varId, varType);
+				parameters.AddVariable (parameter);
 				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
 					Type ();
 					varType = GetLastTokenValue ();
 					Expect ((int)TokenEnum.Id);
 					varId = GetLastTokenValue ();
-					variable = new Variable (varId, varType);
-					variables.AddVariable (variable);
+					parameter = new Variable (varId, varType);
+					parameters.AddVariable (parameter);
 				}
 			}
 			Expect ((int)TokenEnum.RightParenthesis);
 			Expect ((int)TokenEnum.Colon);
 			Type ();
 			string type = GetLastTokenValue ();
-			return ProgramMemory.AddProcedure (id, type, variables);
+			return ProgramMemory.AddProcedure (id, type, parameters);
 		}
 
 		void Statute ()

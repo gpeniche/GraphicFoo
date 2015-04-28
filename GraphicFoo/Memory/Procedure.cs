@@ -17,20 +17,23 @@ namespace GraphicFoo
 		public Procedure (
 			string name, 
 			string rawType, 
-			VariableBlock variableBlock)
+			VariableBlock parameters)
 		{
 			this.name = name;
 			this.type = ParseType (rawType);
-			this.index = 0;
-			this.parameters = new VariableBlock ();
-			this.procedureVariables = 
-				(variableBlock == null) ? new VariableBlock () : variableBlock;
+			this.index = Quadruple.quadruples.Count;
+			this.parameters = 
+				(parameters == null) ? new VariableBlock () : parameters;
+			this.procedureVariables = new VariableBlock ();
 			this.temporaryVariables = new VariableBlock ();
 		}
 
 		public Variable ReadVariable (string id)
 		{
-			Variable variable = procedureVariables.ReadVariable (id);
+			Variable variable = parameters.ReadVariable (id);
+			if (variable == null) {
+				variable = procedureVariables.ReadVariable (id);
+			}
 			if (variable == null) {
 				variable = temporaryVariables.ReadVariable (id);
 			}
@@ -55,7 +58,8 @@ namespace GraphicFoo
 		{
 			return "[" + index + "] Function: " +
 			type.ToString () + " " + name +
-			"\nFunction variables: " + procedureVariables.ToString () +
+			"\nFunction parameters: " + parameters.ToString () +
+			"Function variables: " + procedureVariables.ToString () +
 			"Function temporaries: " + temporaryVariables.ToString ();
 		}
 	}

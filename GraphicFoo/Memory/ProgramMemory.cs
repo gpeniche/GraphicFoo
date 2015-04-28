@@ -47,9 +47,9 @@ namespace GraphicFoo
 		public static Procedure AddProcedure (
 			string id, 
 			string type, 
-			VariableBlock variableBlock)
+			VariableBlock parameterBlock)
 		{
-			Procedure procedure = new Procedure (id, type, variableBlock);
+			Procedure procedure = new Procedure (id, type, parameterBlock);
 			procedures.Add (procedure.name, procedure);
 			return procedure;
 		}
