@@ -157,7 +157,11 @@ namespace GraphicFoo
 			while (StartOf ((int)TokenEnum.Number)) {
 				Statute ();
 			}
-			Return ();
+			string id = "";
+			if (la.kind == (int)TokenEnum.Return) {
+				id = Return ();
+			}
+			Quadruple.CreateReturnQuadruple (id);
 			EndFunction ();
 		}
 
@@ -211,11 +215,13 @@ namespace GraphicFoo
 				SynErr (37);
 		}
 
-		void Return ()
+		string Return ()
 		{
 			Expect ((int)TokenEnum.Return);
-			Var ();
+			Expression ();
 			Expect ((int)TokenEnum.Semicolon);
+			string id = Quadruple.operandStack.Pop ();
+			return id;
 		}
 
 		void EndFunction ()

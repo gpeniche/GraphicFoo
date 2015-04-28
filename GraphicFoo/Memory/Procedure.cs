@@ -9,6 +9,8 @@ namespace GraphicFoo
 
 		public string name;
 		public GraphicFooType type;
+		public int index;
+		private VariableBlock parameters;
 		private VariableBlock procedureVariables;
 		private VariableBlock temporaryVariables;
 
@@ -19,6 +21,8 @@ namespace GraphicFoo
 		{
 			this.name = name;
 			this.type = ParseType (rawType);
+			this.index = 0;
+			this.parameters = new VariableBlock ();
 			this.procedureVariables = 
 				(variableBlock == null) ? new VariableBlock () : variableBlock;
 			this.temporaryVariables = new VariableBlock ();
@@ -39,7 +43,6 @@ namespace GraphicFoo
 			procedureVariables.AddVariable (variable);
 		}
 
-
 		public Variable AddTemporaryVariable (GraphicFooType type)
 		{
 			string id = temporaryPrefix + temporaryVariables.Count ();
@@ -50,7 +53,8 @@ namespace GraphicFoo
 
 		public override string ToString ()
 		{
-			return "Function: " + type.ToString () + " " + name +
+			return "[" + index + "] Function: " +
+			type.ToString () + " " + name +
 			"\nFunction variables: " + procedureVariables.ToString () +
 			"Function temporaries: " + temporaryVariables.ToString ();
 		}

@@ -60,11 +60,11 @@ namespace GraphicFoo
 
 		public override string ToString ()
 		{
-			return "" +
-			op.ToString () + " " +
+			return op.ToString () + " " +
 			((v1 == null) ? "" : v1.ToString ()) + " " +
 			((v2 == null) ? "" : v2.ToString ()) + " " +
-			((target != null) ? target.ToString () : jumpIndex.ToString ());
+			((target == null) ? "" : target.ToString ()) + " " +
+			((jumpIndex != -1) ? jumpIndex.ToString () : "");
 		}
 
 		public static void DebugQuadruples ()
@@ -234,7 +234,15 @@ namespace GraphicFoo
 		#endregion
 
 		#region Procedure Quadruples
-
+		public static void CreateReturnQuadruple (string id)
+		{
+			Variable returnVariable = ProgramMemory.FindVariable (scope, id);
+			if (Semantics.ValidateReturn (scope.type, returnVariable)) {
+				Quadruple quadruple = 
+					new Quadruple (Operators.Return, returnVariable);
+				PushQuadruple (quadruple);
+			}
+		}
 		#endregion
 
 		#region Other Quadruples
