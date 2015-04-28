@@ -23,13 +23,17 @@ namespace GraphicFoo
 			GraphicFooType procedureType, 
 			Variable returnVariable)
 		{
+			bool noReturn = (returnVariable == null);
 			if (procedureType == GraphicFooType.Void) {
-				bool noReturn = (returnVariable == null);
 				if (!noReturn) {
 					Console.WriteLine ("Void functions can't return a type");
 				}
 				return noReturn;
 			} else {
+				if (noReturn) {
+					Console.WriteLine ("Missing return type");
+					return false;
+				}
 				bool match = (procedureType == returnVariable.type);
 				if (!match) {
 					Console.WriteLine ("Return mismatch");
