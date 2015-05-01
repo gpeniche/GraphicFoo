@@ -147,6 +147,7 @@
     <Compile Include="Blocks\Print.cs" />
     <Compile Include="Blocks\Else.cs" />
     <Compile Include="Helper\CompilingHelper.cs" />
+    <Compile Include="Language\Semantics.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
