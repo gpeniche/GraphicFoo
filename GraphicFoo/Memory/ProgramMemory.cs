@@ -47,16 +47,25 @@ namespace GraphicFoo
 		public static Procedure AddProcedure (
 			string id, 
 			string type, 
-			VariableBlock variableBlock)
+			VariableBlock parameterBlock)
 		{
-			Procedure procedure = new Procedure (id, type, variableBlock);
+			Procedure procedure = new Procedure (id, type, parameterBlock);
 			procedures.Add (procedure.name, procedure);
 			return procedure;
 		}
 
-		private static Procedure ReadProcedure (string procedureName)
+		public static Procedure ReadProcedure (string procedureName)
 		{
-			return procedures [procedureName];
+			Procedure procedure = null;
+			procedures.TryGetValue (procedureName, out procedure);
+
+			if (procedure == null) {
+				Console.WriteLine (
+					"Procedure {0} not found", 
+					procedureName
+				);
+			}
+			return procedure;
 		}
 
 		public static Variable FindVariable (Procedure scope, string id)

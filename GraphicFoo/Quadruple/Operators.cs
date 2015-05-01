@@ -35,11 +35,12 @@ namespace GraphicFoo
 		#endregion
 		#region Procedures
 		Expand,
+		Param,
 		GoSub,
 		Return,
 		#endregion
 		#region Tools
-		Write,
+		Print,
 		#endregion
 	}
 }

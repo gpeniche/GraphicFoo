@@ -20,16 +20,18 @@ namespace GraphicFoo
 		public Variable ReadVariable (string variableName)
 		{
 			Variable value = null;
-
-			if (variables.TryGetValue (variableName, out value)) {
-				return value;
-			}
+			variables.TryGetValue (variableName, out value);
 			return value;
 		}
 
 		public bool Contains (string key)
 		{
 			return variables.ContainsKey (key);
+		}
+
+		public List<Variable> ToList ()
+		{
+			return new List<Variable>(variables.Values);
 		}
 
 		public int Count ()

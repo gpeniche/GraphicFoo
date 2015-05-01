@@ -18,18 +18,32 @@ namespace GraphicFoo
 		public Operators op;
 		public Variable v1, v2;
 		public Variable target;
+		public Procedure call;
 		public int jumpIndex;
 
 		#region Class Methods
 
 		private Quadruple (
-			Operators goTo,
-			Variable condition)
+			Operators op,
+			Procedure call)
 		{
-			this.op = goTo;
-			this.v1 = condition;
+			this.op = op;
+			this.v1 = null;
 			this.v2 = null;
 			this.target = null;
+			this.call = call;
+			this.jumpIndex = -1;
+		}
+
+		private Quadruple (
+			Operators op,
+			Variable v1)
+		{
+			this.op = op;
+			this.v1 = v1;
+			this.v2 = null;
+			this.target = null;
+			this.call = null;
 			this.jumpIndex = -1;
 		}
 
@@ -41,7 +55,9 @@ namespace GraphicFoo
 			this.op = op;
 			this.v1 = v1;
 			this.v2 = null;
+			this.call = null;
 			this.target = target;
+			this.jumpIndex = -1;
 		}
 
 		private Quadruple (
@@ -53,16 +69,19 @@ namespace GraphicFoo
 			this.op = op;
 			this.v1 = v1;
 			this.v2 = v2;
+			this.call = null;
 			this.target = target;
+			this.jumpIndex = -1;
 		}
 
 		public override string ToString ()
 		{
-			return "" +
-			op.ToString () + " " +
+			return op.ToString () + " " +
+			((call == null) ? "" : call.name) + " " +
 			((v1 == null) ? "" : v1.ToString ()) + " " +
 			((v2 == null) ? "" : v2.ToString ()) + " " +
-			((target != null) ? target.ToString () : jumpIndex.ToString ());
+			((target == null) ? "" : target.ToString ()) + " " +
+			((jumpIndex != -1) ? jumpIndex.ToString () : "");
 		}
 
 		public static void DebugQuadruples ()
@@ -227,6 +246,84 @@ namespace GraphicFoo
 			Variable condition = ProgramMemory.FindVariable (scope, id);
 			CreateJumpQuadruple (Operators.GotoF, condition);
 
+		}
+
+		#endregion
+
+		#region Procedure Quadruples
+
+		private static void MatchParameters (
+			Procedure procedure, 
+			VariableBlock parameters)
+		{
+			int procedureParameterCount = procedure.GetParameterCount ();
+			int parameterCallCount = parameters.Count ();
+
+			if (procedureParameterCount != parameterCallCount) {
+				Console.WriteLine (
+					"Call to {1}, with wrong numer of parameters ({2})", 
+					procedure.name, 
+					parameterCallCount
+				);
+				return;
+			}
+
+			List<Variable> parameterList = parameters.ToList ();
+			List<Variable> procedureParameterList = 
+				procedure.GetParameters ().ToList ();
+			
+			for (int i = 0; i < parameterCallCount; i++) {
+				if (parameterList [i].type == procedureParameterList [i].type) {
+					// TODO define paramX
+					Quadruple param = 
+						new Quadruple (Operators.Param, parameterList [i]);
+					PushQuadruple (param);
+				} else {
+					Console.WriteLine (
+						"On call to {1}, parameter [{2}] {3} does not match the expected type {4}", 
+						procedure.name, 
+						i,
+						procedureParameterList [i].name,
+						procedureParameterList [i].type.ToString ()
+					);
+					return;
+				}
+			}
+		}
+
+		public static void CreateReturnQuadruple (string id)
+		{
+			Variable returnVariable = ProgramMemory.FindVariable (scope, id);
+			if (Semantics.ValidateReturn (scope.type, returnVariable)) {
+				Quadruple quadruple = 
+					new Quadruple (Operators.Return, returnVariable);
+				PushQuadruple (quadruple);
+			}
+		}
+
+		public static void CreateFunctionCallQuadruples (
+			string id, 
+			VariableBlock parameters)
+		{
+			Procedure procedure = ProgramMemory.ReadProcedure (id);
+			Quadruple expand = new Quadruple (Operators.Expand, procedure);
+			PushQuadruple (expand);
+
+			MatchParameters (procedure, parameters);
+
+			Quadruple goSub = new Quadruple (Operators.GoSub, procedure);
+			PushQuadruple (goSub);
+		}
+
+		#endregion
+
+		#region Other Quadruples
+
+		public static void CreatePrintQuadruple (string exprId)
+		{
+			Variable expression = ProgramMemory.FindVariable (scope, exprId);
+			Quadruple quadruple = new Quadruple (Operators.Print, expression);
+			PushQuadruple (quadruple);
 		}
 
 		#endregion
