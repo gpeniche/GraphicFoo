@@ -4,6 +4,7 @@ using UIKit;
 using Foundation;
 using CoreGraphics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GraphicFoo
 {
@@ -12,13 +13,15 @@ namespace GraphicFoo
 		BlocksCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
 		UIScrollView scrollView;
-		float insertPositionY = 50;
+		UIView consoleView;
+		UITextView textOnConsole;
+		float insertPositionY = 70;
 		float insertPositionX = 0;
 		List<UIView> blocksOnView = new List<UIView> ();
 		UIButton lastSelected;
-		string stringToCompile = "function main() : void %-1% " +
-		                         "%0%" +
-		                         " return; endFunc";
+		string stringToCompile = "function main() : void %-1% \n" +
+		                         "%0% \n" +
+		                         " return \"bye\"; endFunc";
 
 		private UIView activeview;
 		// Controller that activated the keyboard
@@ -47,24 +50,38 @@ namespace GraphicFoo
 			NSNotificationCenter.DefaultCenter.AddObserver
 			(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
-			UIScrollView uIScrollView = new UIScrollView ();
-			uIScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
-			scrollView = uIScrollView;
-			scrollView.Frame = new RectangleF (
-				0,
-				0,
-				(float)View.Frame.Size.Width,
-				(float)View.Frame.Size.Height
+			scrollView = new UIScrollView ();
+			scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
+			scrollView.Frame = new CGRect (
+				260f,
+				0f,
+				(float)View.Frame.Size.Width - 260f,
+				(float)View.Frame.Size.Height - 200f
+			);
+			scrollView.ContentSize = new CGSize (
+				(float)View.Frame.Size.Width - 260f,
+				(float)View.Frame.Size.Height - 200f
 			);
 
 
 			View.BackgroundColor = UIColor.White;
 
-			UILabel title = new UILabel (new RectangleF (260, 20, 320, 30));
+			UILabel title = new UILabel (new RectangleF (300, 20, 320, 30));
 			title.Font = UIFont.SystemFontOfSize (24.0f);
 			title.TextAlignment = UITextAlignment.Center;
 			title.TextColor = UIColor.Blue;
 			title.Text = "Graphic Foo";
+				
+			UIButton runButton = new UIButton (UIButtonType.Custom);
+			runButton.Frame = new RectangleF (550, 20, 60, 45);
+			runButton.SetTitle ("Run", UIControlState.Normal);
+			runButton.SetImage (
+				UIImage.FromBundle ("Graphics/play-button.png"),
+				UIControlState.Normal
+			);
+			runButton.TouchUpInside += (sender, e) => {
+				SendToCompile ();
+			};
 
 			UIButton menuButton = new UIButton (UIButtonType.System);
 			menuButton.Frame = new RectangleF (700, 20, 50, 50);
@@ -75,20 +92,14 @@ namespace GraphicFoo
 			menuButton.TouchUpInside += (sender, e) => {
 				SidebarController.ToggleMenu ();
 			};
-				
-			UIButton runButton = new UIButton (UIButtonType.Custom);
-			runButton.Frame = new RectangleF (600, 20, 60, 45);
-			runButton.SetTitle ("Run", UIControlState.Normal);
-			runButton.SetImage (
-				UIImage.FromBundle ("Graphics/play-button.png"),
-				UIControlState.Normal
-			);
-			runButton.TouchUpInside += (sender, e) => {
-				SendToCompile ();
-			};
 
 			UIView blocksView = new UIView ();
-			blocksView.Frame = new RectangleF (0, 0, 260f, 600);
+			blocksView.Frame = new RectangleF (
+				0, 
+				0, 
+				260f, 
+				(float)View.Frame.Size.Height
+			);
 
 			// Line Layout
 			lineLayout = new LineLayout {
@@ -96,17 +107,55 @@ namespace GraphicFoo
 				ScrollDirection = UICollectionViewScrollDirection.Vertical
 			};
 
+			consoleView = new UIView ();
+			consoleView.Frame = new CGRect (
+				260f,
+				(float)View.Frame.Size.Height - 200f,
+				(float)View.Frame.Size.Width - 260f,
+				200f
+			);
+			consoleView.BackgroundColor = UIColor.Black;
+
+			textOnConsole = new UITextView ();
+			textOnConsole.Frame = new CGRect (
+				0,
+				20,
+				consoleView.Frame.Size.Width,
+				consoleView.Frame.Size.Height - 10f
+			);
+			textOnConsole.Font = UIFont.SystemFontOfSize (16.0f);
+			textOnConsole.TextAlignment = UITextAlignment.Left;
+			textOnConsole.TextColor = UIColor.White;
+			textOnConsole.BackgroundColor = UIColor.Black;
+			textOnConsole.Editable = false;
+
+			UILabel consoleTitle = new UILabel ();
+			consoleTitle.Frame = new CGRect (
+				0,
+				0,
+				200f,
+				20f
+			);
+			consoleTitle.Font = UIFont.SystemFontOfSize (20.0f);
+			consoleTitle.TextAlignment = UITextAlignment.Left;
+			consoleTitle.TextColor = UIColor.White;
+			consoleTitle.Text = "FooConsole: ";
+
 			blocksCollectionViewController = 
 				new BlocksCollectionViewController (lineLayout);
 			blocksCollectionViewController.SetParentController (this);
 
 			blocksView.Add (blocksCollectionViewController.View);
-			scrollView.Add (blocksView);
-			scrollView.Add (title);
-			scrollView.Add (menuButton);
-			scrollView.Add (runButton);
 
+			consoleView.Add (textOnConsole);
+			consoleView.Add (consoleTitle);
+
+			View.Add (blocksView);
 			View.Add (scrollView);
+			View.Add (consoleView);
+			View.Add (title);
+			View.Add (menuButton);
+			View.Add (runButton);
 
 		}
 
@@ -126,7 +175,8 @@ namespace GraphicFoo
 			}
 			if (activeview != null) {
 				// Bottom of the controller = initial position + height + offset      
-				bottom = ((float)activeview.Frame.Y + (float)activeview.Frame.Height + offsetKeyboard);
+				bottom = ((float)activeview.Frame.Y +
+				(float)activeview.Frame.Height + offsetKeyboard);
 
 				// Calculate how far we need to scroll
 				scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom));
@@ -171,64 +221,36 @@ namespace GraphicFoo
 			UIView.CommitAnimations ();
 		}
 
-		private void SendToCompile ()
+		/// <summary>
+		/// Prepares the string to compile and sends it to the scanner.
+		/// </summary>
+		public void SendToCompile ()
 		{
-			string stringForScanner = stringToCompile;
-			foreach (UIView activeview in blocksOnView) {
-				string subStr = string.Empty, originalsubStr;
-				foreach (UIView view in activeview.Subviews) {
-					if (view.Class.Name == "UITextField") {
-						//Updates string to send to parser and scanner
-
-						if (string.IsNullOrWhiteSpace (subStr)) {
-							int fIndex = stringToCompile.IndexOf (
-								             "%" + blocksOnView.IndexOf (activeview) + "%"
-							             );
-							int sIndex = stringToCompile.IndexOf (
-								             "%" + (blocksOnView.IndexOf (activeview) - 1) + "%"
-							             );
-							originalsubStr = subStr = stringToCompile.Substring (
-								sIndex,
-								fIndex - sIndex
-							);
-						} else {
-							originalsubStr = subStr;
-						}
-						subStr = subStr.Replace (
-							"%" + view.AccessibilityLabel + "%",
-							((UITextField)view).Text
-						);
-						stringForScanner = stringForScanner.Replace (
-							originalsubStr,
-							subStr
-						);
-					}
-				}
-			}
-			for (int e = -1; e <= blocksOnView.Count; e++) {
-				stringForScanner = stringForScanner.Replace ("%" + e + "%", "");
-			}
-			Console.WriteLine ("stringForScanner: " + stringForScanner);
-			Console.WriteLine ("stringToCompile: " + stringToCompile);
-			Scanner scanner = new Scanner (stringForScanner);
-			Parser parser = new Parser (scanner);
-			parser.Parse ();
-			string errorMessage = 
-				(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
-				parser.errors.errorMessage : 
-				"None";
-			new UIAlertView ("Errors", errorMessage, null, "OK", null).Show ();
+			textOnConsole.Text = "";
+			string errorMessage = CompilingHelper.SendToCompile (stringToCompile, blocksOnView);
+			textOnConsole.Text = errorMessage;
 		}
 
+		/// <summary>
+		/// Sets the position add new element.
+		/// </summary>
+		/// <param name="blockView">Block view from where we get the position 
+		/// to insert a new element.</param>
+		/// <param name="sender">Sender, Button that activates this method.</param>
 		private void SetPositionAddNewElement (UIView blockView, UIView sender)
 		{
 			insertPositionY = (float)blockView.Frame.Location.Y +
 			(float)blockView.Frame.Size.Height;
-			if (blockView.Tag > 0) {
-				insertPositionX = (float)blockView.Frame.Location.X - 260f + blockView.Tag;
+			if (blockView.AccessibilityHint != "else") {
+				if (blockView.Tag > 0) {
+					insertPositionX = (float)blockView.Frame.Location.X + blockView.Tag;
+				} else {
+					insertPositionX = (float)blockView.Frame.Location.X;
+				}
 			} else {
-				insertPositionX = (float)blockView.Frame.Location.X - 260f;
+				insertPositionX = (float)blockView.Frame.Location.X - blockView.Tag;
 			}
+
 			if (lastSelected != null) {
 				lastSelected.Selected = false;
 			}
@@ -239,22 +261,31 @@ namespace GraphicFoo
 		/// <summary>
 		/// Adds a button to the current view.
 		/// </summary>
-		public void AddBlock (UIView blockView)
+		public void AddBlock (UIView blockView, IBlock blockcell)
 		{
 			if (insertPositionY != 49 || blocksOnView.Count == 0) {
-				foreach (UIView view in blockView.Subviews) {
-					if (view.Tag == 1) {
-						((UIButton)view).TouchUpInside += (sender, e) => 
-							SetPositionAddNewElement (blockView, sender as UIView);
-					} else if (view.Tag == 2) {
-						((UIButton)view).TouchUpInside += (sender, e) => {
-							ArrangeElementsOnView (blocksOnView.IndexOf (blockView), -100);
-							RemoveTextToCompilingString (blocksOnView.IndexOf (blockView));
-							blockView.RemoveFromSuperview ();
-							blocksOnView.Remove (blockView);
-						};
+				((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 1)).TouchUpInside += (sender, e) => 
+					SetPositionAddNewElement (blockView, sender as UIView);
+				((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 2)).TouchUpInside += (sender, e) => {
+					ArrangeElementsOnView (
+						blocksOnView.IndexOf (blockView),
+						-100
+					);
+					RemoveTextFromCompilingString (blocksOnView.IndexOf (blockView));
+					blockView.RemoveFromSuperview ();
+					ArrangeSizeOfScrollview (blockView, true);
+					blocksOnView.Remove (blockView);
+					if (blocksOnView.Count == 0) {
+						insertPositionX = 0;
+						insertPositionY = 70;
 					}
+				};
+				if (blockcell.Name == "Declaration") {
+					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
+						SelectVarType ((UIButton)sender);
+					};
 				}
+
 				if (blockView.Tag < 0) {
 					insertPositionX += blockView.Tag;
 				}
@@ -281,14 +312,175 @@ namespace GraphicFoo
 				} else {
 					blocksOnView.Add (blockView);
 				}
-				View.AddSubview (blockView);
-				if (blockView.Tag > 0) {
-					insertPositionX += blockView.Tag;
-				}
+				ArrangeSizeOfScrollview (blockView, false);
+				scrollView.AddSubview (blockView);
 			} else if (blocksOnView.Count == 0) {
 				insertPositionX = 0;
 			}
 			insertPositionY = 49;
+		}
+
+		/// <summary>
+		/// Arranges the size of scrollview.
+		/// </summary>
+		/// <param name="blockView">Block view to add.</param>
+		/// <param name="removing">If set to <c>true</c> removing element ont view.</param>
+		private void ArrangeSizeOfScrollview (UIView blockView, bool removing)
+		{
+			if (removing) {
+				nfloat maxLeft = blocksOnView.Max (bv => bv.Frame.Left);
+				nfloat maxTop = blocksOnView.Max (bv => bv.Frame.Top);
+				if (maxLeft == blockView.Frame.Left && (maxLeft + blockView.Frame.Width) > 508) {
+					UIView secondMax = blocksOnView.OrderByDescending (r => r.Frame.Left).Skip (1).FirstOrDefault ();
+					scrollView.ContentSize = new CGSize (
+						(float)secondMax.Frame.Left + secondMax.Frame.Width - 50f,
+						scrollView.ContentSize.Height
+					);
+				}
+				if (maxTop == blockView.Frame.Top && (maxLeft + blockView.Frame.Height) > 824) {
+					scrollView.ContentSize = new CGSize (
+						scrollView.ContentSize.Width,
+						(float)scrollView.ContentSize.Height - blockView.Frame.Size.Height
+					);
+				}
+
+				nfloat minLeft = blocksOnView.Min (bv => bv.Frame.Left);
+				if (minLeft == blockView.Frame.Left && minLeft < 0) {
+					UIView secondMin = blocksOnView.OrderBy (r => r.Frame.Left).Skip (1).FirstOrDefault ();
+					scrollView.ContentInset = new UIEdgeInsets (0, secondMin.Frame.Left * -1, 0, 0);
+				}
+
+			} else {
+				if (blocksOnView.Count > 7) {
+					if (blockView.Frame.Top > scrollView.ContentSize.Height - blockView.Frame.Size.Height) {
+						scrollView.ContentOffset = new CGPoint (
+							scrollView.ContentOffset.X,
+							blockView.Frame.Top
+						);
+					}
+					scrollView.ContentSize = new CGSize (
+						scrollView.ContentSize.Width,
+						(float)scrollView.ContentSize.Height + blockView.Frame.Size.Height
+					);
+				}
+				if (blockView.Frame.Left < 0) {
+					scrollView.ContentOffset = new CGPoint (
+						blockView.Frame.Left,
+						scrollView.ContentOffset.Y
+					);
+					if (blockView.Frame.Left + blockView.Frame.Width >
+					    scrollView.ContentSize.Width) {
+						scrollView.ContentOffset = new CGPoint (
+							blockView.Frame.Left,
+							scrollView.ContentOffset.Y + blockView.Frame.Height
+						);
+					}
+					if ((blockView.Frame.Left * -1) > scrollView.ContentInset.Left) {
+						scrollView.ContentInset = new UIEdgeInsets (
+							0,
+							blockView.Frame.Left * -1,
+							0,
+							0
+						);
+					}
+				} else {
+					if (blockView.Frame.Left + blockView.Frame.Width >
+					    scrollView.ContentSize.Width) {
+						scrollView.ContentSize = new CGSize (
+							(float)blockView.Frame.Left + blockView.Frame.Width,
+							scrollView.ContentSize.Height
+						);
+						scrollView.ContentOffset = new CGPoint (
+							blockView.Frame.Left - 180,
+							scrollView.ContentOffset.Y
+						);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Selects the type for a variable.
+		/// </summary>
+		/// <param name="sender">Sender, Button that activates the method.</param>
+		public void SelectVarType (UIButton sender)
+		{
+			// Create a new Alert Controller
+			UIAlertController actionSheetAlert = UIAlertController.Create (
+				                                     "Types of variables",
+				                                     "Select a type from below",
+				                                     UIAlertControllerStyle.ActionSheet
+			                                     );
+
+			// Add Actions
+			actionSheetAlert.AddAction (UIAlertAction.Create (
+				"number",
+				UIAlertActionStyle.Default,
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/circle-empty.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "number";
+				}
+			));
+
+			actionSheetAlert.AddAction (UIAlertAction.Create (
+				"void",
+				UIAlertActionStyle.Default,
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/circle-full.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "void";
+				}
+			));
+
+			actionSheetAlert.AddAction (UIAlertAction.Create (
+				"boolean",
+				UIAlertActionStyle.Default,
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/menu.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "boolean";
+				}
+			));
+
+			actionSheetAlert.AddAction (UIAlertAction.Create (
+				"string", 
+				UIAlertActionStyle.Default,
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/play-button.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "string";
+				}
+			));
+
+			actionSheetAlert.AddAction (UIAlertAction.Create (
+				"Cancel",
+				UIAlertActionStyle.Cancel,
+				((action) => sender.SetImage (
+					UIImage.FromFile ("Graphics/circle-empty.png"),
+					UIControlState.Normal
+				)
+				)));
+
+			// Required for iPad - You must specify a source for the Action Sheet since it is
+			// displayed as a popover
+			UIPopoverPresentationController presentationPopover = 
+				actionSheetAlert.PopoverPresentationController;
+			if (presentationPopover != null) {
+				presentationPopover.SourceView = sender.Superview;
+				presentationPopover.SourceRect = new CGRect (60, 100, 0, 0);
+				presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
+			}
+			// Display the alert
+			this.PresentViewController (actionSheetAlert, true, null);
 		}
 
 		/// <summary>
@@ -297,58 +489,25 @@ namespace GraphicFoo
 		/// <param name="textToAdd">Text to add.</param>
 		public void AddTextToCompilingString (string textToAdd)
 		{
-			if (lastSelected == null) {
-				stringToCompile = stringToCompile.Replace ("%0%", textToAdd + "%0%");
-			} else {
-				int index = blocksOnView.IndexOf (lastSelected.Superview);
-				if (stringToCompile.Contains ("%" + (index + 1) + "%")) {
-					ArrangeIndexes (index, true);
-				}
-				stringToCompile = stringToCompile.Replace (
-					"%" + index + "%",
-					"%" + index + "%" + textToAdd + "%" + (index + 1) + "%"
-				);
-			}
-		}
-
-		public void RemoveTextToCompilingString (int index)
-		{
-			int fIndex = stringToCompile.IndexOf ("%" + index + "%");
-			int sIndex = stringToCompile.IndexOf ("%" + (index - 1) + "%");
-			string strToDelete = stringToCompile.Substring (
-				                     sIndex,
-				                     fIndex - sIndex
-			                     );
-			ArrangeIndexes (index, false);
-			stringToCompile = stringToCompile.Replace (
-				strToDelete,
-				""
+			stringToCompile = CompilingHelper.AddTextToCompilingString (
+				stringToCompile,
+				textToAdd,
+				blocksOnView,
+				lastSelected
 			);
 		}
 
 		/// <summary>
-		/// Arranges the indexes.
+		/// Removes the text from compiling string.
 		/// </summary>
-		/// <param name="fromIndex">From index to start the arrange.</param>
-		/// <param name="goingUp">If set to <c>true</c> going up.</param>
-		public void ArrangeIndexes (int fromIndex, bool goingUp)
+		/// <param name="index">Index from where we're going to remove the text.</param>
+		public void RemoveTextFromCompilingString (int index)
 		{
-			if (goingUp) {
-				for (int i = blocksOnView.Count - 1; i > fromIndex; i--) {
-					stringToCompile = stringToCompile.Replace (
-						"%" + i + "%",
-						"%" + (i + 1) + "%"
-					);
-				}
-			} else {
-				for (int i = fromIndex; i <= blocksOnView.Count; i++) {
-					stringToCompile = stringToCompile.Replace (
-						"%" + i + "%",
-						"%" + (i - 1) + "%"
-					);
-				}
-			}
-
+			stringToCompile = CompilingHelper.RemoveTextFromCompilingString (
+				stringToCompile,
+				blocksOnView,
+				index
+			);
 		}
 
 		/// <summary>
@@ -358,6 +517,8 @@ namespace GraphicFoo
 		/// <param name="offset">Offset.</param>
 		private void ArrangeElementsOnView (int elementToUpdate, int offset)
 		{
+			UIView.BeginAnimations (string.Empty, IntPtr.Zero);
+			UIView.SetAnimationDuration (0.3);
 			for (int index = elementToUpdate + 1; index < blocksOnView.Count; index++) {
 				blocksOnView [index].Frame = new CGRect (
 					blocksOnView [index].Frame.X,
@@ -365,9 +526,9 @@ namespace GraphicFoo
 					blocksOnView [index].Frame.Width,
 					blocksOnView [index].Frame.Height
 				); 
-				View.AddSubview (blocksOnView [index]);
+				scrollView.AddSubview (blocksOnView [index]);
 			}
+			UIView.CommitAnimations ();
 		}
 	}
 }
-

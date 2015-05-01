@@ -4,40 +4,43 @@ using System.Drawing;
 
 namespace GraphicFoo
 {
-	public class LoopHeader : IBlock
+	public class IfHeader : IBlock
 	{
 
 		public string Name {
 			get {
-				return "While Header";
+				return "If Header";
 			}
 		}
 
 		public string Syntax {
 			get {
-				return " while ( %Expression% ) \n";
+				return " if ( %Expression% ) \n";
 			}
 		}
 
 		public string Example {
 			get {
-				return "While ( myFoo == 5 )";
+				return "If ( myFoo == 5 )";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return "A while loop is a control flow statement that allows" +
-				" code to be executed repeatedly based on a given boolean" +
-				" condition. The while loop can be thought of as a" +
-				" repeating if statement, here you start your while" +
-				" statement. ";
+				return "Conditional statements, conditional expressions and" +
+				" conditional constructs are features of a programming" +
+				" language which perform different computations or actions" +
+				" depending on whether a programmer-specified boolean" +
+				" condition evaluates to true or false. Apart from the" +
+				" case of branch predication, this is always achieved by" +
+				" selectively altering the control flow based on some" +
+				" condition";
 			}
 		}
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/loopheader.png");
+				return UIImage.FromBundle ("Graphics/ifheader.png");
 			}
 		}
 
@@ -51,12 +54,12 @@ namespace GraphicFoo
 					new UIImageView (new RectangleF (-36, -9, 400, 132));
 				backgroundImage.Image = Image;
 
-				UILabel whileText = 
+				UILabel ifText = 
 					new UILabel (new RectangleF (-10, 10, 100, 100));
-				whileText.Font = UIFont.SystemFontOfSize (24.0f);
-				whileText.TextAlignment = UITextAlignment.Center;
-				whileText.TextColor = UIColor.White;
-				whileText.Text = "While";
+				ifText.Font = UIFont.SystemFontOfSize (24.0f);
+				ifText.TextAlignment = UITextAlignment.Center;
+				ifText.TextColor = UIColor.White;
+				ifText.Text = "If";
 
 				UILabel leftParenthesis = 
 					new UILabel (new RectangleF (55, 0, 50, 100));
@@ -65,22 +68,22 @@ namespace GraphicFoo
 				leftParenthesis.TextColor = UIColor.White;
 				leftParenthesis.Text = "(";
 
-				UITextField whileExpression = 
+				UITextField ifExpression = 
 					new UITextField (new RectangleF (90, 10, 200, 100));
-				whileExpression.Placeholder = "Add expression";
-				whileExpression.ShouldReturn += textField => { 
-					whileExpression.ResignFirstResponder ();
+				ifExpression.Placeholder = "Add expression";
+				ifExpression.ShouldReturn += textField => { 
+					ifExpression.ResignFirstResponder ();
 					return true; 
 				};
-				whileExpression.AccessibilityLabel = "Expression";
-				whileExpression.TextColor = UIColor.White;
+				ifExpression.AccessibilityLabel = "Expression";
+				ifExpression.TextColor = UIColor.White;
 
 				UILabel rightParenthesis = 
 					new UILabel (new RectangleF (220, 0, 70, 100));
 				rightParenthesis.Font = UIFont.SystemFontOfSize (80.0f);
 				rightParenthesis.TextAlignment = UITextAlignment.Center;
 				rightParenthesis.TextColor = UIColor.White;
-				rightParenthesis.Text = ") {";
+				rightParenthesis.Text = ") ";
 
 				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
 				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);
@@ -108,9 +111,9 @@ namespace GraphicFoo
 				insertPositionBtn.Tag = 1;
 
 				blockView.Add (backgroundImage);
-				blockView.Add (whileText);
+				blockView.Add (ifText);
 				blockView.Add (leftParenthesis);
-				blockView.Add (whileExpression);
+				blockView.Add (ifExpression);
 				blockView.Add (rightParenthesis);
 				blockView.Add (deleteBlock);
 				blockView.Add (insertPositionBtn);
