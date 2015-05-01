@@ -31,11 +31,11 @@ namespace GraphicFoo
 		public string Explanation {
 			get {
 				return " Declaration specifies properties of an identifier:" +
-					" it declares what a word (identifier) means." + 
-					" Declarations are most commonly used for functions," + 
-					" variables, constants, and classes, but can also be used" +
-					" for other entities such as enumerations and type" +
-					" definitions.";
+				" it declares what a word (identifier) means." +
+				" Declarations are most commonly used for functions," +
+				" variables, constants, and classes, but can also be used" +
+				" for other entities such as enumerations and type" +
+				" definitions.";
 			}
 		}
 

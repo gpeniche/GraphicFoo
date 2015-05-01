@@ -27,14 +27,14 @@ namespace GraphicFoo
 
 		public string Explanation {
 			get {
-				return "Conditional statements, conditional expressions and" + 
-					" conditional constructs are features of a programming" + 
-					" language which perform different computations or actions" +
-					" depending on whether a programmer-specified boolean" +
-					" condition evaluates to true or false. Apart from the" +
-					" case of branch predication, this is always achieved by" +
-					" selectively altering the control flow based on some" +
-					" condition";
+				return "Conditional statements, conditional expressions and" +
+				" conditional constructs are features of a programming" +
+				" language which perform different computations or actions" +
+				" depending on whether a programmer-specified boolean" +
+				" condition evaluates to true or false. Apart from the" +
+				" case of branch predication, this is always achieved by" +
+				" selectively altering the control flow based on some" +
+				" condition";
 			}
 		}
 

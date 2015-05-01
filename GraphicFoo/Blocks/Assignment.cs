@@ -29,11 +29,11 @@ namespace GraphicFoo
 		public string Explanation {
 			get {
 				return "Assignment statement sets and/or re-sets the value" +
-					" stored in the storage location(s) denoted by a variable" +
-					" name; in other words, it copies the value into the" +
-					" variable. In most imperative programming languages," + 
-					" the assignment statement (or expression) is a" + 
-					" fundamental construct";
+				" stored in the storage location(s) denoted by a variable" +
+				" name; in other words, it copies the value into the" +
+				" variable. In most imperative programming languages," +
+				" the assignment statement (or expression) is a" +
+				" fundamental construct";
 			}
 		}
 

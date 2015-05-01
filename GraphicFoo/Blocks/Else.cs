@@ -28,9 +28,9 @@ namespace GraphicFoo
 		public string Explanation {
 			get {
 				return " If the if expression is false the execution continues" +
-					" in the following branch – either in the else block " +
-					"(which is usually optional), or if there is no else" +
-					" branch, then after the end If.";
+				" in the following branch – either in the else block " +
+				"(which is usually optional), or if there is no else" +
+				" branch, then after the end If.";
 			}
 		}
 

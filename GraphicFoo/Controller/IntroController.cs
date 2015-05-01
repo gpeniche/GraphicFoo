@@ -58,7 +58,7 @@ namespace GraphicFoo
 				(float)View.Frame.Size.Width - 260f,
 				(float)View.Frame.Size.Height - 200f
 			);
-			scrollView.ContentSize = new CGSize(
+			scrollView.ContentSize = new CGSize (
 				(float)View.Frame.Size.Width - 260f,
 				(float)View.Frame.Size.Height - 200f
 			);
@@ -176,7 +176,7 @@ namespace GraphicFoo
 			if (activeview != null) {
 				// Bottom of the controller = initial position + height + offset      
 				bottom = ((float)activeview.Frame.Y +
-					(float)activeview.Frame.Height + offsetKeyboard);
+				(float)activeview.Frame.Height + offsetKeyboard);
 
 				// Calculate how far we need to scroll
 				scrollamount = ((float)r.Height - (float)(View.Frame.Size.Height - bottom));
@@ -273,16 +273,16 @@ namespace GraphicFoo
 					);
 					RemoveTextFromCompilingString (blocksOnView.IndexOf (blockView));
 					blockView.RemoveFromSuperview ();
-					ArrangeSizeOfScrollview(blockView, true);
+					ArrangeSizeOfScrollview (blockView, true);
 					blocksOnView.Remove (blockView);
-					if(blocksOnView.Count == 0){
+					if (blocksOnView.Count == 0) {
 						insertPositionX = 0;
 						insertPositionY = 70;
 					}
 				};
 				if (blockcell.Name == "Declaration") {
 					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
-						SelectVarType((UIButton)sender);
+						SelectVarType ((UIButton)sender);
 					};
 				}
 
@@ -325,40 +325,41 @@ namespace GraphicFoo
 		/// </summary>
 		/// <param name="blockView">Block view to add.</param>
 		/// <param name="removing">If set to <c>true</c> removing element ont view.</param>
-		private void ArrangeSizeOfScrollview(UIView blockView, bool removing){
+		private void ArrangeSizeOfScrollview (UIView blockView, bool removing)
+		{
 			if (removing) {
 				nfloat maxLeft = blocksOnView.Max (bv => bv.Frame.Left);
 				nfloat maxTop = blocksOnView.Max (bv => bv.Frame.Top);
 				if (maxLeft == blockView.Frame.Left && (maxLeft + blockView.Frame.Width) > 508) {
-					UIView secondMax = blocksOnView.OrderByDescending(r => r.Frame.Left).Skip(1).FirstOrDefault();
-					scrollView.ContentSize = new CGSize(
+					UIView secondMax = blocksOnView.OrderByDescending (r => r.Frame.Left).Skip (1).FirstOrDefault ();
+					scrollView.ContentSize = new CGSize (
 						(float)secondMax.Frame.Left + secondMax.Frame.Width - 50f,
-						(float)scrollView.ContentSize.Height
+						scrollView.ContentSize.Height
 					);
 				}
 				if (maxTop == blockView.Frame.Top && (maxLeft + blockView.Frame.Height) > 824) {
-					scrollView.ContentSize = new CGSize(
-						(float)scrollView.ContentSize.Width,
+					scrollView.ContentSize = new CGSize (
+						scrollView.ContentSize.Width,
 						(float)scrollView.ContentSize.Height - blockView.Frame.Size.Height
 					);
 				}
 
 				nfloat minLeft = blocksOnView.Min (bv => bv.Frame.Left);
-				if(minLeft == blockView.Frame.Left && minLeft < 0){
-					UIView secondMin = blocksOnView.OrderBy(r => r.Frame.Left).Skip(1).FirstOrDefault();
+				if (minLeft == blockView.Frame.Left && minLeft < 0) {
+					UIView secondMin = blocksOnView.OrderBy (r => r.Frame.Left).Skip (1).FirstOrDefault ();
 					scrollView.ContentInset = new UIEdgeInsets (0, secondMin.Frame.Left * -1, 0, 0);
 				}
 
 			} else {
 				if (blocksOnView.Count > 7) {
-					if(blockView.Frame.Top > scrollView.ContentSize.Height - blockView.Frame.Size.Height){
+					if (blockView.Frame.Top > scrollView.ContentSize.Height - blockView.Frame.Size.Height) {
 						scrollView.ContentOffset = new CGPoint (
 							scrollView.ContentOffset.X,
 							blockView.Frame.Top
 						);
 					}
-					scrollView.ContentSize = new CGSize(
-						(float)scrollView.ContentSize.Width,
+					scrollView.ContentSize = new CGSize (
+						scrollView.ContentSize.Width,
 						(float)scrollView.ContentSize.Height + blockView.Frame.Size.Height
 					);
 				}
@@ -367,8 +368,8 @@ namespace GraphicFoo
 						blockView.Frame.Left,
 						scrollView.ContentOffset.Y
 					);
-					if (blockView.Frame.Left + blockView.Frame.Width > 
-						scrollView.ContentSize.Width) {
+					if (blockView.Frame.Left + blockView.Frame.Width >
+					    scrollView.ContentSize.Width) {
 						scrollView.ContentOffset = new CGPoint (
 							blockView.Frame.Left,
 							scrollView.ContentOffset.Y + blockView.Frame.Height
@@ -383,11 +384,11 @@ namespace GraphicFoo
 						);
 					}
 				} else {
-					if (blockView.Frame.Left + blockView.Frame.Width > 
-									scrollView.ContentSize.Width) {
+					if (blockView.Frame.Left + blockView.Frame.Width >
+					    scrollView.ContentSize.Width) {
 						scrollView.ContentSize = new CGSize (
 							(float)blockView.Frame.Left + blockView.Frame.Width,
-							(float)scrollView.ContentSize.Height
+							scrollView.ContentSize.Height
 						);
 						scrollView.ContentOffset = new CGPoint (
 							blockView.Frame.Left - 180,
@@ -402,71 +403,84 @@ namespace GraphicFoo
 		/// Selects the type for a variable.
 		/// </summary>
 		/// <param name="sender">Sender, Button that activates the method.</param>
-		public void SelectVarType(UIButton sender){
+		public void SelectVarType (UIButton sender)
+		{
 			// Create a new Alert Controller
-			UIAlertController actionSheetAlert = UIAlertController.Create(
-				"Types of variables",
-				"Select a type from below",
-				UIAlertControllerStyle.ActionSheet
-			);
+			UIAlertController actionSheetAlert = UIAlertController.Create (
+				                                     "Types of variables",
+				                                     "Select a type from below",
+				                                     UIAlertControllerStyle.ActionSheet
+			                                     );
 
 			// Add Actions
-			actionSheetAlert.AddAction(UIAlertAction.Create(
+			actionSheetAlert.AddAction (UIAlertAction.Create (
 				"number",
 				UIAlertActionStyle.Default,
-				(action) => {sender.SetImage (
-					UIImage.FromFile ("Graphics/circle-empty.png"),
-					UIControlState.Normal
-				); sender.AccessibilityHint = "number";}
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/circle-empty.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "number";
+				}
 			));
 
-			actionSheetAlert.AddAction(UIAlertAction.Create(
+			actionSheetAlert.AddAction (UIAlertAction.Create (
 				"void",
 				UIAlertActionStyle.Default,
-				(action) => {sender.SetImage (
-					UIImage.FromFile ("Graphics/circle-full.png"),
-					UIControlState.Normal
-				); sender.AccessibilityHint = "void";}
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/circle-full.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "void";
+				}
 			));
 
-			actionSheetAlert.AddAction(UIAlertAction.Create(
+			actionSheetAlert.AddAction (UIAlertAction.Create (
 				"boolean",
 				UIAlertActionStyle.Default,
-				(action) => {sender.SetImage (
-					UIImage.FromFile ("Graphics/menu.png"),
-					UIControlState.Normal
-				); sender.AccessibilityHint = "boolean";}
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/menu.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "boolean";
+				}
 			));
 
-			actionSheetAlert.AddAction(UIAlertAction.Create(
+			actionSheetAlert.AddAction (UIAlertAction.Create (
 				"string", 
 				UIAlertActionStyle.Default,
-				(action) => {sender.SetImage (
-					UIImage.FromFile ("Graphics/play-button.png"),
-					UIControlState.Normal
-				); sender.AccessibilityHint = "string";}
+				(action) => {
+					sender.SetImage (
+						UIImage.FromFile ("Graphics/play-button.png"),
+						UIControlState.Normal
+					);
+					sender.AccessibilityHint = "string";
+				}
 			));
 
-			actionSheetAlert.AddAction(UIAlertAction.Create(
+			actionSheetAlert.AddAction (UIAlertAction.Create (
 				"Cancel",
 				UIAlertActionStyle.Cancel,
 				((action) => sender.SetImage (
 					UIImage.FromFile ("Graphics/circle-empty.png"),
 					UIControlState.Normal
 				)
-			)));
+				)));
 
 			// Required for iPad - You must specify a source for the Action Sheet since it is
 			// displayed as a popover
 			UIPopoverPresentationController presentationPopover = 
-								actionSheetAlert.PopoverPresentationController;
-			if (presentationPopover!=null) {
+				actionSheetAlert.PopoverPresentationController;
+			if (presentationPopover != null) {
 				presentationPopover.SourceView = sender.Superview;
-				presentationPopover.SourceRect = new CGRect(60, 100, 0, 0);
+				presentationPopover.SourceRect = new CGRect (60, 100, 0, 0);
 				presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
 			}
 			// Display the alert
-			this.PresentViewController(actionSheetAlert,true,null);
+			this.PresentViewController (actionSheetAlert, true, null);
 		}
 
 		/// <summary>

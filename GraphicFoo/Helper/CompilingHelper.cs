@@ -18,17 +18,17 @@ namespace GraphicFoo
 			foreach (UIView activeview in blocksOnView) {
 				string subStr = string.Empty, originalsubStr;
 				foreach (UIView view in activeview.Subviews) {
-					if (view.Class.Name == "UITextField" || 
-						(view.Class.Name == "UIButton" && view.Tag == 3)) {
+					if (view.Class.Name == "UITextField" ||
+					    (view.Class.Name == "UIButton" && view.Tag == 3)) {
 						//Updates string to send to parser and scanner
 
 						if (string.IsNullOrWhiteSpace (subStr)) {
 							int fIndex = stringToCompile.IndexOf (
-								"%" + blocksOnView.IndexOf (activeview) + "%"
-							);
+								             "%" + blocksOnView.IndexOf (activeview) + "%"
+							             );
 							int sIndex = stringToCompile.IndexOf (
-								"%" + (blocksOnView.IndexOf (activeview) - 1) + "%"
-							);
+								             "%" + (blocksOnView.IndexOf (activeview) - 1) + "%"
+							             );
 							originalsubStr = subStr = stringToCompile.Substring (
 								sIndex,
 								fIndex - sIndex
@@ -109,14 +109,14 @@ namespace GraphicFoo
 			int fIndex = stringToCompile.IndexOf ("%" + index + "%");
 			int sIndex = stringToCompile.IndexOf ("%" + (index - 1) + "%");
 			string strToDelete = stringToCompile.Substring (
-				sIndex,
-				fIndex - sIndex
-			);
+				                     sIndex,
+				                     fIndex - sIndex
+			                     );
 			stringToCompile = stringToCompile.Replace (
 				strToDelete,
 				""
 			);
-			stringToCompile  = ArrangeIndexes (stringToCompile, blocksOnView, index, false);
+			stringToCompile = ArrangeIndexes (stringToCompile, blocksOnView, index, false);
 			return stringToCompile;
 		}
 
@@ -128,7 +128,7 @@ namespace GraphicFoo
 		/// <param name="blocksOnView">Blocks on view.</param>
 		/// <param name="fromIndex">From index to start the arrange.</param>
 		/// <param name="goingUp">If set to <c>true</c> going up.</param>
-		public static string ArrangeIndexes (string stringToCompile, List<UIView> blocksOnView,int fromIndex, bool goingUp)
+		public static string ArrangeIndexes (string stringToCompile, List<UIView> blocksOnView, int fromIndex, bool goingUp)
 		{
 			if (goingUp) {
 				for (int i = blocksOnView.Count - 1; i > fromIndex; i--) {
