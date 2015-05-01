@@ -54,6 +54,16 @@ namespace GraphicFoo
 			return variable;
 		}
 
+		public VariableBlock GetParameters ()
+		{
+			return parameters;
+		}
+
+		public int GetParameterCount ()
+		{
+			return parameters.Count ();
+		}
+
 		public override string ToString ()
 		{
 			return "[" + index + "] Function: " +

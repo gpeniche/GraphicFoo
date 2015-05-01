@@ -54,9 +54,18 @@ namespace GraphicFoo
 			return procedure;
 		}
 
-		private static Procedure ReadProcedure (string procedureName)
+		public static Procedure ReadProcedure (string procedureName)
 		{
-			return procedures [procedureName];
+			Procedure procedure = null;
+			procedures.TryGetValue (procedureName, out procedure);
+
+			if (procedure == null) {
+				Console.WriteLine (
+					"Procedure {0} not found", 
+					procedureName
+				);
+			}
+			return procedure;
 		}
 
 		public static Variable FindVariable (Procedure scope, string id)

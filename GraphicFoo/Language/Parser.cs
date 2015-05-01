@@ -325,15 +325,25 @@ namespace GraphicFoo
 		{
 			Expect ((int)TokenEnum.Function);
 			Expect ((int)TokenEnum.Id);
+			string id = GetLastTokenValue ();
 			Expect ((int)TokenEnum.LeftParenthesis);
+			VariableBlock parameters = new VariableBlock ();
 			if (StartOf ((int)TokenEnum.String)) {
 				Expression ();
+				string paramId = Quadruple.operandStack.Pop ();
+				GraphicFooType type = Quadruple.typeStack.Pop ();
+				parameters.AddVariable (new Variable (paramId, type));
 				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
 					Expression ();
+					paramId = Quadruple.operandStack.Pop ();
+					type = Quadruple.typeStack.Pop ();
+					parameters.AddVariable (new Variable (paramId, type));
 				}
 			}
 			Expect ((int)TokenEnum.RightParenthesis);
+			Quadruple.CreateFunctionCallQuadruples (id, parameters);
+			Expect ((int)TokenEnum.Semicolon);
 		}
 
 		void Type ()
