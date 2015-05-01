@@ -28,5 +28,9 @@
 	<string>0.1</string>
 	<key>CFBundleDisplayName</key>
 	<string>GraphicFoo</string>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
 </dict>
 </plist>

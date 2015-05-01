@@ -23,9 +23,15 @@ namespace GraphicFoo
 		public BlocksCollectionViewController (UICollectionViewLayout layout) : base (layout)
 		{
 			blocks = new List<IBlock> ();
+			blocks.Add (new IfHeader ());
+			blocks.Add (new EndIf ());
+			blocks.Add (new Else ());
+			blocks.Add (new Print ());
 			blocks.Add (new Declaration ());
+			blocks.Add (new Assignment ());
 			blocks.Add (new LoopHeader ());
 			blocks.Add (new EndLoop ());
+
 		}
 
 		public override void ViewDidLoad ()
@@ -166,7 +172,7 @@ namespace GraphicFoo
 			UIInterfaceOrientation toInterfaceOrientation,
 			double duration)
 		{
-			base.WillRotate (toInterfaceOrientation, duration);
+			/*base.WillRotate (toInterfaceOrientation, duration);
 
 			LineLayout lineLayout = CollectionView.CollectionViewLayout as LineLayout;
 			if (lineLayout != null) {
@@ -175,7 +181,7 @@ namespace GraphicFoo
 					lineLayout.SectionInset = new UIEdgeInsets (400, 0, 400, 0);
 				else
 					lineLayout.SectionInset = new UIEdgeInsets (220, 0.0f, 200, 0.0f);
-			}
+			}*/
 		}
 
 	}
@@ -186,6 +192,8 @@ namespace GraphicFoo
 		UIButton blockAction;
 		public IntroController introController;
 		public IBlock blockCell;
+		UILabel exampleLabel;
+		UILabel nameLabel;
 
 		[Export ("initWithFrame:")]
 		public BlockCell (CGRect frame) : base (frame)
@@ -201,42 +209,38 @@ namespace GraphicFoo
 			ContentView.BackgroundColor = UIColor.White;
 			ContentView.Transform = CGAffineTransform.MakeScale (0.8f, 0.8f);
 
-			/*imageView = new UIImageView (UIImage.FromBundle ("placeholder.png"));
-            imageView.Center = ContentView.Center;
-            imageView.Transform = CGAffineTransform.MakeScale (0.7f, 0.7f);*/
-
 			blockAction = UIButton.FromType (UIButtonType.Custom);
 			blockAction.Frame = new RectangleF (-10, 50, 280, 130);
 
+			exampleLabel = 
+				new UILabel (new RectangleF (25, 90, 200, 50));
+			exampleLabel.Font = UIFont.SystemFontOfSize (20.0f);
+			exampleLabel.TextAlignment = UITextAlignment.Center;
+			exampleLabel.TextColor = UIColor.White;
+
+			nameLabel = new UILabel (new RectangleF (-50, 10, 320, 30));
+			nameLabel.Font = UIFont.SystemFontOfSize (24.0f);
+			nameLabel.TextAlignment = UITextAlignment.Center;
+			nameLabel.TextColor = UIColor.DarkGray;
+
 			ContentView.Add (blockAction);
+			ContentView.Add (exampleLabel);
+			ContentView.Add (nameLabel);
 
 			blockAction.TouchUpInside += (sender, e) => {
 				introController.AddTextToCompilingString (blockCell.Syntax);
-				introController.AddBlock (blockCell.BlockView);
+				introController.AddBlock (blockCell.BlockView, blockCell);
 			};
 		}
 
 		public void SetTitle ()
 		{
-			UILabel nameLabel = new UILabel (new RectangleF (-50, 10, 320, 30));
-			nameLabel.Font = UIFont.SystemFontOfSize (24.0f);
-			nameLabel.TextAlignment = UITextAlignment.Center;
-			nameLabel.TextColor = UIColor.DarkGray;
 			nameLabel.Text = blockCell.Name;
-
-			ContentView.Add (nameLabel);
 		}
 
 		public void SetExample ()
 		{
-			UILabel exampleLabel = 
-				new UILabel (new RectangleF (50, 90, 150, 50));
-			exampleLabel.Font = UIFont.SystemFontOfSize (18.0f);
-			exampleLabel.TextAlignment = UITextAlignment.Center;
-			exampleLabel.TextColor = UIColor.White;
 			exampleLabel.Text = blockCell.Example;
-
-			ContentView.Add (exampleLabel);
 		}
 
 		public void SetImage ()

@@ -66,7 +66,7 @@ namespace GraphicFoo
 					offSetAdjustment = itemHorizontalCenter - horizontalCenter;
 				}
 			}
-			return new CGPoint (proposedContentOffset.X + offSetAdjustment, proposedContentOffset.Y);
+			return new CGPoint (proposedContentOffset.X + offSetAdjustment, proposedContentOffset.Y * 2);
 		}
 
 	}

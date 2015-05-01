@@ -4,36 +4,36 @@ using System.Drawing;
 
 namespace GraphicFoo
 {
-	public class EndLoop : IBlock
+	public class EndIf : IBlock
 	{
 		
 		public string Name {
 			get {
-				return "EndWhile";
+				return "EndIf";
 			}
 		}
 
 		public string Syntax {
 			get {
-				return " endWhile \n";
+				return " endIf \n";
 			}
 		}
 
 		public string Example {
 			get {
-				return "endWhile";
+				return "endIf";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return "endWhile";
+				return "EndLoop";
 			}
 		}
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/endloop.png");
+				return UIImage.FromBundle ("Graphics/endif.png");
 			}
 		}
 
@@ -47,12 +47,12 @@ namespace GraphicFoo
 					new UIImageView (new RectangleF (-36, -9, 400, 132));
 				backgroundImage.Image = Image;
 
-				UILabel whileFooterText = 
+				UILabel ifFooterText = 
 					new UILabel (new RectangleF (-10, 10, 300, 100));
-				whileFooterText.Font = UIFont.SystemFontOfSize (24.0f);
-				whileFooterText.TextAlignment = UITextAlignment.Center;
-				whileFooterText.TextColor = UIColor.White;
-				whileFooterText.Text = "endWhile";
+				ifFooterText.Font = UIFont.SystemFontOfSize (24.0f);
+				ifFooterText.TextAlignment = UITextAlignment.Center;
+				ifFooterText.TextColor = UIColor.White;
+				ifFooterText.Text = "endIf";
 
 				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
 				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);
@@ -80,7 +80,7 @@ namespace GraphicFoo
 				insertPositionBtn.Tag = 1;
 
 				blockView.Add (backgroundImage);
-				blockView.Add (whileFooterText);
+				blockView.Add (ifFooterText);
 				blockView.Add (deleteBlock);
 				blockView.Add (insertPositionBtn);
 

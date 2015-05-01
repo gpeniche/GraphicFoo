@@ -129,7 +129,6 @@
     <Compile Include="Quadruple\Quadruple.cs" />
     <Compile Include="Quadruple\Operators.cs" />
     <Compile Include="Quadruple\AssociationRules.cs" />
-    <Compile Include="Blocks\Declaration.cs" />
     <Compile Include="Blocks\EndLoop.cs" />
     <Compile Include="Blocks\IBlock.cs" />
     <Compile Include="Blocks\LoopHeader.cs" />
@@ -141,16 +140,20 @@
     <Compile Include="Controller\SideMenuController.cs" />
     <Compile Include="View\GridLayout.cs" />
     <Compile Include="View\LineLayout.cs" />
+    <Compile Include="Blocks\Assignment.cs" />
+    <Compile Include="Blocks\Declaration.cs" />
+    <Compile Include="Blocks\IfHeader.cs" />
+    <Compile Include="Blocks\EndIf.cs" />
+    <Compile Include="Blocks\Print.cs" />
+    <Compile Include="Blocks\Else.cs" />
+    <Compile Include="Helper\CompilingHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
     <Folder Include="Quadruple\" />
     <Folder Include="Graphics\" />
-    <BundleResource Include="Graphics\Declaration.png" />
     <BundleResource Include="Graphics\delete-icon.png" />
-    <BundleResource Include="Graphics\Endloop.png" />
-    <BundleResource Include="Graphics\Loopheader.png" />
     <BundleResource Include="Graphics\menu.png" />
     <BundleResource Include="Graphics\play-button.png" />
     <BundleResource Include="Graphics\circle-empty.png" />
@@ -158,5 +161,14 @@
     <Folder Include="Blocks\" />
     <Folder Include="View\" />
     <Folder Include="Controller\" />
+    <BundleResource Include="Graphics\assignment.png" />
+    <BundleResource Include="Graphics\endloop.png" />
+    <BundleResource Include="Graphics\loopheader.png" />
+    <BundleResource Include="Graphics\declaration.png" />
+    <BundleResource Include="Graphics\ifheader.png" />
+    <BundleResource Include="Graphics\endif.png" />
+    <BundleResource Include="Graphics\print.png" />
+    <Folder Include="Helper\" />
+    <BundleResource Include="Graphics\else.png" />
   </ItemGroup>
 </Project>

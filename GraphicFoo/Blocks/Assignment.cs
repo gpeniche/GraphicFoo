@@ -1,47 +1,45 @@
 using System;
 using UIKit;
 using System.Drawing;
-using System.Collections.Generic;
-using CoreGraphics;
-using System.Linq;
+using Foundation;
 
 namespace GraphicFoo
 {
-	public class Declaration : IBlock
+	public class Assignment : IBlock
 	{
 
 		public string Name {
 			get {
-				return "Declaration";
+				return "Assignment";
 			}
 		}
 
 		public string Syntax {
 			get {
-				return " %varType% %varName% ; \n";
+				return " %varName% = %varValue% ; \n";
 			}
 		}
 
 		public string Example {
 			get {
-				return " number myFoo ";
+				return "myFoo = 5";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return " Declaration specifies properties of an identifier:" +
-					" it declares what a word (identifier) means." + 
-					" Declarations are most commonly used for functions," + 
-					" variables, constants, and classes, but can also be used" +
-					" for other entities such as enumerations and type" +
-					" definitions.";
+				return "Assignment statement sets and/or re-sets the value" +
+					" stored in the storage location(s) denoted by a variable" +
+					" name; in other words, it copies the value into the" +
+					" variable. In most imperative programming languages," + 
+					" the assignment statement (or expression) is a" + 
+					" fundamental construct";
 			}
 		}
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/declaration.png");
+				return UIImage.FromBundle ("Graphics/assignment.png");
 			}
 		}
 
@@ -53,19 +51,8 @@ namespace GraphicFoo
 				UIImageView backgroundImage = 
 					new UIImageView (new RectangleF (-36, -9, 400, 132));
 				backgroundImage.Image = Image;
-				backgroundImage.Tag = 0;
 
-				UIButton varType = new UIButton (new RectangleF (10, 5, 100, 100));
-				varType.SetImage (
-					UIImage.FromFile ("Graphics/delete-icon.png"),
-					UIControlState.Normal
-				);
-				varType.AccessibilityLabel = "varType";
-				varType.Tag = 3;
-				varType.AccessibilityHint = "none";
-
-				UITextField varName = 
-					new UITextField (new RectangleF (170, 5, 220, 100));
+				UITextField varName = new UITextField (new RectangleF (10, 5, 100, 100));
 				varName.Placeholder = "var name";
 				varName.ShouldReturn += textField => { 
 					varName.ResignFirstResponder ();
@@ -73,6 +60,23 @@ namespace GraphicFoo
 				};
 				varName.AccessibilityLabel = "varName";
 				varName.TextColor = UIColor.White;
+
+				UILabel equalLabel = 
+					new UILabel (new RectangleF (120, 0, 50, 100));
+				equalLabel.Font = UIFont.SystemFontOfSize (80.0f);
+				equalLabel.TextAlignment = UITextAlignment.Center;
+				equalLabel.TextColor = UIColor.White;
+				equalLabel.Text = "=";
+
+				UITextField varValue = 
+					new UITextField (new RectangleF (170, 5, 220, 100));
+				varValue.Placeholder = "add value";
+				varValue.ShouldReturn += textField => { 
+					varValue.ResignFirstResponder ();
+					return true; 
+				};
+				varValue.AccessibilityLabel = "varValue";
+				varValue.TextColor = UIColor.White;
 
 				UIButton deleteBlock = UIButton.FromType (UIButtonType.Custom);
 				deleteBlock.Frame = new RectangleF (290, 8, 20, 20);
@@ -99,8 +103,9 @@ namespace GraphicFoo
 				insertPositionBtn.Tag = 1;
 
 				blockView.Add (backgroundImage);
-				blockView.Add (varType);
 				blockView.Add (varName);
+				blockView.Add (equalLabel);
+				blockView.Add (varValue);
 				blockView.Add (deleteBlock);
 				blockView.Add (insertPositionBtn);
 

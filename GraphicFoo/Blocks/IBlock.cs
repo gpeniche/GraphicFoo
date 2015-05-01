@@ -13,8 +13,6 @@ namespace GraphicFoo
 
 		string Explanation { get; }
 
-		int Type { get; }
-
 		UIImage Image { get; }
 
 		UIView BlockView { get; }
