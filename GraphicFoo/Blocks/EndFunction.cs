@@ -3,52 +3,52 @@ using CoreGraphics;
 
 namespace GraphicFoo
 {
-	public class EndIf : IBlock
+	public class EndFunction : IBlock
 	{
 		
 		public string Name {
 			get {
-				return "EndIf";
+				return "EndFunction";
 			}
 		}
 
 		public string Syntax {
 			get {
-				return " endIf \n";
+				return " endFunc \n";
 			}
 		}
 
 		public string Example {
 			get {
-				return "endIf";
+				return "endFunc";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return "EndLoop";
+				return "endFunc";
 			}
 		}
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/endif.png");
+				return UIImage.FromBundle ("Graphics/endloop.png");
 			}
 		}
 
 		public UIView BlockView {
 			get {
 				UIView blockView = BlockConstructorHelper.ContructEndBlock (
-					                   -88,
+					                   -220,
 					                   Image,
-					                   "endIf",
-					                   400,
-					                   new CGRect (-10, 10, 300, 100)
+					                   "endFunc",
+					                   600,
+					                   new CGRect (20, 10, 200, 100)
 				                   );
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (465f, 8f),
+					                     new CGPoint (440f, 35f)
 				                     );
 
 				foreach (UIView view in sharedViews.Subviews) {

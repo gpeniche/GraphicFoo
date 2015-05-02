@@ -77,9 +77,19 @@ namespace GraphicFoo
 		/// <param name="textToAdd">Text to add to the compiling string.</param>
 		/// <param name="blocksOnView">Blocks on view.</param>
 		/// <param name="lastSelected">Last element selected on the view.</param>
-		public static string AddTextToCompilingString (string stringToCompile, string textToAdd, List<UIView> blocksOnView, UIButton lastSelected)
+		public static string AddTextToCompilingString (
+			string stringToCompile,
+			string textToAdd,
+			List<UIView> blocksOnView,
+			UIButton lastSelected)
 		{
 			if (lastSelected == null) {
+				if (blocksOnView.Count == 0 && stringToCompile.IndexOf ("%0%") < 0) {
+					stringToCompile = stringToCompile.Replace (
+						"%-1%",
+						"%-1% \n %0%"
+					);
+				} 
 				stringToCompile = stringToCompile.Replace (
 					"%0%",
 					textToAdd + "%0%"
@@ -87,7 +97,7 @@ namespace GraphicFoo
 			} else {
 				int index = blocksOnView.IndexOf (lastSelected.Superview);
 				if (stringToCompile.Contains ("%" + (index + 1) + "%")) {
-					ArrangeIndexes (stringToCompile, blocksOnView, index, true);
+					stringToCompile = ArrangeIndexes (stringToCompile, blocksOnView, index, true);
 				}
 				stringToCompile = stringToCompile.Replace (
 					"%" + index + "%",
