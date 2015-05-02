@@ -25,29 +25,59 @@ namespace GraphicFoo
 
 		private static void Run ()
 		{
-			foreach (Quadruple q in Quadruple.quadruples) {
+			int index = 0;
+
+			while (index < Quadruple.quadruples.Count) {
+				Quadruple q = Quadruple.quadruples [index];
+				Console.WriteLine ("Executing [" + index + "]");
 				switch (q.op) {
 				case Operators.Assignation:
 					q.target.value = q.v1.value;
+					index++;
 					break;
 				case Operators.Plus:
 				case Operators.Minus:
 				case Operators.Multiplication:
 				case Operators.Division:
 					ExecuteArithmeticOperation (q);
+					index++;
 					break;
 				case Operators.Greater:
 				case Operators.Lesser:
 					ExecuteRelationalOperation (q);
+					index++;
+					break;
+				case Operators.Equal:
+				case Operators.Unequal:
+					ExecuteEqualityOperation (q);
+					index++;
 					break;
 				case Operators.Or:
 				case Operators.And:
 					ExecuteLogicalOperation (q);
+					index++;
+					break;
+				case Operators.Goto:
+					index = q.jumpIndex;
+					break;
+				case Operators.GotoT:
+					index = 
+						(ExecuteGotoOperation (q, true)) ? 
+						q.jumpIndex : 
+						index + 1;
+					break;
+				case Operators.GotoF:
+					index = 
+						(ExecuteGotoOperation (q, false)) ? 
+						q.jumpIndex : 
+						index + 1;
 					break;
 				case Operators.Print:
 					Print (q);
+					index++;
 					break;
 				default:
+					index++;
 					break;
 				}
 			}
@@ -110,6 +140,18 @@ namespace GraphicFoo
 			}
 		}
 
+		private static void ExecuteEqualityOperation (Quadruple q)
+		{
+
+			switch (q.op) {
+			case Operators.Equal:
+				break;
+			case Operators.Unequal:
+				break;
+			}
+
+		}
+
 		private static void ExecuteLogicalOperation (Quadruple q)
 		{
 			bool? v1Value = CastToBoolean (q.v1);
@@ -133,6 +175,20 @@ namespace GraphicFoo
 				q.target.value = v1 && v2;
 				break;
 			}
+		}
+
+		private static bool ExecuteGotoOperation (Quadruple q, bool condition)
+		{
+			bool? v1Value = CastToBoolean (q.v1);
+			bool v1;
+
+			if (v1Value == null) {
+				Console.WriteLine ("Execution error: Boolean cast failed");
+				//TODO return?
+			}
+
+			v1 = v1Value ?? default(bool);
+			return v1 == condition;
 		}
 
 		private static void Print (Quadruple q)
