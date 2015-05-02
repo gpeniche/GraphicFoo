@@ -257,7 +257,7 @@ namespace GraphicFoo
 			VariableBlock parameters)
 		{
 			int procedureParameterCount = procedure.GetParameterCount ();
-			int parameterCallCount = parameters.Count ();
+			int parameterCallCount = parameters.GetCount ();
 
 			if (procedureParameterCount != parameterCallCount) {
 				Console.WriteLine (

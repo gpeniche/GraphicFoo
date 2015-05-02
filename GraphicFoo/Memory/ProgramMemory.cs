@@ -5,6 +5,8 @@ namespace GraphicFoo
 {
 	public static class ProgramMemory
 	{
+		#region Initialize
+
 		private const string temporaryPrefix = "temp";
 
 		private static VariableBlock constants;
@@ -19,6 +21,10 @@ namespace GraphicFoo
 			globalVariables = new VariableBlock ();
 			procedures = new Dictionary <string, Procedure> ();
 		}
+
+		#endregion
+
+		#region Populate
 
 		public static Variable AddConstant (string id, GraphicFooType type)
 		{
@@ -38,7 +44,7 @@ namespace GraphicFoo
 
 		public static Variable AddGlobalTemporary (GraphicFooType type)
 		{
-			string id = temporaryPrefix + globalTemporary.Count ();
+			string id = temporaryPrefix + globalTemporary.GetCount ();
 			Variable variable = new Variable (id, type);
 			globalTemporary.AddVariable (variable);
 			return variable;
@@ -53,6 +59,10 @@ namespace GraphicFoo
 			procedures.Add (procedure.name, procedure);
 			return procedure;
 		}
+
+		#endregion
+
+		#region Access
 
 		public static Procedure ReadProcedure (string procedureName)
 		{
@@ -102,6 +112,19 @@ namespace GraphicFoo
 			return variable;
 		}
 
+		#endregion
+
+		#region Execute
+
+		public static void LoadConstants ()
+		{
+			constants.GroupByType ();
+		}
+
+		#endregion
+
+		#region Debug
+
 		public static Variable DebugFindVariable (string id)
 		{
 			Variable variable = null;
@@ -133,6 +156,8 @@ namespace GraphicFoo
 			}
 			Console.WriteLine (output);
 		}
+
+		#endregion
 	}
 }
 
