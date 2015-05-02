@@ -148,6 +148,10 @@
     <Compile Include="Blocks\Else.cs" />
     <Compile Include="Helper\CompilingHelper.cs" />
     <Compile Include="Language\Semantics.cs" />
+    <Compile Include="Blocks\FunctionHeader.cs" />
+    <Compile Include="Blocks\EndFunction.cs" />
+    <Compile Include="Blocks\Return.cs" />
+    <Compile Include="Helper\BlockConstructorHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
