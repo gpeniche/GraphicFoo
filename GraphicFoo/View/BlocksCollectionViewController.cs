@@ -23,6 +23,9 @@ namespace GraphicFoo
 		public BlocksCollectionViewController (UICollectionViewLayout layout) : base (layout)
 		{
 			blocks = new List<IBlock> ();
+			blocks.Add (new FunctionHeader ());
+			blocks.Add (new EndFunction ());
+			blocks.Add (new Return ());
 			blocks.Add (new IfHeader ());
 			blocks.Add (new EndIf ());
 			blocks.Add (new Else ());
@@ -213,8 +216,8 @@ namespace GraphicFoo
 			blockAction.Frame = new RectangleF (-10, 50, 280, 130);
 
 			exampleLabel = 
-				new UILabel (new RectangleF (25, 90, 200, 50));
-			exampleLabel.Font = UIFont.SystemFontOfSize (20.0f);
+				new UILabel (new RectangleF (20, 90, 210, 50));
+			exampleLabel.Font = UIFont.SystemFontOfSize (18.0f);
 			exampleLabel.TextAlignment = UITextAlignment.Center;
 			exampleLabel.TextColor = UIColor.White;
 

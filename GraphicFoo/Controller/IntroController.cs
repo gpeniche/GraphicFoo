@@ -19,9 +19,8 @@ namespace GraphicFoo
 		float insertPositionX = 0;
 		List<UIView> blocksOnView = new List<UIView> ();
 		UIButton lastSelected;
-		string stringToCompile = "function main() : void %-1% \n" +
-		                         "%0% \n" +
-		                         " return \"bye\"; endFunc";
+		string stringToCompile = "%-1% \n" +
+		                         "%0% \n";
 
 		private UIView activeview;
 		// Controller that activated the keyboard
@@ -280,9 +279,9 @@ namespace GraphicFoo
 						insertPositionY = 70;
 					}
 				};
-				if (blockcell.Name == "Declaration") {
+				if (blockcell.Name == "Declaration" || blockcell.Name == "Function Header") {
 					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
-						SelectVarType ((UIButton)sender);
+						SelectVarType ((UIButton)sender, (int)(blockView.Tag * 1.5));
 					};
 				}
 
@@ -330,7 +329,7 @@ namespace GraphicFoo
 			if (removing) {
 				nfloat maxLeft = blocksOnView.Max (bv => bv.Frame.Left);
 				nfloat maxTop = blocksOnView.Max (bv => bv.Frame.Top);
-				if (maxLeft == blockView.Frame.Left && (maxLeft + blockView.Frame.Width) > 508) {
+				if (blocksOnView.Count > 1 && maxLeft == blockView.Frame.Left && (maxLeft + blockView.Frame.Width) > 508) {
 					UIView secondMax = blocksOnView.OrderByDescending (r => r.Frame.Left).Skip (1).FirstOrDefault ();
 					scrollView.ContentSize = new CGSize (
 						(float)secondMax.Frame.Left + secondMax.Frame.Width - 50f,
@@ -345,7 +344,7 @@ namespace GraphicFoo
 				}
 
 				nfloat minLeft = blocksOnView.Min (bv => bv.Frame.Left);
-				if (minLeft == blockView.Frame.Left && minLeft < 0) {
+				if (blocksOnView.Count > 1 && minLeft == blockView.Frame.Left && minLeft < 0) {
 					UIView secondMin = blocksOnView.OrderBy (r => r.Frame.Left).Skip (1).FirstOrDefault ();
 					scrollView.ContentInset = new UIEdgeInsets (0, secondMin.Frame.Left * -1, 0, 0);
 				}
@@ -385,7 +384,7 @@ namespace GraphicFoo
 					}
 				} else {
 					if (blockView.Frame.Left + blockView.Frame.Width >
-					    scrollView.ContentSize.Width) {
+					    scrollView.ContentSize.Width + 92) { // offset for function block
 						scrollView.ContentSize = new CGSize (
 							(float)blockView.Frame.Left + blockView.Frame.Width,
 							scrollView.ContentSize.Height
@@ -403,7 +402,7 @@ namespace GraphicFoo
 		/// Selects the type for a variable.
 		/// </summary>
 		/// <param name="sender">Sender, Button that activates the method.</param>
-		public void SelectVarType (UIButton sender)
+		public void SelectVarType (UIButton sender, int offset)
 		{
 			// Create a new Alert Controller
 			UIAlertController actionSheetAlert = UIAlertController.Create (
@@ -476,7 +475,7 @@ namespace GraphicFoo
 				actionSheetAlert.PopoverPresentationController;
 			if (presentationPopover != null) {
 				presentationPopover.SourceView = sender.Superview;
-				presentationPopover.SourceRect = new CGRect (60, 100, 0, 0);
+				presentationPopover.SourceRect = new CGRect (60 + offset, 100, 0, 0);
 				presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
 			}
 			// Display the alert
