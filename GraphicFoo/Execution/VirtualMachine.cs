@@ -4,6 +4,9 @@ namespace GraphicFoo
 {
 	public static class VirtualMachine
 	{
+
+		#region Main
+
 		public static void Execute ()
 		{
 			Load ();
@@ -33,6 +36,10 @@ namespace GraphicFoo
 				case Operators.Division:
 					ExecuteArithmeticOperation (q);
 					break;
+				case Operators.Greater:
+				case Operators.Lesser:
+					ExecuteRelationalOperation (q);
+					break;
 				case Operators.Or:
 				case Operators.And:
 					ExecuteLogicalOperation (q);
@@ -46,7 +53,9 @@ namespace GraphicFoo
 			}
 		}
 
-		#region Arithmetic
+		#endregion
+
+		#region Operations
 
 		private static void ExecuteArithmeticOperation (Quadruple q)
 		{
@@ -81,25 +90,25 @@ namespace GraphicFoo
 			}
 		}
 
-		private static float? CastToNumeric (Variable v)
+		private static void ExecuteRelationalOperation (Quadruple q)
 		{
-			if (v.GetNativeType () == typeof(bool)) {
-				bool? value = (v.value as bool?);
-				if (value == true) {
-					return 1f;
-				} else if (value == false) {
-					return 0f;
-				} else {
-					return null;
-				}
-			} else {
-				return (v.value as float?);
+			float? v1Value = CastToNumeric (q.v1);
+			float? v2Value = CastToNumeric (q.v2);
+
+			if (v1Value == null || v2Value == null) {
+				Console.WriteLine ("Execution error: Number cast failed");
+				//TODO return?
+			}
+
+			switch (q.op) {
+			case Operators.Greater:
+				q.target.value = v1Value > v2Value;
+				break;
+			case Operators.Lesser:
+				q.target.value = v1Value < v2Value;
+				break;
 			}
 		}
-
-		#endregion
-
-		#region Logical
 
 		private static void ExecuteLogicalOperation (Quadruple q)
 		{
@@ -125,6 +134,23 @@ namespace GraphicFoo
 				break;
 			}
 		}
+
+		private static void Print (Quadruple q)
+		{
+			Type printType = q.v1.GetNativeType ();
+
+			if (printType == typeof(float)) {
+				Console.WriteLine ("Program Output: " + (q.v1.value as float?));
+			} else if (printType == typeof(bool)) {
+				Console.WriteLine ("Program Output: " + (q.v1.value as bool?));
+			} else if (printType == typeof(string)) {
+				Console.WriteLine ("Program Output: " + (q.v1.value as string));
+			}
+		}
+
+		#endregion
+
+		#region Casting
 
 		private static bool? CastToBoolean (Variable v)
 		{
@@ -152,20 +178,31 @@ namespace GraphicFoo
 			}
 		}
 
-		#endregion
-
-		private static void Print (Quadruple q)
+		private static float? CastToNumeric (Variable v)
 		{
-			Type printType = q.v1.GetNativeType ();
-
-			if (printType == typeof(float)) {
-				Console.WriteLine ("Program Output:" + (q.v1.value as float?));
-			} else if (printType == typeof(bool)) {
-				Console.WriteLine ("Program Output:" + (q.v1.value as bool?));
-			} else if (printType == typeof(string)) {
-				Console.WriteLine ("Program Output:" + (q.v1.value as string));
+			Type type = v.GetNativeType ();
+			if (type == typeof(string)) {
+				string value = (v.value as string);
+				if (value == null) {
+					return null;
+				} else {
+					return (float)value.Length;
+				}
+			} else if (type == typeof(bool)) {
+				bool? value = (v.value as bool?);
+				if (value == true) {
+					return 1f;
+				} else if (value == false) {
+					return 0f;
+				} else {
+					return null;
+				}
+			} else {
+				return (v.value as float?);
 			}
 		}
+
+		#endregion
 	}
 }
 
