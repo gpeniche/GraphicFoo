@@ -123,6 +123,7 @@ namespace GraphicFoo
 				{ Operators.Lesser, GraphicFooType.Boolean },
 					#endregion
 					#region Equality
+					// TODO remove this mix
 				{ Operators.Equal, GraphicFooType.Boolean },
 				{ Operators.Unequal, GraphicFooType.Boolean },
 					#endregion
@@ -163,9 +164,11 @@ namespace GraphicFoo
 					t1.ToString (), 
 					t2.ToString ()
 				);
+				// TODO return errors
 				return t1;
 			} else if (!rules [(int)t1, (int)t2].ContainsKey (op)) {
 				Console.WriteLine ("Key \"{1}\" not found.", op.ToString ());
+				// TODO return errors
 				return t1;
 			} else {
 				return (GraphicFooType)rules [(int)t1, (int)t2] [op];
