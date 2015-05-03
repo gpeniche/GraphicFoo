@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GraphicFoo
 {
@@ -6,6 +7,9 @@ namespace GraphicFoo
 	{
 
 		#region Main
+
+		public static int startOfMain;
+		private static Stack<int> goSubJumps;
 
 		public static void Execute ()
 		{
@@ -15,6 +19,10 @@ namespace GraphicFoo
 
 		private static void Load ()
 		{
+			goSubJumps = new Stack<int> ();
+			if (startOfMain == -1) {
+				Console.WriteLine ("Execution error: Main procedure not found");
+			}
 			LoadConstants ();
 		}
 
@@ -25,7 +33,7 @@ namespace GraphicFoo
 
 		private static void Run ()
 		{
-			int index = 0;
+			int index = startOfMain;
 
 			while (index < Quadruple.quadruples.Count) {
 				Quadruple q = Quadruple.quadruples [index];
@@ -71,6 +79,19 @@ namespace GraphicFoo
 						(ExecuteGotoOperation (q, false)) ? 
 						q.jumpIndex : 
 						index + 1;
+					break;
+				case Operators.Return:
+					if (goSubJumps.Count == 0) {
+						// TODO End Execution
+						index = int.MaxValue;
+						return;
+					} else {
+						index = goSubJumps.Pop () + 1;
+					}
+					break;
+				case Operators.GoSub:
+					goSubJumps.Push (index);
+					index = q.call.index;
 					break;
 				case Operators.Print:
 					Print (q);
