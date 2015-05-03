@@ -311,6 +311,7 @@ namespace GraphicFoo
 			}
 			SemanticEnum returnStatus = Semantics.ValidateReturn (scope.type, returnVariable);
 			if (returnStatus == SemanticEnum.ValidReturn) {
+				scope.SetEnd (Quadruple.quadruples.Count);
 				Quadruple quadruple = 
 					new Quadruple (Operators.Return, returnVariable);
 				PushQuadruple (quadruple);

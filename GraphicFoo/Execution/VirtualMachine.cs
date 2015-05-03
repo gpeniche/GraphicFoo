@@ -81,6 +81,13 @@ namespace GraphicFoo
 						q.jumpIndex : 
 						index + 1;
 					break;
+				case Operators.Expand:
+					index++;
+					break;
+				case Operators.GoSub:
+					goSubJumps.Push (index);
+					index = q.call.index;
+					break;
 				case Operators.Return:
 					if (goSubJumps.Count == 0) {
 						// TODO End Execution
@@ -89,10 +96,6 @@ namespace GraphicFoo
 					} else {
 						index = goSubJumps.Pop () + 1;
 					}
-					break;
-				case Operators.GoSub:
-					goSubJumps.Push (index);
-					index = q.call.index;
 					break;
 				case Operators.Print:
 					Print (q);
