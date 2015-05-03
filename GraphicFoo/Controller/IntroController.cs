@@ -82,12 +82,7 @@ namespace GraphicFoo
 				SendToCompile ();
 			};
 
-			UIButton menuButton = new UIButton (UIButtonType.System);
-			menuButton.Frame = new RectangleF (700, 20, 50, 50);
-			menuButton.SetImage (
-				UIImage.FromBundle ("Graphics/menu.png"),
-				UIControlState.Normal
-			);
+			UIButton menuButton = ViewConstructorHelper.LoadMenuButton ();
 			menuButton.TouchUpInside += (sender, e) => {
 				SidebarController.ToggleMenu ();
 			};
@@ -227,6 +222,15 @@ namespace GraphicFoo
 		{
 			textOnConsole.Text = "";
 			string errorMessage = CompilingHelper.SendToCompile (stringToCompile, blocksOnView);
+			if (errorMessage != "None") {
+				new UIAlertView (
+					"Oops",
+					"Looks like your program is not quite well constructed, " +
+					"please double check it",
+					null,
+					"OK",
+					null).Show();
+			}
 			textOnConsole.Text = errorMessage;
 		}
 

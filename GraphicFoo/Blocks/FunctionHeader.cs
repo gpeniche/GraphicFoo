@@ -59,6 +59,7 @@ namespace GraphicFoo
 				functionText.Font = UIFont.SystemFontOfSize (20.0f);
 				functionText.TextAlignment = UITextAlignment.Center;
 				functionText.TextColor = UIColor.White;
+				functionText.Font = UIFont.FromName("GeezaPro", 24f);
 				functionText.Text = "Func";
 
 				UITextField functionName = 

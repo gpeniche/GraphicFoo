@@ -155,6 +155,8 @@
     <Compile Include="Controller\BlocksCollectionViewController.cs" />
     <Compile Include="Controller\RootViewController.cs" />
     <Compile Include="Controller\InstructionsController.cs" />
+    <Compile Include="Controller\AboutController.cs" />
+    <Compile Include="Helper\ViewConstructorHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
