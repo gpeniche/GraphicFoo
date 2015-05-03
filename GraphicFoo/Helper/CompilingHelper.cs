@@ -57,8 +57,8 @@ namespace GraphicFoo
 			for (int e = -1; e <= blocksOnView.Count; e++) {
 				stringForScanner = stringForScanner.Replace ("%" + e + "%", "");
 			}
-			Console.WriteLine ("stringForScanner: " + stringForScanner);
-			Console.WriteLine ("stringToCompile: " + stringToCompile);
+			Console.WriteLine ("stringForScanner: \n" + stringForScanner);
+			Console.WriteLine ("stringToCompile: \n" + stringToCompile);
 			Scanner scanner = new Scanner (stringForScanner);
 			Parser parser = new Parser (scanner);
 			parser.Parse ();

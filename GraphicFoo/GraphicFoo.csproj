@@ -152,6 +152,7 @@
     <Compile Include="Blocks\EndFunction.cs" />
     <Compile Include="Blocks\Return.cs" />
     <Compile Include="Helper\BlockConstructorHelper.cs" />
+    <Compile Include="Language\SemanticEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />

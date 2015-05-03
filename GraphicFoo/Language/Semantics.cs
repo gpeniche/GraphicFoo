@@ -11,15 +11,13 @@ namespace GraphicFoo
 			bool match = (expected == actual);
 			if (!match) {
 				Console.WriteLine (
-					"Type mismatch expected {1}, found {2}", 
-					expected, 
-					actual
+					"Type mismatch expected " + expected + ", found " + actual
 				);
 			}
 			return match;
 		}
 
-		public static bool ValidateReturn (
+		public static SemanticEnum ValidateReturn (
 			GraphicFooType procedureType, 
 			Variable returnVariable)
 		{
@@ -27,18 +25,20 @@ namespace GraphicFoo
 			if (procedureType == GraphicFooType.Void) {
 				if (!noReturn) {
 					Console.WriteLine ("Void functions can't return a type");
+					return SemanticEnum.CantHaveReturn;
 				}
-				return noReturn;
+				return SemanticEnum.ValidReturn;
 			} else {
 				if (noReturn) {
 					Console.WriteLine ("Missing return type");
-					return false;
+					return SemanticEnum.MissingReturnType;
 				}
 				bool match = (procedureType == returnVariable.type);
 				if (!match) {
 					Console.WriteLine ("Return mismatch");
+					return SemanticEnum.TypeMismatch;
 				}
-				return match;
+				return SemanticEnum.ValidReturn;
 			}
 		}
 	}

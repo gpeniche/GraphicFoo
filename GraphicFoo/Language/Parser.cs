@@ -53,10 +53,10 @@ namespace GraphicFoo
 			errDist = 0;
 		}
 
-		public void SemErr (string msg)
+		public void SemErr (int msg, string complementError = null)
 		{
 			if (errDist >= minErrDist)
-				errors.SemErr (t.line, t.col, msg);
+				errors.SemErr (t.line, t.col, msg, complementError);
 			errDist = 0;
 		}
 
@@ -158,10 +158,11 @@ namespace GraphicFoo
 				Statute ();
 			}
 			string id = "";
-			if (la.kind == (int)TokenEnum.Return) {
-				id = Return ();
+			id = Return ();
+			SemanticEnum returnStatus = Quadruple.CreateReturnQuadruple (id);
+			if (returnStatus != SemanticEnum.ValidReturn) {
+				SemErr ((int)returnStatus);
 			}
-			Quadruple.CreateReturnQuadruple (id);
 			EndFunction ();
 		}
 
@@ -181,6 +182,9 @@ namespace GraphicFoo
 				Expect ((int)TokenEnum.Id);
 				string varId = GetLastTokenValue ();
 				Variable parameter = new Variable (varId, varType);
+				if (parameter.type == GraphicFooType.Invalid) {
+					SemErr ((int)SemanticEnum.Variable);
+				}
 				parameters.AddVariable (parameter);
 				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
@@ -212,15 +216,22 @@ namespace GraphicFoo
 			} else if (la.kind == (int)TokenEnum.Function) {
 				CallFunction ();
 			} else
-				SynErr (37);
+				SynErr ((int)TokenEnum.InvalidStatute);
 		}
 
 		string Return ()
 		{
 			Expect ((int)TokenEnum.Return);
-			Expression ();
+			if (StartOf ((int)TokenEnum.String)) {
+				Expression ();
+			}
 			Expect ((int)TokenEnum.Semicolon);
-			string id = Quadruple.operandStack.Pop ();
+			string id = "";
+			try {
+				id = Quadruple.operandStack.Pop ();
+			} catch (InvalidOperationException) {
+			}
+
 			return id;
 		}
 
@@ -234,7 +245,11 @@ namespace GraphicFoo
 			if (la.kind == (int)TokenEnum.Id) {
 				Get ();
 				string id = GetLastTokenValue ();
-				return ProgramMemory.FindVariable (scope, id);
+				Variable variable = ProgramMemory.FindVariable (scope, id);
+				if (variable == null) {
+					SemErr ((int)SemanticEnum.NotDeclared);
+				}
+				return variable;
 			} else if (la.kind == (int)TokenEnum.Number ||
 			           la.kind == (int)TokenEnum.String ||
 			           la.kind == (int)TokenEnum.True ||
@@ -251,7 +266,7 @@ namespace GraphicFoo
 				string constant = GetLastTokenValue ();
 				return ProgramMemory.AddConstant (constant, type);
 			} else {
-				SynErr (38);
+				SynErr ((int)TokenEnum.InvalidVar);
 				return null;
 			}
 		}
@@ -261,6 +276,10 @@ namespace GraphicFoo
 			bool assign = false;
 			Expect ((int)TokenEnum.Id);
 			string id = GetLastTokenValue ();
+			Variable variable = ProgramMemory.FindVariable (scope, id);
+			if (variable == null && type == "") {
+				SemErr ((int)SemanticEnum.NotDeclared);
+			}
 			if (la.kind == (int)TokenEnum.Assignation) {
 				Get ();
 				Expression ();
@@ -277,8 +296,12 @@ namespace GraphicFoo
 			}
 
 			if (assign) {
-				string temp = Quadruple.operandStack.Pop ();
-				Quadruple.CreateAssignationQuadruple (temp, id);
+				try {
+					string temp = Quadruple.operandStack.Pop ();
+					Quadruple.CreateAssignationQuadruple (temp, id);
+				} catch (InvalidOperationException) {
+					SynErr ((int)TokenEnum.NoExpression);
+				}
 			}
 		}
 
@@ -316,8 +339,13 @@ namespace GraphicFoo
 			Expression ();
 			Expect ((int)TokenEnum.RightParenthesis);
 			Expect ((int)TokenEnum.Semicolon);
+			string temp = string.Empty;
+			try {
+				temp = Quadruple.operandStack.Pop ();
+			} catch (InvalidOperationException e) {
+				SynErr ((int)TokenEnum.NoExpression);
+			}
 
-			string temp = Quadruple.operandStack.Pop ();
 			Quadruple.CreatePrintQuadruple (temp);
 		}
 
@@ -332,13 +360,21 @@ namespace GraphicFoo
 				Expression ();
 				string paramId = Quadruple.operandStack.Pop ();
 				GraphicFooType type = Quadruple.typeStack.Pop ();
-				parameters.AddVariable (new Variable (paramId, type));
+				Variable parameter = new Variable (paramId, type);
+				if (parameter.type == GraphicFooType.Invalid) {
+					SemErr ((int)SemanticEnum.Variable);
+				}
+				parameters.AddVariable (parameter);
 				while (la.kind == (int)TokenEnum.Comma) {
 					Get ();
 					Expression ();
 					paramId = Quadruple.operandStack.Pop ();
 					type = Quadruple.typeStack.Pop ();
-					parameters.AddVariable (new Variable (paramId, type));
+					parameter = new Variable (paramId, type);
+					if (parameter.type == GraphicFooType.Invalid) {
+						SemErr ((int)SemanticEnum.Variable);
+					}
+					parameters.AddVariable (parameter);
 				}
 			}
 			Expect ((int)TokenEnum.RightParenthesis);
@@ -356,8 +392,9 @@ namespace GraphicFoo
 				Get ();
 			} else if (la.kind == (int)TokenEnum.StringType) {
 				Get ();
-			} else
-				SynErr (39);
+			} else {
+				SynErr ((int)TokenEnum.InvalidType);
+			}
 		}
 
 		void Expression ()
@@ -377,9 +414,12 @@ namespace GraphicFoo
 				} else if (la.kind == (int)TokenEnum.Equals) {
 					Get ();
 					op = Operators.Equal;
-				} else {
+				} else if (la.kind == (int)TokenEnum.Concatenation) {
 					Get ();
 					op = Operators.Concatenation;
+				} else {
+					op = Operators.InvalidOperator;
+					SynErr ((int)TokenEnum.InvalidOperator);
 				}
 				Quadruple.operatorStack.Push (op);
 				Exp ();
@@ -390,7 +430,9 @@ namespace GraphicFoo
 		void EndIf ()
 		{
 			Expect ((int)TokenEnum.EndIf);
-			Quadruple.PopJump ();
+			if (!Quadruple.PopJump ()) {
+				SynErr ((int)TokenEnum.EndIf);
+			}
 		}
 
 		void EndLoop ()
@@ -407,11 +449,21 @@ namespace GraphicFoo
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
 			Quadruple.PushJump ();
-			GraphicFooType type = Quadruple.typeStack.Pop ();
-			if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
-				string id = Quadruple.operandStack.Pop ();
-				Quadruple.CreateGotoFalseQuadruple (id);
+			try {
+				GraphicFooType type = Quadruple.typeStack.Pop ();
+				if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
+					string id = Quadruple.operandStack.Pop ();
+					Quadruple.CreateGotoFalseQuadruple (id);
+				} else {
+					SemErr (
+						(int)SemanticEnum.TypeMismatch,
+						"expected boolean, found " + type
+					);
+				}
+			} catch (InvalidOperationException e) {
+				SynErr ((int)TokenEnum.NoExpression);
 			}
+
 			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
@@ -420,12 +472,22 @@ namespace GraphicFoo
 			Expect ((int)TokenEnum.If);
 			Expect ((int)TokenEnum.LeftParenthesis);
 			Expression ();
-			GraphicFooType type = Quadruple.typeStack.Pop ();
-			if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
-				string id = Quadruple.operandStack.Pop ();
-				Quadruple.CreateGotoFalseQuadruple (id);
-				Quadruple.PushJump ();
+			try {
+				GraphicFooType type = Quadruple.typeStack.Pop ();
+				if (Semantics.ExpectType (type, GraphicFooType.Boolean)) {
+					string id = Quadruple.operandStack.Pop ();
+					Quadruple.CreateGotoFalseQuadruple (id);
+					Quadruple.PushJump ();
+				} else {
+					SemErr (
+						(int)SemanticEnum.TypeMismatch,
+						"expected boolean, found " + type
+					);
+				}
+			} catch (InvalidOperationException e) {
+				SynErr ((int)TokenEnum.NoExpression);
 			}
+
 			Expect ((int)TokenEnum.RightParenthesis);
 		}
 
@@ -489,6 +551,7 @@ namespace GraphicFoo
 			} else if (StartOf ((int)TokenEnum.False)) {
 				if (la.kind == (int)TokenEnum.Plus ||
 				    la.kind == (int)TokenEnum.Minus) {
+					// TODO use
 					if (la.kind == (int)TokenEnum.Plus) {
 						Get ();
 					} else {
@@ -496,11 +559,15 @@ namespace GraphicFoo
 					}
 				}
 				Variable variable = Var ();
-				Quadruple.operandStack.Push (variable.name);
-				Quadruple.typeStack.Push (variable.type);
+				try {
+					Quadruple.operandStack.Push (variable.name);
+					Quadruple.typeStack.Push (variable.type);
+				} catch (NullReferenceException e) {
+					SemErr ((int)SemanticEnum.Variable);
+				}
 
 			} else
-				SynErr (40);
+				SynErr ((int)TokenEnum.InvalidFactor);
 		}
 
 		#endregion
@@ -785,7 +852,7 @@ namespace GraphicFoo
 		// number of errors detected
 		public System.IO.TextWriter errorStream = Console.Out;
 		// error messages go to this stream
-		public string errMsgFormat = "-- line {0} col {1}: {2}";
+		public string errMsgFormat = "-- block {0} col {1}: {2}";
 		// 0=line, 1=column, 2=text
 		public string errorMessage;
 
@@ -794,7 +861,7 @@ namespace GraphicFoo
 			string s;
 			switch (n) {
 			case (int)TokenEnum.EOF:
-				s = "EOF expected";
+				s = "code blocks out of function";
 				break;
 			case (int)TokenEnum.Id:
 				s = "id expected";
@@ -904,32 +971,57 @@ namespace GraphicFoo
 			case 36:
 				s = "??? expected";
 				break;
-			case 37:
+			case (int)TokenEnum.InvalidStatute:
 				s = "invalid Statute";
 				break;
-			case 38:
+			case (int)TokenEnum.InvalidVar:
 				s = "invalid Var";
 				break;
-			case 39:
+			case (int)TokenEnum.InvalidType:
 				s = "invalid Type";
 				break;
-			case 40:
+			case (int)TokenEnum.InvalidFactor:
 				s = "invalid Factor";
 				break;
-
+			case (int)TokenEnum.NoExpression:
+				s = "Expression expected";
+				break;
 			default:
 				s = "error " + n;
 				break;
 			}
 			errorStream.WriteLine (errMsgFormat, line, col, s);
 			errorMessage += 
-				"line:" + line + " col:" + col + " error:" + s + "\n";
+				"block:" + line + " error:" + s + "\n";
 			count++;
 		}
 
-		public virtual void SemErr (int line, int col, string s)
+		public virtual void SemErr (int line, int col, int n, string complementError)
 		{
+			string s;
+			switch (n) {
+			case (int)SemanticEnum.Variable:
+				s = "Variable expected";
+				break;
+			case (int)SemanticEnum.NotDeclared:
+				s = "Variable was not previously declared";
+				break;
+			case (int)SemanticEnum.TypeMismatch:
+				s = "Type mismatch " + complementError;
+				break;
+			case (int)SemanticEnum.CantHaveReturn:
+				s = "Can't have return variable";
+				break;
+			case (int)SemanticEnum.MissingReturnType:
+				s = "Missing return type ";
+				break;
+			default:
+				s = "error " + n;
+				break;
+			}
 			errorStream.WriteLine (errMsgFormat, line, col, s);
+			errorMessage += 
+				"block:" + line + " error:" + s + "\n";
 			count++;
 		}
 
