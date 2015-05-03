@@ -40,6 +40,14 @@ namespace GraphicFoo
 		Multiplication,
 		Division,
 		And,
+		Unknown,
+		InvalidStatute,
+		InvalidVar,
+		InvalidType,
+		InvalidOperator,
+		InvalidFactor,
+		NoExpression,
+		ValueAssignation,
 	}
 }
 

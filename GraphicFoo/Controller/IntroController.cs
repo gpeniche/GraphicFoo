@@ -19,7 +19,7 @@ namespace GraphicFoo
 		float insertPositionX = 0;
 		List<UIView> blocksOnView = new List<UIView> ();
 		UIButton lastSelected;
-		string stringToCompile = "%-1% \n" +
+		string stringToCompile = "%-1%" +
 		                         "%0% \n";
 
 		private UIView activeview;

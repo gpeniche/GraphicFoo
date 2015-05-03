@@ -59,6 +59,9 @@ namespace GraphicFoo
 
 		Print,
 		#endregion
+		#region Invalid
+		InvalidOperator,
+		#endregion
 	}
 }
 

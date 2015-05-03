@@ -222,10 +222,15 @@ namespace GraphicFoo
 			jumpStack.Push (quadruples.Count - 1);
 		}
 
-		public static void PopJump (int offset = 0)
+		public static bool PopJump (int offset = 0)
 		{
-			int jumpIndex = jumpStack.Pop ();
-			quadruples [jumpIndex].jumpIndex = quadruples.Count + offset;
+			try {
+				int jumpIndex = jumpStack.Pop ();
+				quadruples [jumpIndex].jumpIndex = quadruples.Count + offset;
+				return true;
+			} catch (InvalidOperationException e) {
+				return false;
+			}
 		}
 
 		public static void PopTwoJumps ()
@@ -291,14 +296,19 @@ namespace GraphicFoo
 			}
 		}
 
-		public static void CreateReturnQuadruple (string id)
+		public static SemanticEnum CreateReturnQuadruple (string id)
 		{
-			Variable returnVariable = ProgramMemory.FindVariable (scope, id);
-			if (Semantics.ValidateReturn (scope.type, returnVariable)) {
+			Variable returnVariable = null;
+			if (id != "") {
+				returnVariable = ProgramMemory.FindVariable (scope, id);
+			}
+			SemanticEnum returnStatus = Semantics.ValidateReturn (scope.type, returnVariable);
+			if (returnStatus == SemanticEnum.ValidReturn) {
 				Quadruple quadruple = 
 					new Quadruple (Operators.Return, returnVariable);
 				PushQuadruple (quadruple);
 			}
+			return returnStatus;
 		}
 
 		public static void CreateFunctionCallQuadruples (
