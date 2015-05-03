@@ -231,7 +231,9 @@ namespace GraphicFoo
 			ContentView.Add (nameLabel);
 
 			blockAction.TouchUpInside += (sender, e) => {
-				introController.AddTextToCompilingString (blockCell.Syntax);
+				if(introController.lastSelected == null || introController.lastSelected.Selected == true){
+					introController.AddTextToCompilingString (blockCell.Syntax);
+				}
 				introController.AddBlock (blockCell.BlockView, blockCell);
 			};
 		}

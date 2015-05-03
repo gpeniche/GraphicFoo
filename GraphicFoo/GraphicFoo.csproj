@@ -132,8 +132,6 @@
     <Compile Include="Blocks\EndLoop.cs" />
     <Compile Include="Blocks\IBlock.cs" />
     <Compile Include="Blocks\LoopHeader.cs" />
-    <Compile Include="View\BlocksCollectionViewController.cs" />
-    <Compile Include="View\RootViewController.cs" />
     <Compile Include="Controller\BaseController.cs" />
     <Compile Include="Controller\ContentController.cs" />
     <Compile Include="Controller\IntroController.cs" />
@@ -154,6 +152,8 @@
     <Compile Include="Blocks\Return.cs" />
     <Compile Include="Helper\BlockConstructorHelper.cs" />
     <Compile Include="Language\SemanticEnum.cs" />
+    <Compile Include="Controller\BlocksCollectionViewController.cs" />
+    <Compile Include="Controller\RootViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />

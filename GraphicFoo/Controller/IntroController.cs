@@ -10,6 +10,8 @@ namespace GraphicFoo
 {
 	public class IntroController : BaseController
 	{
+		public UIButton lastSelected;
+
 		BlocksCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
 		UIScrollView scrollView;
@@ -18,7 +20,6 @@ namespace GraphicFoo
 		float insertPositionY = 70;
 		float insertPositionX = 0;
 		List<UIView> blocksOnView = new List<UIView> ();
-		UIButton lastSelected;
 		string stringToCompile = "%-1%" +
 		                         "%0% \n";
 
@@ -399,9 +400,10 @@ namespace GraphicFoo
 		}
 
 		/// <summary>
-		/// Selects the type for a variable.
+		/// Selects the type of the variable.
 		/// </summary>
 		/// <param name="sender">Sender, Button that activates the method.</param>
+		/// <param name="offset">Offset.</param>
 		public void SelectVarType (UIButton sender, int offset)
 		{
 			// Create a new Alert Controller
