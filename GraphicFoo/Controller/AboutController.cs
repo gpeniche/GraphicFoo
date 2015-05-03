@@ -37,7 +37,7 @@ namespace GraphicFoo
 			body.TextAlignment = UITextAlignment.Center;
 			body.Editable = false;
 			body.Layer.BorderWidth = 5f;
-			body.Layer.BorderColor = new CGColor(191, 222, 227);
+			body.Layer.BorderColor = new CGColor (191, 222, 227);
 			body.Text = " \n" +
 			"- Graphic is an app which is intented for people that is just" +
 			" starting to discover the programming as an excellent tool" +

@@ -229,7 +229,7 @@ namespace GraphicFoo
 					"please double check it",
 					null,
 					"OK",
-					null).Show();
+					null).Show ();
 			}
 			textOnConsole.Text = errorMessage;
 		}
