@@ -142,14 +142,21 @@ namespace GraphicFoo
 
 		private static void ExecuteEqualityOperation (Quadruple q)
 		{
+			// TODO sanitize nulls
+			if (q.v1.GetNativeType () == typeof(float)) {
+				q.target.value = 
+					(q.v1.value as float?) == (q.v2.value as float?);
+			} else if (q.v1.GetNativeType () == typeof(bool)) {
+				q.target.value = 
+					(q.v1.value as bool?) == (q.v2.value as bool?);
+			} else if (q.v1.GetNativeType () == typeof(string)) {
+				q.target.value = 
+					(q.v1.value as string).Equals (q.v2.value as string);
+			} 
 
-			switch (q.op) {
-			case Operators.Equal:
-				break;
-			case Operators.Unequal:
-				break;
+			if (q.op == Operators.Unequal) {
+				q.target.value = !(q.target.value as bool?);
 			}
-
 		}
 
 		private static void ExecuteLogicalOperation (Quadruple q)

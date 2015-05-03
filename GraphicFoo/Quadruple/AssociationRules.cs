@@ -101,7 +101,45 @@ namespace GraphicFoo
 				#endregion
 			};
 			rules [(int)GraphicFooType.String, (int)GraphicFooType.String] = 
-				null;
+				new Hashtable () {
+				#region Assignment
+				//				Assignation,
+				#endregion
+				#region Additive
+//				{ Operators.Plus, GraphicFooType.Number },
+//				{ Operators.Minus, GraphicFooType.Number },
+//				{ Operators.Concatenation, GraphicFooType.String },
+				#endregion
+				#region Multiplicative
+//				{ Operators.Multiplication, GraphicFooType.Number },
+//				{ Operators.Division, GraphicFooType.Number },
+				#endregion
+				#region Relational
+				{ Operators.Greater, GraphicFooType.Boolean },
+				{ Operators.Lesser, GraphicFooType.Boolean },
+				#endregion
+				#region Equality
+				{ Operators.Equal, GraphicFooType.Boolean },
+				{ Operators.Unequal, GraphicFooType.Boolean },
+				#endregion
+				#region Logical
+				{ Operators.Or, GraphicFooType.Boolean },
+				{ Operators.And, GraphicFooType.Boolean },
+				#endregion
+				#region Jumps
+				//				Goto,
+				//				GotoT,
+				//				GotoF,
+				#endregion
+				#region Procedures
+				//				Expand,
+				//				GoSub,
+				//				Return,
+				#endregion
+				#region Tools
+				//				Write,
+				#endregion
+			};
 
 			rules [(int)GraphicFooType.Boolean, (int)GraphicFooType.Number] = 
 				rules [(int)GraphicFooType.Number, (int)GraphicFooType.Boolean] =
@@ -123,7 +161,7 @@ namespace GraphicFoo
 				{ Operators.Lesser, GraphicFooType.Boolean },
 					#endregion
 					#region Equality
-					// TODO remove this mix
+				// TODO remove this mix
 				{ Operators.Equal, GraphicFooType.Boolean },
 				{ Operators.Unequal, GraphicFooType.Boolean },
 					#endregion
