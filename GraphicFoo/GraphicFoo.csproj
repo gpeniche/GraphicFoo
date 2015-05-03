@@ -148,6 +148,7 @@
     <Compile Include="Blocks\Else.cs" />
     <Compile Include="Helper\CompilingHelper.cs" />
     <Compile Include="Language\Semantics.cs" />
+    <Compile Include="Execution\VirtualMachine.cs" />
     <Compile Include="Blocks\FunctionHeader.cs" />
     <Compile Include="Blocks\EndFunction.cs" />
     <Compile Include="Blocks\Return.cs" />
@@ -176,5 +177,6 @@
     <BundleResource Include="Graphics\print.png" />
     <Folder Include="Helper\" />
     <BundleResource Include="Graphics\else.png" />
+    <Folder Include="Execution\" />
   </ItemGroup>
 </Project>

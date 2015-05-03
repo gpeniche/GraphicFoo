@@ -48,7 +48,7 @@ namespace GraphicFoo
 
 		public Variable AddTemporaryVariable (GraphicFooType type)
 		{
-			string id = temporaryPrefix + temporaryVariables.Count ();
+			string id = temporaryPrefix + temporaryVariables.GetCount ();
 			Variable variable = new Variable (id, type);
 			temporaryVariables.AddVariable (variable);
 			return variable;
@@ -61,7 +61,7 @@ namespace GraphicFoo
 
 		public int GetParameterCount ()
 		{
-			return parameters.Count ();
+			return parameters.GetCount ();
 		}
 
 		public override string ToString ()

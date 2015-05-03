@@ -13,7 +13,7 @@ namespace GraphicFoo
 		public static Stack<Operators> operatorStack;
 		public static Stack<int> hierarchyStack;
 		public static Stack<int> jumpStack;
-		public static List<Quadruple> quadruples;
+		public static Dictionary<int, Quadruple> quadruples;
 
 		public Operators op;
 		public Variable v1, v2;
@@ -105,13 +105,13 @@ namespace GraphicFoo
 			operatorStack = new Stack<Operators> ();
 			hierarchyStack = new Stack<int> ();
 			jumpStack = new Stack<int> ();
-			quadruples = new List<Quadruple> ();
+			quadruples = new Dictionary<int, Quadruple> ();
 			AssociationRules.Initialize ();
 		}
 
 		public static void PushQuadruple (Quadruple quaduple)
 		{
-			quadruples.Add (quaduple);
+			quadruples.Add (quadruples.Count, quaduple);
 		}
 
 		#region Assigantion Quadruples
@@ -222,11 +222,11 @@ namespace GraphicFoo
 			jumpStack.Push (quadruples.Count - 1);
 		}
 
-		public static bool PopJump ()
+		public static bool PopJump (int offset = 0)
 		{
 			try {
 				int jumpIndex = jumpStack.Pop ();
-				quadruples [jumpIndex].jumpIndex = quadruples.Count;
+				quadruples [jumpIndex].jumpIndex = quadruples.Count + offset;
 				return true;
 			} catch (InvalidOperationException e) {
 				return false;
@@ -262,7 +262,7 @@ namespace GraphicFoo
 			VariableBlock parameters)
 		{
 			int procedureParameterCount = procedure.GetParameterCount ();
-			int parameterCallCount = parameters.Count ();
+			int parameterCallCount = parameters.GetCount ();
 
 			if (procedureParameterCount != parameterCallCount) {
 				Console.WriteLine (

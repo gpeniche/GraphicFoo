@@ -61,6 +61,7 @@ namespace GraphicFoo
 					parser.errors.errorMessage : 
 					"None";
 				new UIAlertView ("Errors", errorMessage, null, "OK", null).Show ();
+				VirtualMachine.Execute ();
 			};
 
 			View.Add (codeTextField);

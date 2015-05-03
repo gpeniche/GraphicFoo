@@ -313,7 +313,7 @@ namespace GraphicFoo
 			}
 			if (la.kind == (int)TokenEnum.Else) {
 				Get ();
-				Quadruple.PopJump ();
+				Quadruple.PopJump (1);
 				Quadruple.CreateGotoQuadruple ();
 				Quadruple.PushJump ();
 				while (StartOf ((int)TokenEnum.Number)) {
