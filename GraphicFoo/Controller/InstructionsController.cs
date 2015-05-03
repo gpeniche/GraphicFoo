@@ -1,0 +1,50 @@
+﻿using System;
+using System.Drawing;
+using UIKit;
+using Foundation;
+using CoreGraphics;
+
+namespace GraphicFoo
+{
+	public class InstructionsController : BaseController
+	{
+		public InstructionsController () : base (null, null)
+		{
+		}
+
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+			View.BackgroundColor = UIColor.White;
+
+			UILabel title = new UILabel (new RectangleF (0, 50, 320, 30));
+			title.Font = UIFont.SystemFontOfSize (24.0f);
+			title.TextAlignment = UITextAlignment.Center;
+			title.TextColor = UIColor.Blue;
+			title.Text = "Sidebar Navigation";
+
+			UILabel body = new UILabel (new RectangleF (50, 120, 220, 100));
+			body.Font = UIFont.SystemFontOfSize (12.0f);
+			body.TextAlignment = UITextAlignment.Center;
+			body.Lines = 0;
+			body.Text = @"This is the instructions view controller.";
+
+			UIButton menuButton = new UIButton (UIButtonType.System);
+			menuButton.Frame = new RectangleF (50, 250, 220, 30);
+			menuButton.SetTitle ("Toggle Side Menu", UIControlState.Normal);
+			menuButton.TouchUpInside += (sender, e) => {
+				SidebarController.ToggleMenu ();
+			};
+
+			UITextField codeTextField = new UITextField ();
+			codeTextField.Frame = new RectangleF (310, 350, 220, 30);
+			codeTextField.Placeholder = "Add code";
+
+			View.Add (codeTextField);
+			View.Add (title);
+			View.Add (body);
+			View.Add (menuButton);
+		}
+	}
+}
+

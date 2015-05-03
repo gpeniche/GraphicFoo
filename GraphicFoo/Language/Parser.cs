@@ -342,7 +342,7 @@ namespace GraphicFoo
 			string temp = string.Empty;
 			try {
 				temp = Quadruple.operandStack.Pop ();
-			} catch (InvalidOperationException e) {
+			} catch (InvalidOperationException) {
 				SynErr ((int)TokenEnum.NoExpression);
 			}
 
@@ -460,7 +460,7 @@ namespace GraphicFoo
 						"expected boolean, found " + type
 					);
 				}
-			} catch (InvalidOperationException e) {
+			} catch (InvalidOperationException) {
 				SynErr ((int)TokenEnum.NoExpression);
 			}
 
@@ -484,7 +484,7 @@ namespace GraphicFoo
 						"expected boolean, found " + type
 					);
 				}
-			} catch (InvalidOperationException e) {
+			} catch (InvalidOperationException) {
 				SynErr ((int)TokenEnum.NoExpression);
 			}
 
@@ -562,7 +562,7 @@ namespace GraphicFoo
 				try {
 					Quadruple.operandStack.Push (variable.name);
 					Quadruple.typeStack.Push (variable.type);
-				} catch (NullReferenceException e) {
+				} catch (NullReferenceException) {
 					SemErr ((int)SemanticEnum.Variable);
 				}
 
