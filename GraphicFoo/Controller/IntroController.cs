@@ -20,8 +20,7 @@ namespace GraphicFoo
 		float insertPositionY = 70;
 		float insertPositionX = 0;
 		List<UIView> blocksOnView = new List<UIView> ();
-		string stringToCompile = "%-1%" +
-		                         "%0% \n";
+		string stringToCompile = "%-1% %0% \n";
 
 		private UIView activeview;
 		// Controller that activated the keyboard
@@ -278,6 +277,8 @@ namespace GraphicFoo
 					if (blocksOnView.Count == 0) {
 						insertPositionX = 0;
 						insertPositionY = 70;
+						stringToCompile = "%-1% %0% \n";
+						lastSelected = null;
 					}
 				};
 				if (blockcell.Name == "Declaration" || blockcell.Name == "Function Header") {
