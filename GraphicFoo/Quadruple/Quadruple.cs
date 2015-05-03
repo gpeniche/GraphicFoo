@@ -281,7 +281,14 @@ namespace GraphicFoo
 				if (parameterList [i].type == procedureParameterList [i].type) {
 					// TODO define paramX
 					Quadruple param = 
-						new Quadruple (Operators.Param, parameterList [i]);
+						new Quadruple (
+							Operators.Param, 
+							ProgramMemory.FindVariable (
+								scope, 
+								parameterList [i].name
+							),
+							procedure.GetParameters ().GetVariableAt (i)
+						);
 					PushQuadruple (param);
 				} else {
 					Console.WriteLine (

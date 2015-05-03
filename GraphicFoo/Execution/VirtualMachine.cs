@@ -40,6 +40,7 @@ namespace GraphicFoo
 				Console.WriteLine ("Executing [" + index + "]");
 				switch (q.op) {
 				case Operators.Assignation:
+				case Operators.Param:
 					q.target.value = q.v1.value;
 					index++;
 					break;
