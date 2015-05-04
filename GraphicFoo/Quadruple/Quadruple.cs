@@ -228,7 +228,7 @@ namespace GraphicFoo
 				int jumpIndex = jumpStack.Pop ();
 				quadruples [jumpIndex].jumpIndex = quadruples.Count + offset;
 				return true;
-			} catch (InvalidOperationException e) {
+			} catch (InvalidOperationException) {
 				return false;
 			}
 		}

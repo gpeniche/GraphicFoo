@@ -1,47 +1,45 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
-	public class Else : IBlock
+	public class CallFunction : IBlock
 	{
-		
+
 		public string Name {
 			get {
-				return "Else";
+				return "Call Function";
 			}
 		}
 
 		public string Syntax {
 			get {
-				return " else \n";
+				return " %funcName% ; \n";
 			}
 		}
 
 		public string Example {
 			get {
-				return "else myFoo = 5 ";
+				return "funcFoo()";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return " If the if expression is false the execution continues" +
-				" in the following branch – either in the else block " +
-				"(which is usually optional), or if there is no else" +
-				" branch, then after the end If.";
+				return "Call a function you previously defined";
 			}
 		}
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/else.png");
+				return UIImage.FromBundle ("Graphics/return.png");
 			}
 		}
 
 		public UIColor Color {
 			get {
-				return UIColor.FromRGB (239, 137, 28);
+				return UIColor.FromRGB (191, 222, 227);
 			}
 		}
 
@@ -49,19 +47,18 @@ namespace GraphicFoo
 			get {
 				UIView blockView = 
 					new UIView (new CGRect (0, 200, 400, 90));
-				blockView.Tag = -98;
-				blockView.AccessibilityHint = "else";
 
 				UIImageView backgroundImage = 
 					new UIImageView (new CGRect (-36, -9, 400, 132));
 				backgroundImage.Image = Image;
 
-				UILabel ifFooterText = 
-					new UILabel (new CGRect (-10, 10, 300, 90));
-				ifFooterText.TextAlignment = UITextAlignment.Center;
-				ifFooterText.TextColor = Color;
-				ifFooterText.Text = "else";
-				ifFooterText.Font = UIFont.FromName ("Orange Kid", 28f);
+				UITextField funcName = BlockConstructorHelper.CreateTextField (
+					                       new CGRect (15, 5, 260, 100),
+					                       "function to call",
+					                       "funcName",
+					                       Color,
+					                       28f
+				                       );
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
 					                     new CGPoint (-20f, 20f),
@@ -69,7 +66,7 @@ namespace GraphicFoo
 				                     );
 
 				blockView.Add (backgroundImage);
-				blockView.Add (ifFooterText);
+				blockView.Add (funcName);
 				foreach (UIView view in sharedViews.Subviews) {
 					blockView.Add (view);
 				}

@@ -10,17 +10,22 @@ namespace GraphicFoo
 {
 	public class IntroController : BaseController
 	{
+		const float ORIGINX = 50;
+		const float ORIGINY = 70;
+
+		public UIButton lastSelected;
+
 		BlocksCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
 		UIScrollView scrollView;
 		UIView consoleView;
 		UITextView textOnConsole;
-		float insertPositionY = 70;
-		float insertPositionX = 0;
+		float insertPositionY = ORIGINY;
+		float insertPositionX = ORIGINX;
 		List<UIView> blocksOnView = new List<UIView> ();
-		UIButton lastSelected;
-		string stringToCompile = "%-1%" +
-		                         "%0% \n";
+		string stringToCompile = "%-1% %0% \n";
+		float scrollViewOriginalWidth;
+		float scrollViewOriginalHeight;
 
 		private UIView activeview;
 		// Controller that activated the keyboard
@@ -49,30 +54,31 @@ namespace GraphicFoo
 			NSNotificationCenter.DefaultCenter.AddObserver
 			(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
+
+			scrollViewOriginalWidth = (float)View.Frame.Size.Width - 260f;
+			scrollViewOriginalHeight = (float)View.Frame.Size.Height - 200f;
 			scrollView = new UIScrollView ();
 			scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
 			scrollView.Frame = new CGRect (
 				260f,
 				0f,
-				(float)View.Frame.Size.Width - 260f,
-				(float)View.Frame.Size.Height - 200f
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
 			);
 			scrollView.ContentSize = new CGSize (
-				(float)View.Frame.Size.Width - 260f,
-				(float)View.Frame.Size.Height - 200f
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
 			);
 
-
-			View.BackgroundColor = UIColor.White;
-
-			UILabel title = new UILabel (new RectangleF (300, 20, 320, 30));
+			UILabel title = new UILabel (new CGRect (300, 20, 320, 30));
 			title.Font = UIFont.SystemFontOfSize (24.0f);
 			title.TextAlignment = UITextAlignment.Center;
-			title.TextColor = UIColor.Blue;
+			title.Font = UIFont.FromName ("Orange Kid", 44f);
+			title.TextColor = UIColor.FromRGB (191, 222, 227);
 			title.Text = "Graphic Foo";
 				
 			UIButton runButton = new UIButton (UIButtonType.Custom);
-			runButton.Frame = new RectangleF (550, 20, 60, 45);
+			runButton.Frame = new CGRect (580, 20, 70, 80);
 			runButton.SetTitle ("Run", UIControlState.Normal);
 			runButton.SetImage (
 				UIImage.FromBundle ("Graphics/play-button.png"),
@@ -82,12 +88,7 @@ namespace GraphicFoo
 				SendToCompile ();
 			};
 
-			UIButton menuButton = new UIButton (UIButtonType.System);
-			menuButton.Frame = new RectangleF (700, 20, 50, 50);
-			menuButton.SetImage (
-				UIImage.FromBundle ("Graphics/menu.png"),
-				UIControlState.Normal
-			);
+			UIButton menuButton = ViewConstructorHelper.LoadMenuButton ();
 			menuButton.TouchUpInside += (sender, e) => {
 				SidebarController.ToggleMenu ();
 			};
@@ -100,12 +101,6 @@ namespace GraphicFoo
 				(float)View.Frame.Size.Height
 			);
 
-			// Line Layout
-			lineLayout = new LineLayout {
-				HeaderReferenceSize = new CGSize (260, 100),
-				ScrollDirection = UICollectionViewScrollDirection.Vertical
-			};
-
 			consoleView = new UIView ();
 			consoleView.Frame = new CGRect (
 				260f,
@@ -113,6 +108,8 @@ namespace GraphicFoo
 				(float)View.Frame.Size.Width - 260f,
 				200f
 			);
+			consoleView.Layer.BorderWidth = 2.0f;
+			consoleView.Layer.BorderColor = new CGColor (255, 255, 0);
 			consoleView.BackgroundColor = UIColor.Black;
 
 			textOnConsole = new UITextView ();
@@ -122,24 +119,30 @@ namespace GraphicFoo
 				consoleView.Frame.Size.Width,
 				consoleView.Frame.Size.Height - 10f
 			);
-			textOnConsole.Font = UIFont.SystemFontOfSize (16.0f);
 			textOnConsole.TextAlignment = UITextAlignment.Left;
-			textOnConsole.TextColor = UIColor.White;
+			textOnConsole.TextColor = UIColor.FromRGB (255, 255, 0);
 			textOnConsole.BackgroundColor = UIColor.Black;
 			textOnConsole.Editable = false;
+			textOnConsole.Font = UIFont.FromName ("Orange Kid", 20f);
 
 			UILabel consoleTitle = new UILabel ();
 			consoleTitle.Frame = new CGRect (
-				0,
-				0,
+				4,
+				2,
 				200f,
 				20f
 			);
-			consoleTitle.Font = UIFont.SystemFontOfSize (20.0f);
 			consoleTitle.TextAlignment = UITextAlignment.Left;
-			consoleTitle.TextColor = UIColor.White;
+			consoleTitle.TextColor = UIColor.FromRGB (255, 255, 0);
 			consoleTitle.Text = "FooConsole: ";
+			consoleTitle.Font = UIFont.FromName ("Orange Kid", 24f);
 
+			// Line Layout
+			lineLayout = new LineLayout {
+				HeaderReferenceSize = new CGSize (260, 100),
+				ScrollDirection = UICollectionViewScrollDirection.Vertical
+			};
+					
 			blocksCollectionViewController = 
 				new BlocksCollectionViewController (lineLayout);
 			blocksCollectionViewController.SetParentController (this);
@@ -149,6 +152,7 @@ namespace GraphicFoo
 			consoleView.Add (textOnConsole);
 			consoleView.Add (consoleTitle);
 
+			View.BackgroundColor = UIColor.Black;
 			View.Add (blocksView);
 			View.Add (scrollView);
 			View.Add (consoleView);
@@ -258,6 +262,27 @@ namespace GraphicFoo
 		}
 
 		/// <summary>
+		/// Restarts the view.
+		/// </summary>
+		public void RestartView ()
+		{
+			insertPositionX = ORIGINX;
+			insertPositionY = ORIGINY;
+			stringToCompile = "%-1% %0% \n";
+			lastSelected = null;
+			scrollView.Frame = new CGRect (
+				260f,
+				0f,
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
+			);
+			scrollView.ContentSize = new CGSize (
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
+			);
+		}
+
+		/// <summary>
 		/// Adds a button to the current view.
 		/// </summary>
 		public void AddBlock (UIView blockView, IBlock blockcell)
@@ -268,20 +293,19 @@ namespace GraphicFoo
 				((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 2)).TouchUpInside += (sender, e) => {
 					ArrangeElementsOnView (
 						blocksOnView.IndexOf (blockView),
-						-100
+						(int)blockView.Frame.Height * -1
 					);
 					RemoveTextFromCompilingString (blocksOnView.IndexOf (blockView));
 					blockView.RemoveFromSuperview ();
 					ArrangeSizeOfScrollview (blockView, true);
 					blocksOnView.Remove (blockView);
 					if (blocksOnView.Count == 0) {
-						insertPositionX = 0;
-						insertPositionY = 70;
+						RestartView ();
 					}
 				};
 				if (blockcell.Name == "Declaration" || blockcell.Name == "Function Header") {
 					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
-						SelectVarType ((UIButton)sender, (int)(blockView.Tag * 1.5));
+						SelectVarType ((UIButton)sender, (int)(blockView.Frame.Width / 2));
 					};
 				}
 
@@ -302,7 +326,7 @@ namespace GraphicFoo
 				    blocksOnView.IndexOf (lastSelected.Superview) + 1 < blocksOnView.Count) {
 					ArrangeElementsOnView (
 						blocksOnView.IndexOf (lastSelected.Superview),
-						100
+						(int)blockView.Frame.Height
 					);
 					blocksOnView.Insert (
 						blocksOnView.IndexOf (lastSelected.Superview) + 1,
@@ -346,14 +370,14 @@ namespace GraphicFoo
 				nfloat minLeft = blocksOnView.Min (bv => bv.Frame.Left);
 				if (blocksOnView.Count > 1 && minLeft == blockView.Frame.Left && minLeft < 0) {
 					UIView secondMin = blocksOnView.OrderBy (r => r.Frame.Left).Skip (1).FirstOrDefault ();
-					scrollView.ContentInset = new UIEdgeInsets (0, secondMin.Frame.Left * -1, 0, 0);
+					scrollView.ContentInset = new UIEdgeInsets (0, (secondMin.Frame.Left - ORIGINX) * -1, 0, 0);
 				}
 
 			} else {
 				if (blocksOnView.Count > 7) {
-					if (blockView.Frame.Top > scrollView.ContentSize.Height - blockView.Frame.Size.Height) {
+					if (blockView.Frame.Top > scrollView.Frame.Height) {
 						scrollView.ContentOffset = new CGPoint (
-							scrollView.ContentOffset.X,
+							blockView.Frame.Left - ORIGINX,
 							blockView.Frame.Top
 						);
 					}
@@ -364,7 +388,7 @@ namespace GraphicFoo
 				}
 				if (blockView.Frame.Left < 0) {
 					scrollView.ContentOffset = new CGPoint (
-						blockView.Frame.Left,
+						blockView.Frame.Left - ORIGINX,
 						scrollView.ContentOffset.Y
 					);
 					if (blockView.Frame.Left + blockView.Frame.Width >
@@ -374,23 +398,23 @@ namespace GraphicFoo
 							scrollView.ContentOffset.Y + blockView.Frame.Height
 						);
 					}
-					if ((blockView.Frame.Left * -1) > scrollView.ContentInset.Left) {
+					if (((blockView.Frame.Left - ORIGINX) * -1) > scrollView.ContentInset.Left) {
 						scrollView.ContentInset = new UIEdgeInsets (
 							0,
-							blockView.Frame.Left * -1,
+							(blockView.Frame.Left - ORIGINX) * -1,
 							0,
 							0
 						);
 					}
 				} else {
 					if (blockView.Frame.Left + blockView.Frame.Width >
-					    scrollView.ContentSize.Width + 92) { // offset for function block
+					    scrollView.ContentSize.Width) {
 						scrollView.ContentSize = new CGSize (
 							(float)blockView.Frame.Left + blockView.Frame.Width,
 							scrollView.ContentSize.Height
 						);
 						scrollView.ContentOffset = new CGPoint (
-							blockView.Frame.Left - 180,
+							blockView.Frame.Left - 150,
 							scrollView.ContentOffset.Y
 						);
 					}
@@ -399,9 +423,10 @@ namespace GraphicFoo
 		}
 
 		/// <summary>
-		/// Selects the type for a variable.
+		/// Selects the type of the variable.
 		/// </summary>
 		/// <param name="sender">Sender, Button that activates the method.</param>
+		/// <param name="offset">Offset.</param>
 		public void SelectVarType (UIButton sender, int offset)
 		{
 			// Create a new Alert Controller
@@ -417,7 +442,7 @@ namespace GraphicFoo
 				UIAlertActionStyle.Default,
 				(action) => {
 					sender.SetImage (
-						UIImage.FromFile ("Graphics/circle-empty.png"),
+						UIImage.FromFile ("Graphics/number-icon.png"),
 						UIControlState.Normal
 					);
 					sender.AccessibilityHint = "number";
@@ -429,7 +454,7 @@ namespace GraphicFoo
 				UIAlertActionStyle.Default,
 				(action) => {
 					sender.SetImage (
-						UIImage.FromFile ("Graphics/circle-full.png"),
+						UIImage.FromFile ("Graphics/void-icon.png"),
 						UIControlState.Normal
 					);
 					sender.AccessibilityHint = "void";
@@ -441,7 +466,7 @@ namespace GraphicFoo
 				UIAlertActionStyle.Default,
 				(action) => {
 					sender.SetImage (
-						UIImage.FromFile ("Graphics/menu.png"),
+						UIImage.FromFile ("Graphics/boolean-icon.png"),
 						UIControlState.Normal
 					);
 					sender.AccessibilityHint = "boolean";
@@ -453,7 +478,7 @@ namespace GraphicFoo
 				UIAlertActionStyle.Default,
 				(action) => {
 					sender.SetImage (
-						UIImage.FromFile ("Graphics/play-button.png"),
+						UIImage.FromFile ("Graphics/string-icon.png"),
 						UIControlState.Normal
 					);
 					sender.AccessibilityHint = "string";
@@ -464,7 +489,7 @@ namespace GraphicFoo
 				"Cancel",
 				UIAlertActionStyle.Cancel,
 				((action) => sender.SetImage (
-					UIImage.FromFile ("Graphics/circle-empty.png"),
+					UIImage.FromFile ("Graphics/delete-icon.png"),
 					UIControlState.Normal
 				)
 				)));
@@ -476,6 +501,7 @@ namespace GraphicFoo
 			if (presentationPopover != null) {
 				presentationPopover.SourceView = sender.Superview;
 				presentationPopover.SourceRect = new CGRect (60 + offset, 100, 0, 0);
+				presentationPopover.BackgroundColor = UIColor.DarkGray;
 				presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
 			}
 			// Display the alert

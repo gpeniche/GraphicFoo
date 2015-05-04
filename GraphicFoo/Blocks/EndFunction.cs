@@ -32,23 +32,30 @@ namespace GraphicFoo
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/endloop.png");
+				return UIImage.FromBundle ("Graphics/endfunction.png");
+			}
+		}
+
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (191, 222, 227);
 			}
 		}
 
 		public UIView BlockView {
 			get {
 				UIView blockView = BlockConstructorHelper.ContructEndBlock (
-					                   -220,
+					                   -98,
 					                   Image,
 					                   "endFunc",
-					                   600,
-					                   new CGRect (20, 10, 200, 100)
+					                   400,
+					                   new CGRect (10, 10, 200, 90),
+					                   Color
 				                   );
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (465f, 8f),
-					                     new CGPoint (440f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				foreach (UIView view in sharedViews.Subviews) {

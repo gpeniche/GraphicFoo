@@ -1,5 +1,6 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -36,10 +37,16 @@ namespace GraphicFoo
 			}
 		}
 
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (28, 55, 156);
+			}
+		}
+
 		public UIView BlockView {
 			get {
 				UIView blockView = 
-					new UIView (new CGRect (0, 200, 400, 100));
+					new UIView (new CGRect (0, 200, 400, 90));
 
 				UIImageView backgroundImage = 
 					new UIImageView (new CGRect (-36, -9, 400, 132));
@@ -47,38 +54,36 @@ namespace GraphicFoo
 
 				UILabel printText = 
 					new UILabel (new CGRect (-10, 10, 100, 100));
-				printText.Font = UIFont.SystemFontOfSize (24.0f);
 				printText.TextAlignment = UITextAlignment.Center;
-				printText.TextColor = UIColor.White;
+				printText.TextColor = Color;
 				printText.Text = "Print";
+				printText.Font = UIFont.FromName ("Orange Kid", 28f);
 
 				UILabel leftParenthesis = 
-					new UILabel (new CGRect (55, 0, 50, 100));
-				leftParenthesis.Font = UIFont.SystemFontOfSize (75.0f);
+					new UILabel (new CGRect (55, 10, 50, 100));
 				leftParenthesis.TextAlignment = UITextAlignment.Center;
-				leftParenthesis.TextColor = UIColor.White;
+				leftParenthesis.TextColor = Color;
 				leftParenthesis.Text = "(";
+				leftParenthesis.Font = UIFont.FromName ("Orange Kid", 55f);
 
-				UITextField printExpression = 
-					new UITextField (new CGRect (90, 10, 200, 100));
-				printExpression.Placeholder = "Add expression";
-				printExpression.ShouldReturn += textField => { 
-					printExpression.ResignFirstResponder ();
-					return true; 
-				};
-				printExpression.AccessibilityLabel = "expression";
-				printExpression.TextColor = UIColor.White;
+				UITextField printExpression = BlockConstructorHelper.CreateTextField (
+					                              new CGRect (90, 10, 180, 100),
+					                              "add expression",
+					                              "expression",
+					                              Color,
+					                              28f
+				                              );
 
 				UILabel rightParenthesis = 
-					new UILabel (new CGRect (220, 0, 70, 100));
-				rightParenthesis.Font = UIFont.SystemFontOfSize (80.0f);
+					new UILabel (new CGRect (250, 10, 70, 100));
 				rightParenthesis.TextAlignment = UITextAlignment.Center;
-				rightParenthesis.TextColor = UIColor.White;
-				rightParenthesis.Text = ") ;";
+				rightParenthesis.TextColor = Color;
+				rightParenthesis.Text = ");";
+				rightParenthesis.Font = UIFont.FromName ("Orange Kid", 55f);
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				blockView.Add (backgroundImage);

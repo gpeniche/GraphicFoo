@@ -1,5 +1,6 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -41,17 +42,23 @@ namespace GraphicFoo
 			}
 		}
 
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (10, 214, 140);
+			}
+		}
+
 		public UIView BlockView {
 			get {
 				UIView blockView = 
-					new UIView (new CGRect (0, 200, 400, 100));
+					new UIView (new CGRect (0, 200, 400, 90));
 
 				UIImageView backgroundImage = 
 					new UIImageView (new CGRect (-36, -9, 400, 132));
 				backgroundImage.Image = Image;
 				backgroundImage.Tag = 0;
 
-				UIButton varType = new UIButton (new CGRect (10, 5, 100, 100));
+				UIButton varType = new UIButton (new CGRect (15, 20, 90, 90));
 				varType.SetImage (
 					UIImage.FromFile ("Graphics/delete-icon.png"),
 					UIControlState.Normal
@@ -60,19 +67,17 @@ namespace GraphicFoo
 				varType.Tag = 3;
 				varType.AccessibilityHint = "none";
 
-				UITextField varName = 
-					new UITextField (new CGRect (170, 5, 220, 100));
-				varName.Placeholder = "var name";
-				varName.ShouldReturn += textField => { 
-					varName.ResignFirstResponder ();
-					return true; 
-				};
-				varName.AccessibilityLabel = "varName";
-				varName.TextColor = UIColor.White;
+				UITextField varName = BlockConstructorHelper.CreateTextField (
+					                      new CGRect (120, 5, 180, 100),
+					                      "var name",
+					                      "varName",
+					                      Color,
+					                      28f
+				                      );
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				blockView.Add (backgroundImage);

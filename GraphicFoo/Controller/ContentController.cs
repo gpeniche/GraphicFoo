@@ -30,8 +30,11 @@ namespace GraphicFoo
 			body.Text = @"This is the content view controller.";
 
 			UIButton menuButton = new UIButton (UIButtonType.System);
-			menuButton.Frame = new RectangleF (50, 250, 220, 30);
-			menuButton.SetTitle ("Toggle Side Menu", UIControlState.Normal);
+			menuButton.Frame = new RectangleF (700, 20, 50, 50);
+			menuButton.SetImage (
+				UIImage.FromBundle ("Graphics/menu.png"),
+				UIControlState.Normal
+			);
 			menuButton.TouchUpInside += (sender, e) => {
 				SidebarController.ToggleMenu ();
 			};
@@ -50,7 +53,6 @@ namespace GraphicFoo
 
 			runButton.TouchUpInside += (sender, e) => {
 				string input = codeTextField.Text;
-				//new UIAlertView ("Code", input, null, "OK", null).Show ();
 				Scanner scanner = new Scanner (input);
 				Parser parser = new Parser (scanner);
 				parser.Parse ();
