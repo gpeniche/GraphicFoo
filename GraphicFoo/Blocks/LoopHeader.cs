@@ -40,11 +40,17 @@ namespace GraphicFoo
 			}
 		}
 
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (47, 195, 23);
+			}
+		}
+
 		public UIView BlockView {
 			get {
 				UIView blockView = 
-					new UIView (new CGRect (0, 200, 400, 100));
-				blockView.Tag = 88;
+					new UIView (new CGRect (0, 200, 400, 90));
+				blockView.Tag = 98;
 
 				UIImageView backgroundImage = 
 					new UIImageView (new CGRect (-36, -9, 400, 132));
@@ -52,38 +58,40 @@ namespace GraphicFoo
 
 				UILabel whileText = 
 					new UILabel (new CGRect (-10, 10, 100, 100));
-				whileText.Font = UIFont.SystemFontOfSize (24.0f);
 				whileText.TextAlignment = UITextAlignment.Center;
-				whileText.TextColor = UIColor.White;
+				whileText.TextColor = Color;
 				whileText.Text = "While";
+				whileText.Font = UIFont.FromName ("Orange Kid", 28f);
 
 				UILabel leftParenthesis = 
-					new UILabel (new CGRect (55, 0, 50, 100));
-				leftParenthesis.Font = UIFont.SystemFontOfSize (75.0f);
+					new UILabel (new CGRect (55, 10, 50, 100));
 				leftParenthesis.TextAlignment = UITextAlignment.Center;
-				leftParenthesis.TextColor = UIColor.White;
+				leftParenthesis.TextColor = Color;
 				leftParenthesis.Text = "(";
+				leftParenthesis.Font = UIFont.FromName ("Orange Kid", 55f);
 
 				UITextField whileExpression = 
-					new UITextField (new CGRect (90, 10, 200, 100));
+					new UITextField (new CGRect (90, 10, 170, 100));
 				whileExpression.Placeholder = "Add expression";
 				whileExpression.ShouldReturn += textField => { 
 					whileExpression.ResignFirstResponder ();
 					return true; 
 				};
 				whileExpression.AccessibilityLabel = "expression";
-				whileExpression.TextColor = UIColor.White;
+				whileExpression.TextColor = Color;
+				whileExpression.Font = UIFont.FromName ("Orange Kid", 28f);
 
 				UILabel rightParenthesis = 
-					new UILabel (new CGRect (220, 0, 70, 100));
-				rightParenthesis.Font = UIFont.SystemFontOfSize (80.0f);
+					new UILabel (new CGRect (220, 10, 70, 100));
+				rightParenthesis.Font = UIFont.SystemFontOfSize (60.0f);
 				rightParenthesis.TextAlignment = UITextAlignment.Center;
-				rightParenthesis.TextColor = UIColor.White;
+				rightParenthesis.TextColor = Color;
 				rightParenthesis.Text = ")";
+				rightParenthesis.Font = UIFont.FromName ("Orange Kid", 55f);
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				blockView.Add (backgroundImage);

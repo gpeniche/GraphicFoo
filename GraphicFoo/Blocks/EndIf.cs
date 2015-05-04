@@ -36,19 +36,26 @@ namespace GraphicFoo
 			}
 		}
 
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (239, 137, 28);
+			}
+		}
+
 		public UIView BlockView {
 			get {
 				UIView blockView = BlockConstructorHelper.ContructEndBlock (
-					                   -88,
+					                   -98,
 					                   Image,
 					                   "endIf",
 					                   400,
-					                   new CGRect (-10, 10, 300, 100)
+					                   new CGRect (0, 10, 300, 90),
+					                   Color
 				                   );
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				foreach (UIView view in sharedViews.Subviews) {

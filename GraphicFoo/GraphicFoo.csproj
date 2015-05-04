@@ -155,31 +155,43 @@
     <Compile Include="Controller\BlocksCollectionViewController.cs" />
     <Compile Include="Controller\RootViewController.cs" />
     <Compile Include="Controller\InstructionsController.cs" />
-    <Compile Include="Controller\AboutController.cs" />
     <Compile Include="Helper\ViewConstructorHelper.cs" />
+    <Compile Include="Controller\AboutController.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
     <Folder Include="Language\" />
     <Folder Include="Quadruple\" />
-    <Folder Include="Graphics\" />
-    <BundleResource Include="Graphics\delete-icon.png" />
-    <BundleResource Include="Graphics\menu.png" />
-    <BundleResource Include="Graphics\play-button.png" />
-    <BundleResource Include="Graphics\circle-empty.png" />
-    <BundleResource Include="Graphics\circle-full.png" />
     <Folder Include="Blocks\" />
     <Folder Include="View\" />
     <Folder Include="Controller\" />
-    <BundleResource Include="Graphics\assignment.png" />
-    <BundleResource Include="Graphics\endloop.png" />
-    <BundleResource Include="Graphics\loopheader.png" />
-    <BundleResource Include="Graphics\declaration.png" />
-    <BundleResource Include="Graphics\ifheader.png" />
-    <BundleResource Include="Graphics\endif.png" />
-    <BundleResource Include="Graphics\print.png" />
     <Folder Include="Helper\" />
-    <BundleResource Include="Graphics\else.png" />
     <Folder Include="Execution\" />
+    <Folder Include="Resources\Fonts\" />
+    <BundleResource Include="Resources\Graphics\menu.png" />
+    <BundleResource Include="Resources\Graphics\play-button.png" />
+    <BundleResource Include="Resources\Graphics\boolean-icon.png" />
+    <BundleResource Include="Resources\Graphics\number-icon.png" />
+    <BundleResource Include="Resources\Graphics\string-icon.png" />
+    <BundleResource Include="Resources\Graphics\void-icon.png" />
+    <BundleResource Include="Resources\Graphics\assignment.png" />
+    <BundleResource Include="Resources\Graphics\declaration.png" />
+    <BundleResource Include="Resources\Graphics\else.png" />
+    <BundleResource Include="Resources\Graphics\endif.png" />
+    <BundleResource Include="Resources\Graphics\endloop.png" />
+    <BundleResource Include="Resources\Graphics\endfunction.png" />
+    <BundleResource Include="Resources\Graphics\functionheader.png" />
+    <BundleResource Include="Resources\Graphics\ifheader.png" />
+    <BundleResource Include="Resources\Graphics\print.png" />
+    <BundleResource Include="Resources\Graphics\return.png" />
+    <BundleResource Include="Resources\Graphics\loopheader.png" />
+    <BundleResource Include="Resources\Graphics\circle-empty.png" />
+    <BundleResource Include="Resources\Graphics\circle-full.png" />
+    <BundleResource Include="Resources\Graphics\delete-icon.png" />
+    <BundleResource Include="Resources\Fonts\Orangeki.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </BundleResource>
   </ItemGroup>
 </Project>

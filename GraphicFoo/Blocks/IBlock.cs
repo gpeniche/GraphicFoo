@@ -16,5 +16,7 @@ namespace GraphicFoo
 		UIImage Image { get; }
 
 		UIView BlockView { get; }
+
+		UIColor Color { get; }
 	}
 }

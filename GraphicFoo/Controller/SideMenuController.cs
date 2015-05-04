@@ -21,6 +21,7 @@ namespace GraphicFoo
 			title.TextAlignment = UITextAlignment.Center;
 			title.TextColor = UIColor.FromRGB (191, 222, 227);
 			title.Text = "Menu";
+			title.Font = UIFont.FromName ("Orange Kid", 34f);
 
 			UIButton introButton = new UIButton (UIButtonType.System);
 			introButton.Frame = new CGRect (0, 180, 260, 20);
@@ -28,6 +29,7 @@ namespace GraphicFoo
 			introButton.TouchUpInside += (sender, e) => 
 				SidebarController.ChangeContentView (new IntroController ());
 			introButton.SetTitleColor (UIColor.FromRGB (191, 222, 227), UIControlState.Normal);
+			introButton.Font = UIFont.FromName ("Orange Kid", 28f);
 
 			UIButton testButton = new UIButton (UIButtonType.System);
 			testButton.Frame = new CGRect (0, 220, 260, 20);
@@ -35,6 +37,7 @@ namespace GraphicFoo
 			testButton.TouchUpInside += (sender, e) => 
 				SidebarController.ChangeContentView (new ContentController ());
 			testButton.SetTitleColor (UIColor.FromRGB (191, 222, 227), UIControlState.Normal);
+			testButton.Font = UIFont.FromName ("Orange Kid", 28f);
 
 			UIButton instructionsButton = new UIButton (UIButtonType.System);
 			instructionsButton.Frame = new CGRect (0, 260, 260, 20);
@@ -42,6 +45,7 @@ namespace GraphicFoo
 			instructionsButton.TouchUpInside += (sender, e) => 
 				SidebarController.ChangeContentView (new InstructionsController ());
 			instructionsButton.SetTitleColor (UIColor.FromRGB (191, 222, 227), UIControlState.Normal);
+			instructionsButton.Font = UIFont.FromName ("Orange Kid", 28f);
 
 			UIButton aboutButton = new UIButton (UIButtonType.System);
 			aboutButton.Frame = new CGRect (0, 300, 260, 20);
@@ -49,6 +53,7 @@ namespace GraphicFoo
 			aboutButton.TouchUpInside += (sender, e) => 
 				SidebarController.ChangeContentView (new AboutController ());
 			aboutButton.SetTitleColor (UIColor.FromRGB (191, 222, 227), UIControlState.Normal);
+			aboutButton.Font = UIFont.FromName ("Orange Kid", 28f);
 
 			View.Add (title);
 			View.Add (introButton);
