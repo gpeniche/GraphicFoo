@@ -1,6 +1,7 @@
 ﻿using System;
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -81,12 +82,47 @@ namespace GraphicFoo
 			footerText.TextAlignment = UITextAlignment.Center;
 			footerText.TextColor = color;
 			footerText.Text = textOnBlock;
-			footerText.Font = UIFont.FromName("Orange Kid", 28f);
+			footerText.Font = UIFont.FromName ("Orange Kid", 28f);
 
 			blockView.Add (backgroundImageView);
 			blockView.Add (footerText);
 
 			return blockView;
+		}
+
+		/// <summary>
+		/// Creates a text field for a block.
+		/// </summary>
+		/// <returns>The text field.</returns>
+		/// <param name="frame">Frame for the text field.</param>
+		/// <param name="placeholder">Placeholder.</param>
+		/// <param name="accessibilityLabel">Accessibility label.</param>
+		/// <param name="color">Color.</param>
+		/// <param name="fontSize">Font size.</param>
+		public static UITextField CreateTextField (
+			CGRect frame,
+			string placeholder,
+			string accessibilityLabel,
+			UIColor color,
+			float fontSize)
+		{
+			UITextField inputOnBlock = 
+				new UITextField (frame);
+			inputOnBlock.AttributedPlaceholder = new NSAttributedString (
+				placeholder,
+				font: UIFont.FromName ("Orange Kid", 16.0f),
+				foregroundColor: color,
+				strokeWidth: 4 
+			);
+			inputOnBlock.KeyboardAppearance = UIKeyboardAppearance.Dark;
+			inputOnBlock.ShouldReturn += textField => { 
+				inputOnBlock.ResignFirstResponder ();
+				return true; 
+			};
+			inputOnBlock.AccessibilityLabel = accessibilityLabel;
+			inputOnBlock.TextColor = color;
+			inputOnBlock.Font = UIFont.FromName ("Orange Kid", fontSize);
+			return inputOnBlock;
 		}
 	}
 }

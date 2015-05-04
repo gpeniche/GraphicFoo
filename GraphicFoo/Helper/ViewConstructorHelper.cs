@@ -8,8 +8,8 @@ namespace GraphicFoo
 	{
 		public static UIButton LoadMenuButton ()
 		{
-			UIButton menuButton = new UIButton (UIButtonType.System);
-			menuButton.Frame = new CGRect (700, 20, 50, 50);
+			UIButton menuButton = new UIButton (UIButtonType.Custom);
+			menuButton.Frame = new CGRect (670, 0, 100, 120);
 			menuButton.SetImage (
 				UIImage.FromBundle ("Graphics/menu.png"),
 				UIControlState.Normal

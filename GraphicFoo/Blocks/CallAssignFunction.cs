@@ -4,47 +4,43 @@ using Foundation;
 
 namespace GraphicFoo
 {
-	public class Assignment : IBlock
+	public class CallAssignFunction : IBlock
 	{
 
 		public string Name {
 			get {
-				return "Assignment";
+				return "Call-Assign Function";
 			}
 		}
 
 		public string Syntax {
 			get {
-				return " %varName% = %varValue% ; \n";
+				return " %varName% = %funcName% ; \n";
 			}
 		}
 
 		public string Example {
 			get {
-				return "myFoo = 5";
+				return "myFoo = funcFoo()";
 			}
 		}
 
 		public string Explanation {
 			get {
-				return "Assignment statement sets and/or re-sets the value" +
-				" stored in the storage location(s) denoted by a variable" +
-				" name; in other words, it copies the value into the" +
-				" variable. In most imperative programming languages," +
-				" the assignment statement (or expression) is a" +
-				" fundamental construct";
+				return "Call a function you previously defined and assign the" +
+				" returning value to an existing variable";
 			}
 		}
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/assignment.png");
+				return UIImage.FromBundle ("Graphics/return.png");
 			}
 		}
 
 		public UIColor Color {
 			get {
-				return UIColor.FromRGB (241, 227, 3);
+				return UIColor.FromRGB (191, 222, 227);
 			}
 		}
 
@@ -72,10 +68,10 @@ namespace GraphicFoo
 				equalLabel.Text = "=";
 				equalLabel.Font = UIFont.FromName ("Orange Kid", 70.0f);
 
-				UITextField varValue = BlockConstructorHelper.CreateTextField (
+				UITextField funcName = BlockConstructorHelper.CreateTextField (
 					                       new CGRect (170, 5, 130, 100),
-					                       "add vale",
-					                       "varValue",
+					                       "function to call",
+					                       "funcName",
 					                       Color,
 					                       28f
 				                       );
@@ -88,7 +84,7 @@ namespace GraphicFoo
 				blockView.Add (backgroundImage);
 				blockView.Add (varName);
 				blockView.Add (equalLabel);
-				blockView.Add (varValue);
+				blockView.Add (funcName);
 				foreach (UIView view in sharedViews.Subviews) {
 					blockView.Add (view);
 				}

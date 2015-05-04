@@ -29,6 +29,8 @@ namespace GraphicFoo
 			blocks.Add (new IfHeader ());
 			blocks.Add (new EndIf ());
 			blocks.Add (new Else ());
+			blocks.Add (new CallAssignFunction ());
+			blocks.Add (new CallFunction ());
 			blocks.Add (new Print ());
 			blocks.Add (new Declaration ());
 			blocks.Add (new Assignment ());
@@ -214,7 +216,7 @@ namespace GraphicFoo
 			ContentView.Layer.BorderColor = new CGColor (191, 222, 227);
 			ContentView.Layer.BorderWidth = 2.0f;
 			ContentView.BackgroundColor = UIColor.Black;
-			ContentView.Transform = CGAffineTransform.MakeScale (0.7f, 0.7f);
+			ContentView.Transform = CGAffineTransform.MakeScale (0.9f, 0.9f);
 
 			blockAction = UIButton.FromType (UIButtonType.Custom);
 			blockAction.Frame = new CGRect (0, 50, 280, 130);

@@ -24,6 +24,8 @@ namespace GraphicFoo
 		float insertPositionX = ORIGINX;
 		List<UIView> blocksOnView = new List<UIView> ();
 		string stringToCompile = "%-1% %0% \n";
+		float scrollViewOriginalWidth;
+		float scrollViewOriginalHeight;
 
 		private UIView activeview;
 		// Controller that activated the keyboard
@@ -52,21 +54,21 @@ namespace GraphicFoo
 			NSNotificationCenter.DefaultCenter.AddObserver
 			(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
+
+			scrollViewOriginalWidth = (float)View.Frame.Size.Width - 260f;
+			scrollViewOriginalHeight = (float)View.Frame.Size.Height - 200f;
 			scrollView = new UIScrollView ();
 			scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
 			scrollView.Frame = new CGRect (
 				260f,
 				0f,
-				(float)View.Frame.Size.Width - 260f,
-				(float)View.Frame.Size.Height - 200f
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
 			);
 			scrollView.ContentSize = new CGSize (
-				(float)View.Frame.Size.Width - 260f,
-				(float)View.Frame.Size.Height - 200f
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
 			);
-
-
-			View.BackgroundColor = UIColor.Black;
 
 			UILabel title = new UILabel (new CGRect (300, 20, 320, 30));
 			title.Font = UIFont.SystemFontOfSize (24.0f);
@@ -76,7 +78,7 @@ namespace GraphicFoo
 			title.Text = "Graphic Foo";
 				
 			UIButton runButton = new UIButton (UIButtonType.Custom);
-			runButton.Frame = new CGRect (550, 20, 60, 45);
+			runButton.Frame = new CGRect (580, 20, 70, 80);
 			runButton.SetTitle ("Run", UIControlState.Normal);
 			runButton.SetImage (
 				UIImage.FromBundle ("Graphics/play-button.png"),
@@ -99,12 +101,6 @@ namespace GraphicFoo
 				(float)View.Frame.Size.Height
 			);
 
-			// Line Layout
-			lineLayout = new LineLayout {
-				HeaderReferenceSize = new CGSize (260, 100),
-				ScrollDirection = UICollectionViewScrollDirection.Vertical
-			};
-
 			consoleView = new UIView ();
 			consoleView.Frame = new CGRect (
 				260f,
@@ -113,7 +109,7 @@ namespace GraphicFoo
 				200f
 			);
 			consoleView.Layer.BorderWidth = 2.0f;
-			consoleView.Layer.BorderColor = new CGColor (191, 222, 227);
+			consoleView.Layer.BorderColor = new CGColor (255, 255, 0);
 			consoleView.BackgroundColor = UIColor.Black;
 
 			textOnConsole = new UITextView ();
@@ -124,7 +120,7 @@ namespace GraphicFoo
 				consoleView.Frame.Size.Height - 10f
 			);
 			textOnConsole.TextAlignment = UITextAlignment.Left;
-			textOnConsole.TextColor = UIColor.FromRGB (191, 222, 227);
+			textOnConsole.TextColor = UIColor.FromRGB (255, 255, 0);
 			textOnConsole.BackgroundColor = UIColor.Black;
 			textOnConsole.Editable = false;
 			textOnConsole.Font = UIFont.FromName ("Orange Kid", 20f);
@@ -137,10 +133,16 @@ namespace GraphicFoo
 				20f
 			);
 			consoleTitle.TextAlignment = UITextAlignment.Left;
-			consoleTitle.TextColor = UIColor.FromRGB (191, 222, 227);
+			consoleTitle.TextColor = UIColor.FromRGB (255, 255, 0);
 			consoleTitle.Text = "FooConsole: ";
 			consoleTitle.Font = UIFont.FromName ("Orange Kid", 24f);
 
+			// Line Layout
+			lineLayout = new LineLayout {
+				HeaderReferenceSize = new CGSize (260, 100),
+				ScrollDirection = UICollectionViewScrollDirection.Vertical
+			};
+					
 			blocksCollectionViewController = 
 				new BlocksCollectionViewController (lineLayout);
 			blocksCollectionViewController.SetParentController (this);
@@ -150,12 +152,6 @@ namespace GraphicFoo
 			consoleView.Add (textOnConsole);
 			consoleView.Add (consoleTitle);
 
-			foreach (string family in UIFont.FamilyNames) {
-				Console.Write ("\n - Family + : ");
-				foreach (string name in UIFont.FontNamesForFamilyName(family)) {
-					Console.Write (name + ", ");
-				}
-			}
 			View.BackgroundColor = UIColor.Black;
 			View.Add (blocksView);
 			View.Add (scrollView);
@@ -266,6 +262,27 @@ namespace GraphicFoo
 		}
 
 		/// <summary>
+		/// Restarts the view.
+		/// </summary>
+		public void RestartView ()
+		{
+			insertPositionX = ORIGINX;
+			insertPositionY = ORIGINY;
+			stringToCompile = "%-1% %0% \n";
+			lastSelected = null;
+			scrollView.Frame = new CGRect (
+				260f,
+				0f,
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
+			);
+			scrollView.ContentSize = new CGSize (
+				scrollViewOriginalWidth,
+				scrollViewOriginalHeight
+			);
+		}
+
+		/// <summary>
 		/// Adds a button to the current view.
 		/// </summary>
 		public void AddBlock (UIView blockView, IBlock blockcell)
@@ -283,15 +300,12 @@ namespace GraphicFoo
 					ArrangeSizeOfScrollview (blockView, true);
 					blocksOnView.Remove (blockView);
 					if (blocksOnView.Count == 0) {
-						insertPositionX = ORIGINX;
-						insertPositionY = ORIGINY;
-						stringToCompile = "%-1% %0% \n";
-						lastSelected = null;
+						RestartView ();
 					}
 				};
 				if (blockcell.Name == "Declaration" || blockcell.Name == "Function Header") {
 					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
-						SelectVarType ((UIButton)sender, (int)(blockView.Tag * 1.5));
+						SelectVarType ((UIButton)sender, (int)(blockView.Frame.Width / 2));
 					};
 				}
 
@@ -361,9 +375,9 @@ namespace GraphicFoo
 
 			} else {
 				if (blocksOnView.Count > 7) {
-					if (blockView.Frame.Top > scrollView.ContentSize.Height - blockView.Frame.Size.Height) {
+					if (blockView.Frame.Top > scrollView.Frame.Height) {
 						scrollView.ContentOffset = new CGPoint (
-							scrollView.ContentOffset.X,
+							blockView.Frame.Left - ORIGINX,
 							blockView.Frame.Top
 						);
 					}
@@ -487,6 +501,7 @@ namespace GraphicFoo
 			if (presentationPopover != null) {
 				presentationPopover.SourceView = sender.Superview;
 				presentationPopover.SourceRect = new CGRect (60 + offset, 100, 0, 0);
+				presentationPopover.BackgroundColor = UIColor.DarkGray;
 				presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
 			}
 			// Display the alert

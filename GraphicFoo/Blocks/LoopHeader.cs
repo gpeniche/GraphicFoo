@@ -1,5 +1,6 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -70,16 +71,13 @@ namespace GraphicFoo
 				leftParenthesis.Text = "(";
 				leftParenthesis.Font = UIFont.FromName ("Orange Kid", 55f);
 
-				UITextField whileExpression = 
-					new UITextField (new CGRect (90, 10, 170, 100));
-				whileExpression.Placeholder = "Add expression";
-				whileExpression.ShouldReturn += textField => { 
-					whileExpression.ResignFirstResponder ();
-					return true; 
-				};
-				whileExpression.AccessibilityLabel = "expression";
-				whileExpression.TextColor = Color;
-				whileExpression.Font = UIFont.FromName ("Orange Kid", 28f);
+				UITextField whileExpression = BlockConstructorHelper.CreateTextField (
+					                              new CGRect (90, 10, 170, 100),
+					                              "add expression",
+					                              "expression",
+					                              Color,
+					                              28f
+				                              );
 
 				UILabel rightParenthesis = 
 					new UILabel (new CGRect (220, 10, 70, 100));
