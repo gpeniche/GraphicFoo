@@ -32,7 +32,13 @@ namespace GraphicFoo
 
 		public UIImage Image {
 			get {
-				return UIImage.FromBundle ("Graphics/print.png");
+				return UIImage.FromBundle ("Graphics/return.png");
+			}
+		}
+
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (191, 222, 227);
 			}
 		}
 
@@ -43,29 +49,31 @@ namespace GraphicFoo
 					                   Image,
 					                   "Return",
 					                   400,
-					                   new CGRect (-10, 10, 100, 100)
+					                   new CGRect (-10, 10, 100, 100),
+					                   Color
 				                   );
 
 				UITextField returnVar = 
-					new UITextField (new CGRect (90, 10, 200, 100));
+					new UITextField (new CGRect (90, 10, 180, 90));
 				returnVar.Placeholder = "Add var";
 				returnVar.ShouldReturn += textField => { 
 					returnVar.ResignFirstResponder ();
 					return true; 
 				};
 				returnVar.AccessibilityLabel = "var";
-				returnVar.TextColor = UIColor.White;
+				returnVar.TextColor = Color;
+				returnVar.Font = UIFont.FromName ("Orange Kid", 28f);
 
 				UILabel semicolon = 
-					new UILabel (new CGRect (220, 0, 70, 100));
-				semicolon.Font = UIFont.SystemFontOfSize (80.0f);
+					new UILabel (new CGRect (250, 0, 30, 100));
+				semicolon.Font = UIFont.SystemFontOfSize (70.0f);
 				semicolon.TextAlignment = UITextAlignment.Center;
-				semicolon.TextColor = UIColor.White;
+				semicolon.TextColor = Color;
 				semicolon.Text = ";";
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				blockView.Add (returnVar);

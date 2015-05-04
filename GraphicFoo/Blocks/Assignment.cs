@@ -41,44 +41,54 @@ namespace GraphicFoo
 			}
 		}
 
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (241, 227, 3);
+			}
+		}
+
 		public UIView BlockView {
 			get {
 				UIView blockView = 
-					new UIView (new CGRect (0, 200, 400, 100));
+					new UIView (new CGRect (0, 200, 400, 90));
 
 				UIImageView backgroundImage = 
 					new UIImageView (new CGRect (-36, -9, 400, 132));
 				backgroundImage.Image = Image;
 
-				UITextField varName = new UITextField (new CGRect (10, 5, 100, 100));
+				UITextField varName = new UITextField (new CGRect (15, 12, 100, 90));
 				varName.Placeholder = "var name";
 				varName.ShouldReturn += textField => { 
 					varName.ResignFirstResponder ();
 					return true; 
 				};
 				varName.AccessibilityLabel = "varName";
-				varName.TextColor = UIColor.White;
+				varName.TextColor = Color;
+				varName.Font = UIFont.FromName ("Orange Kid", 28f);
 
 				UILabel equalLabel = 
 					new UILabel (new CGRect (120, 0, 50, 100));
-				equalLabel.Font = UIFont.SystemFontOfSize (80.0f);
 				equalLabel.TextAlignment = UITextAlignment.Center;
-				equalLabel.TextColor = UIColor.White;
+				equalLabel.TextColor = Color;
 				equalLabel.Text = "=";
+				equalLabel.Font = UIFont.FromName ("Orange Kid", 70.0f);
+
 
 				UITextField varValue = 
-					new UITextField (new CGRect (170, 5, 220, 100));
+					new UITextField (new CGRect (170, 5, 130, 100));
 				varValue.Placeholder = "add value";
 				varValue.ShouldReturn += textField => { 
 					varValue.ResignFirstResponder ();
 					return true; 
 				};
 				varValue.AccessibilityLabel = "varValue";
-				varValue.TextColor = UIColor.White;
+				varValue.TextColor = Color;
+				varValue.Font = UIFont.FromName ("Orange Kid", 28f);
+
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				blockView.Add (backgroundImage);

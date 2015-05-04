@@ -24,29 +24,30 @@ namespace GraphicFoo
 			title.TextAlignment = UITextAlignment.Center;
 			title.TextColor = UIColor.FromRGB (191, 222, 227);
 			title.Text = "About Graphic Foo";
-
 			UITextView body = new UITextView (new CGRect (
 				                  50,
 				                  120,
 				                  View.Frame.Width - 100,
 				                  View.Frame.Height - 240)
 			                  );
+			title.Font = UIFont.FromName ("Orange Kid", 40f);
+
 			body.BackgroundColor = UIColor.Black;
 			body.TextColor = UIColor.FromRGB (191, 222, 227);
-			body.Font = UIFont.SystemFontOfSize (24.0f);
 			body.TextAlignment = UITextAlignment.Center;
 			body.Editable = false;
 			body.Layer.BorderWidth = 5f;
 			body.Layer.BorderColor = new CGColor (191, 222, 227);
+			body.Font = UIFont.FromName ("Orange Kid", 28f);
 			body.Text = " \n" +
-			"- Graphic is an app which is intented for people that is just" +
+			"- Graphic Foo is an app which is intented for people that is just" +
 			" starting to discover the programming as an excellent tool" +
 			" to create and be creative nowadays, so Graphic Foo tries" +
-			" to be an easy and friendly interface to start creating and" +
+			" to be an easy and friendly interface to start" +
 			" developing those early skills \n\n" +
 			"- The creators of Graphic Foo wish you a really pleasant time" +
-			" using it and that you can become a great programmer and one" +
-			" day a leader on the programming world \n\n" +
+			" using it hoping that you can become a great programmer and one" +
+			" day a leader in the programming world \n\n" +
 			" Enjoy it!";
 
 			UIButton menuButton = ViewConstructorHelper.LoadMenuButton ();

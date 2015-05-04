@@ -20,10 +20,10 @@ namespace GraphicFoo
 				                320,
 				                30)
 			                );
-			title.Font = UIFont.SystemFontOfSize (36.0f);
 			title.TextAlignment = UITextAlignment.Center;
 			title.TextColor = UIColor.FromRGB (191, 222, 227);
 			title.Text = "Instructions";
+			title.Font = UIFont.FromName ("Orange Kid", 40f);
 
 			UITextView body = new UITextView (new CGRect (
 				                  50,
@@ -38,6 +38,7 @@ namespace GraphicFoo
 			body.Editable = false;
 			body.Layer.BorderWidth = 5f;
 			body.Layer.BorderColor = new CGColor (191, 222, 227);
+			body.Font = UIFont.FromName ("Orange Kid", 28f);
 			body.Text = " \n" +
 			"- Start off by selecting a function block from your left" +
 			" then to keep adding blocks just select the place to" +

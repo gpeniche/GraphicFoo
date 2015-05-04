@@ -20,7 +20,7 @@ namespace GraphicFoo
 
 		public string Example {
 			get {
-				return "else { myFoo = 5 }";
+				return "else myFoo = 5 ";
 			}
 		}
 
@@ -39,11 +39,17 @@ namespace GraphicFoo
 			}
 		}
 
+		public UIColor Color {
+			get {
+				return UIColor.FromRGB (239, 137, 28);
+			}
+		}
+
 		public UIView BlockView {
 			get {
 				UIView blockView = 
-					new UIView (new CGRect (0, 200, 400, 100));
-				blockView.Tag = -88;
+					new UIView (new CGRect (0, 200, 400, 90));
+				blockView.Tag = -98;
 				blockView.AccessibilityHint = "else";
 
 				UIImageView backgroundImage = 
@@ -51,15 +57,15 @@ namespace GraphicFoo
 				backgroundImage.Image = Image;
 
 				UILabel ifFooterText = 
-					new UILabel (new CGRect (-10, 10, 300, 100));
-				ifFooterText.Font = UIFont.SystemFontOfSize (24.0f);
+					new UILabel (new CGRect (-10, 10, 300, 90));
 				ifFooterText.TextAlignment = UITextAlignment.Center;
-				ifFooterText.TextColor = UIColor.White;
+				ifFooterText.TextColor = Color;
 				ifFooterText.Text = "else";
+				ifFooterText.Font = UIFont.FromName ("Orange Kid", 28f);
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
-					                     new CGPoint (290f, 8f),
-					                     new CGPoint (265f, 35f)
+					                     new CGPoint (-20f, 20f),
+					                     new CGPoint (290f, 35f)
 				                     );
 
 				blockView.Add (backgroundImage);

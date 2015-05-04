@@ -47,15 +47,17 @@ namespace GraphicFoo
 				260,
 				introController.View.Frame.Size.Height
 			);
-			CollectionView.BackgroundColor = UIColor.LightGray;
+			CollectionView.BackgroundColor = UIColor.Black;
 			CollectionView.RegisterClassForSupplementaryView (
 				typeof(Header),
 				UICollectionElementKindSection.Header,
 				headerId
 			);
 
+			UIMenuItem menuItem = new UIMenuItem ("More info", new Selector ("custom"));
+
 			UIMenuController.SharedMenuController.MenuItems = new [] {
-				new UIMenuItem ("More info", new Selector ("custom"))
+				menuItem
 			};
 		}
 
@@ -101,7 +103,15 @@ namespace GraphicFoo
 				                    headerId,
 				                    indexPath
 			                    );
-			headerView.Text = "Your blocks to choose";
+			UILabel title = new UILabel (new CGRect (0, -20, 260, 100));
+			title.Text = "Your blocks";
+			title.TextAlignment = UITextAlignment.Center;
+			title.TextColor = UIColor.FromRGB (191, 222, 227);
+			title.Font = UIFont.FromName ("Orange Kid", 34f);
+			title.BackgroundColor = UIColor.Black;
+
+			headerView.BackgroundColor = UIColor.Black;
+			headerView.Add (title);
 			return headerView;
 		}
 
@@ -109,7 +119,7 @@ namespace GraphicFoo
 			UICollectionView collectionView, NSIndexPath indexPath)
 		{
 			var cell = collectionView.CellForItem (indexPath);
-			cell.ContentView.BackgroundColor = UIColor.Green;
+			cell.ContentView.BackgroundColor = UIColor.DarkGray;
 		}
 
 		public override void ItemUnhighlighted (
@@ -117,7 +127,7 @@ namespace GraphicFoo
 			NSIndexPath indexPath)
 		{
 			var cell = collectionView.CellForItem (indexPath);
-			cell.ContentView.BackgroundColor = UIColor.White;
+			cell.ContentView.BackgroundColor = UIColor.Black;
 		}
 
 		public override bool ShouldHighlightItem (
@@ -201,37 +211,29 @@ namespace GraphicFoo
 		[Export ("initWithFrame:")]
 		public BlockCell (CGRect frame) : base (frame)
 		{
-			BackgroundView = new UIView{ BackgroundColor = UIColor.Orange };
-
-			SelectedBackgroundView = new UIView { 
-				BackgroundColor = UIColor.Green 
-			};
-
-			ContentView.Layer.BorderColor = UIColor.LightGray.CGColor;
+			ContentView.Layer.BorderColor = new CGColor (191, 222, 227);
 			ContentView.Layer.BorderWidth = 2.0f;
-			ContentView.BackgroundColor = UIColor.White;
-			ContentView.Transform = CGAffineTransform.MakeScale (0.8f, 0.8f);
+			ContentView.BackgroundColor = UIColor.Black;
+			ContentView.Transform = CGAffineTransform.MakeScale (0.7f, 0.7f);
 
 			blockAction = UIButton.FromType (UIButtonType.Custom);
-			blockAction.Frame = new RectangleF (-10, 50, 280, 130);
+			blockAction.Frame = new CGRect (0, 50, 280, 130);
 
 			exampleLabel = 
-				new UILabel (new RectangleF (20, 90, 210, 50));
-			exampleLabel.Font = UIFont.SystemFontOfSize (18.0f);
+				new UILabel (new RectangleF (30, 90, 210, 50));
 			exampleLabel.TextAlignment = UITextAlignment.Center;
-			exampleLabel.TextColor = UIColor.White;
+			exampleLabel.Font = UIFont.FromName ("Orange Kid", 28f);
 
-			nameLabel = new UILabel (new RectangleF (-50, 10, 320, 30));
-			nameLabel.Font = UIFont.SystemFontOfSize (24.0f);
+			nameLabel = new UILabel (new RectangleF (-30, 10, 320, 30));
 			nameLabel.TextAlignment = UITextAlignment.Center;
-			nameLabel.TextColor = UIColor.DarkGray;
+			nameLabel.Font = UIFont.FromName ("Orange Kid", 34f);
 
 			ContentView.Add (blockAction);
 			ContentView.Add (exampleLabel);
 			ContentView.Add (nameLabel);
 
 			blockAction.TouchUpInside += (sender, e) => {
-				if(introController.lastSelected == null || introController.lastSelected.Selected == true){
+				if (introController.lastSelected == null || introController.lastSelected.Selected == true) {
 					introController.AddTextToCompilingString (blockCell.Syntax);
 				}
 				introController.AddBlock (blockCell.BlockView, blockCell);
@@ -240,11 +242,13 @@ namespace GraphicFoo
 
 		public void SetTitle ()
 		{
+			nameLabel.TextColor = blockCell.Color;
 			nameLabel.Text = blockCell.Name;
 		}
 
 		public void SetExample ()
 		{
+			exampleLabel.TextColor = blockCell.Color;
 			exampleLabel.Text = blockCell.Example;
 		}
 
