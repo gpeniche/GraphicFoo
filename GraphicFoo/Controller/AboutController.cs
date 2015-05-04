@@ -16,7 +16,7 @@ namespace GraphicFoo
 
 			UILabel title = new UILabel (new CGRect (
 				                (View.Frame.Width / 2) - 160,
-				                50,
+				                25,
 				                320,
 				                30)
 			                );

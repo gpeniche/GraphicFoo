@@ -136,7 +136,6 @@
     <Compile Include="Controller\ContentController.cs" />
     <Compile Include="Controller\IntroController.cs" />
     <Compile Include="Controller\SideMenuController.cs" />
-    <Compile Include="View\GridLayout.cs" />
     <Compile Include="View\LineLayout.cs" />
     <Compile Include="Blocks\Assignment.cs" />
     <Compile Include="Blocks\Declaration.cs" />
@@ -159,6 +158,8 @@
     <Compile Include="Controller\AboutController.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Blocks\CallFunction.cs" />
+    <Compile Include="Blocks\CallAssignFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
@@ -170,8 +171,6 @@
     <Folder Include="Helper\" />
     <Folder Include="Execution\" />
     <Folder Include="Resources\Fonts\" />
-    <BundleResource Include="Resources\Graphics\menu.png" />
-    <BundleResource Include="Resources\Graphics\play-button.png" />
     <BundleResource Include="Resources\Graphics\boolean-icon.png" />
     <BundleResource Include="Resources\Graphics\number-icon.png" />
     <BundleResource Include="Resources\Graphics\string-icon.png" />
@@ -189,9 +188,12 @@
     <BundleResource Include="Resources\Graphics\loopheader.png" />
     <BundleResource Include="Resources\Graphics\circle-empty.png" />
     <BundleResource Include="Resources\Graphics\circle-full.png" />
-    <BundleResource Include="Resources\Graphics\delete-icon.png" />
     <BundleResource Include="Resources\Fonts\Orangeki.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </BundleResource>
+    <BundleResource Include="Resources\Graphics\callfunction.png" />
+    <BundleResource Include="Resources\Graphics\delete-icon.png" />
+    <BundleResource Include="Resources\Graphics\menu.png" />
+    <BundleResource Include="Resources\Graphics\play-button.png" />
   </ItemGroup>
 </Project>

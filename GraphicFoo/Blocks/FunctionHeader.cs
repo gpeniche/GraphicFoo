@@ -1,5 +1,6 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -67,16 +68,13 @@ namespace GraphicFoo
 				functionText.Text = "Func";
 				functionText.Font = UIFont.FromName ("Orange Kid", 22f);
 
-				UITextField functionName = 
-					new UITextField (new CGRect (55, 40, 75, 40));
-				functionName.Placeholder = "name";
-				functionName.ShouldReturn += textField => { 
-					functionName.ResignFirstResponder ();
-					return true; 
-				};
-				functionName.AccessibilityLabel = "funcName";
-				functionName.TextColor = Color;
-				functionName.Font = UIFont.FromName ("Orange Kid", 22f);
+				UITextField functionName = BlockConstructorHelper.CreateTextField (
+					                           new CGRect (55, 40, 75, 40),
+					                           "name",
+					                           "funcName",
+					                           Color,
+					                           22f
+				                           );
 
 				UILabel leftParenthesis = 
 					new UILabel (new CGRect (130, 10, 15, 100));
@@ -85,17 +83,13 @@ namespace GraphicFoo
 				leftParenthesis.Text = "(";
 				leftParenthesis.Font = UIFont.FromName ("Orange Kid", 50f);
 
-
-				UITextField functionParameters = 
-					new UITextField (new CGRect (148, 40, 100, 40));
-				functionParameters.Placeholder = "Add expression";
-				functionParameters.ShouldReturn += textField => { 
-					functionParameters.ResignFirstResponder ();
-					return true; 
-				};
-				functionParameters.AccessibilityLabel = "parameters";
-				functionParameters.TextColor = Color;
-				functionParameters.Font = UIFont.FromName ("Orange Kid", 22f);
+				UITextField functionParameters = BlockConstructorHelper.CreateTextField (
+					                                 new CGRect (148, 40, 100, 40),
+					                                 "add expression",
+					                                 "parameters",
+					                                 Color,
+					                                 22f
+				                                 );
 
 				UILabel rightParenthesis = 
 					new UILabel (new CGRect (250, 10, 15, 100));

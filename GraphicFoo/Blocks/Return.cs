@@ -1,5 +1,6 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -26,7 +27,13 @@ namespace GraphicFoo
 
 		public string Explanation {
 			get {
-				return "";
+				return "A return statement causes execution to leave the" +
+				" current subroutine and resume at the point in" +
+				" the code immediately after where the subroutine" +
+				" was called, known as its return address. The" +
+				" return address is saved, usually on the process's" +
+				" call stack, as part of the operation of making the" +
+				" subroutine call";
 			}
 		}
 
@@ -53,16 +60,13 @@ namespace GraphicFoo
 					                   Color
 				                   );
 
-				UITextField returnVar = 
-					new UITextField (new CGRect (90, 10, 180, 90));
-				returnVar.Placeholder = "Add var";
-				returnVar.ShouldReturn += textField => { 
-					returnVar.ResignFirstResponder ();
-					return true; 
-				};
-				returnVar.AccessibilityLabel = "var";
-				returnVar.TextColor = Color;
-				returnVar.Font = UIFont.FromName ("Orange Kid", 28f);
+				UITextField returnVar = BlockConstructorHelper.CreateTextField (
+					                        new CGRect (90, 10, 180, 90),
+					                        "add var",
+					                        "var",
+					                        Color,
+					                        28f
+				                        );
 
 				UILabel semicolon = 
 					new UILabel (new CGRect (250, 0, 30, 100));

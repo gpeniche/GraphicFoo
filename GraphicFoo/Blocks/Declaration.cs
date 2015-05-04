@@ -1,5 +1,6 @@
 using UIKit;
 using CoreGraphics;
+using Foundation;
 
 namespace GraphicFoo
 {
@@ -66,16 +67,13 @@ namespace GraphicFoo
 				varType.Tag = 3;
 				varType.AccessibilityHint = "none";
 
-				UITextField varName = 
-					new UITextField (new CGRect (120, 5, 180, 100));
-				varName.Placeholder = "var name";
-				varName.ShouldReturn += textField => { 
-					varName.ResignFirstResponder ();
-					return true; 
-				};
-				varName.AccessibilityLabel = "varName";
-				varName.TextColor = Color;
-				varName.Font = UIFont.FromName ("Orange Kid", 28f);
+				UITextField varName = BlockConstructorHelper.CreateTextField (
+					                      new CGRect (120, 5, 180, 100),
+					                      "var name",
+					                      "varName",
+					                      Color,
+					                      28f
+				                      );
 
 				UIView sharedViews = BlockConstructorHelper.ConstructSharedElements (
 					                     new CGPoint (-20f, 20f),
