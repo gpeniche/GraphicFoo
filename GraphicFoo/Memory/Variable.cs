@@ -20,6 +20,11 @@ namespace GraphicFoo
 			this.type = ParseType (rawType);
 		}
 
+		public Variable Clone (Variable variable)
+		{
+			return new Variable (variable.name, variable.type);
+		}
+
 		public override string ToString ()
 		{
 			return "[" + type.ToString () + " " + name + "]";

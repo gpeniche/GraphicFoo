@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GraphicFoo
 {
@@ -10,16 +11,19 @@ namespace GraphicFoo
 
 		public static int startOfMain;
 		private static Stack<int> goSubJumps;
+		private static Stack<Dictionary<int, Quadruple>> programStack;
 
 		public static void Execute ()
 		{
 			Load ();
-			Run ();
+			Run (Quadruple.quadruples, startOfMain);
 		}
 
 		private static void Load ()
 		{
 			goSubJumps = new Stack<int> ();
+			programStack = new Stack<Dictionary<int, Quadruple>> ();
+			programStack.Push (Quadruple.quadruples);
 			if (startOfMain == -1) {
 				Console.WriteLine ("Execution error: Main procedure not found");
 			}
@@ -31,13 +35,20 @@ namespace GraphicFoo
 			ProgramMemory.LoadConstants ();
 		}
 
-		private static void Run ()
+		private static void Run (
+			Dictionary<int, Quadruple> quadruples, 
+			int start)
 		{
-			int index = startOfMain;
+			int index = start;
 
-			while (index < Quadruple.quadruples.Count) {
-				Quadruple q = Quadruple.quadruples [index];
-				Console.WriteLine ("Executing [" + index + "]");
+			while (true) {
+				if (!quadruples.ContainsKey (index)) {
+					return;
+				}
+				Quadruple q = quadruples [index];
+				Console.WriteLine (
+					"Executing [" + index + "/" + (quadruples.Count - 1) + "]"
+				);
 				switch (q.op) {
 				case Operators.Assignation:
 				case Operators.Param:
@@ -82,19 +93,22 @@ namespace GraphicFoo
 						index + 1;
 					break;
 				case Operators.Expand:
+					ExecuteProcedureExpansion (q);
 					index++;
 					break;
 				case Operators.GoSub:
 					goSubJumps.Push (index);
-					index = q.call.index;
+					Run (programStack.Peek (), q.call.index);
+					index++;
 					break;
 				case Operators.Return:
 					if (goSubJumps.Count == 0) {
 						// TODO End Execution
-						index = int.MaxValue;
+						index++;
 						return;
 					} else {
 						index = goSubJumps.Pop () + 1;
+						Run (programStack.Pop (), index);
 					}
 					break;
 				case Operators.Print:
@@ -223,6 +237,18 @@ namespace GraphicFoo
 			return v1 == condition;
 		}
 
+		private static void ExecuteProcedureExpansion (Quadruple q)
+		{
+			Procedure p = q.call;
+			Dictionary<int, Quadruple> quadruples = 
+				Quadruple.quadruples.
+				Where (s => s.Key >= p.index && s.Key <= p.end).
+				ToDictionary (dict => dict.Key, dict => dict.Value);
+		
+			// TODO set variables
+			programStack.Push (quadruples);
+		}
+
 		private static void Print (Quadruple q)
 		{
 			Type printType = q.v1.GetNativeType ();
@@ -289,6 +315,21 @@ namespace GraphicFoo
 				return (v.value as float?);
 			}
 		}
+
+		#endregion
+
+		#region Debug
+
+		private static void DebugQuadruples (
+			Dictionary<int, Quadruple> quadruples)
+		{
+			string output = "\n=====\nSubroutine Quadruples\n=====";
+			foreach (KeyValuePair<int, Quadruple> pair in quadruples) {
+				output += "\n[" + pair.Key + "] " + pair.Value.ToString ();
+			}
+			Console.WriteLine (output);
+		}
+
 
 		#endregion
 	}
