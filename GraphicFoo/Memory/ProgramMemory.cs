@@ -55,6 +55,11 @@ namespace GraphicFoo
 			string type, 
 			VariableBlock parameterBlock)
 		{
+			if (procedures.ContainsKey (id)) {
+				// TODO sem error
+				return null;
+			}
+
 			Procedure procedure = new Procedure (id, type, parameterBlock);
 			procedures.Add (procedure.name, procedure);
 			return procedure;

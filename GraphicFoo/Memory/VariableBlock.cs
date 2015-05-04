@@ -30,6 +30,11 @@ namespace GraphicFoo
 			return variables.ContainsKey (key);
 		}
 
+		public Variable GetVariableAt (int index) 
+		{
+			return variables.Skip (index).First ().Value;
+		}
+
 		public List<Variable> ToList ()
 		{
 			return new List<Variable> (variables.Values);

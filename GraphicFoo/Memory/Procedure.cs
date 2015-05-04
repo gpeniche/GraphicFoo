@@ -10,6 +10,8 @@ namespace GraphicFoo
 		public string name;
 		public GraphicFooType type;
 		public int index;
+		public int end;
+		public bool isMain;
 		private VariableBlock parameters;
 		private VariableBlock procedureVariables;
 		private VariableBlock temporaryVariables;
@@ -22,6 +24,13 @@ namespace GraphicFoo
 			this.name = name;
 			this.type = ParseType (rawType);
 			this.index = Quadruple.quadruples.Count;
+			this.end = -1;
+			this.isMain = name == "main";
+
+			if (isMain) {
+				VirtualMachine.startOfMain = index;
+			}
+
 			this.parameters = 
 				(parameters == null) ? new VariableBlock () : parameters;
 			this.procedureVariables = new VariableBlock ();
@@ -64,9 +73,14 @@ namespace GraphicFoo
 			return parameters.GetCount ();
 		}
 
+		public void SetEnd (int end) 
+		{
+			this.end = end;
+		}
+
 		public override string ToString ()
 		{
-			return "[" + index + "] Function: " +
+			return "[" + index + ", " + end + "] Function: " +
 			type.ToString () + " " + name +
 			"\nFunction parameters: " + parameters.ToString () +
 			"Function variables: " + procedureVariables.ToString () +
