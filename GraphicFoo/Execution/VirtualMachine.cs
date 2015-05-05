@@ -9,6 +9,8 @@ namespace GraphicFoo
 
 		#region Main
 
+		private static Stack<VariableBlock> clones;
+
 		public static int startOfMain;
 		private static Stack<int> goSubJumps;
 		private static Stack<Dictionary<int, Quadruple>> programStack;
@@ -23,6 +25,7 @@ namespace GraphicFoo
 		{
 			goSubJumps = new Stack<int> ();
 			programStack = new Stack<Dictionary<int, Quadruple>> ();
+			clones = new Stack<VariableBlock> ();
 			programStack.Push (Quadruple.quadruples);
 			if (startOfMain == -1) {
 				Console.WriteLine ("Execution error: Main procedure not found");
@@ -51,8 +54,26 @@ namespace GraphicFoo
 				);
 				switch (q.op) {
 				case Operators.Assignation:
-				case Operators.Param:
 					q.target.value = q.v1.value;
+					index++;
+					break;
+				case Operators.Param:
+//					programStack.Peek ()[index].target.value = q.v1.value;
+					clones.Peek ().ReadVariable (q.target.name).value = q.v1.value;
+//					clones.ReadVariable (q.target.name).value = clones.ReadVariable (q.v1.name).value;
+//								Console.WriteLine (q.v1.name + " :Val: " + (q.v1.value as float?));
+//					Console.WriteLine (q.v1.name + " :Val: " + (clones.Peek ().ReadVariable (q.v1.name).value as float?));
+//					Console.WriteLine (q.target.name + " :Param: " + (q.target.value as float?));
+//					try {
+//						var temp = clones.Pop ();
+//						if (temp != null) {
+//							Console.WriteLine (q.target.name + " :Param: " + (clones.Peek ().ReadVariable (q.target.name).value as float?));
+//							clones.Push (temp);
+//						}
+//					} catch (Exception) {
+//					}
+//								Console.WriteLine (q.target.name + " :Param: " + (clones.Peek ().ReadVariable (q.target.name).value as float?));
+//					q.target.value = q.v1.value;
 					index++;
 					break;
 				case Operators.Plus:
@@ -98,6 +119,7 @@ namespace GraphicFoo
 					break;
 				case Operators.GoSub:
 					goSubJumps.Push (index);
+					q.call.callCount++;
 					Run (programStack.Peek (), q.call.index);
 					index++;
 					break;
@@ -126,6 +148,8 @@ namespace GraphicFoo
 
 		#region Operations
 
+		#region add
+
 		private static void ExecuteArithmeticOperation (Quadruple q)
 		{
 			float? v1Value = CastToNumeric (q.v1);
@@ -139,6 +163,9 @@ namespace GraphicFoo
 			switch (q.op) {
 			case Operators.Plus:
 				q.target.value = v1Value + v2Value;
+//				Console.WriteLine ("Add v1: " + (v1Value as float?));
+//				Console.WriteLine ("Add v2: " + (v2Value as float?));
+//				Console.WriteLine ("Add res: " + (q.target.value as float?));
 				break;
 			case Operators.Minus:
 				q.target.value = v1Value - v2Value;
@@ -237,16 +264,123 @@ namespace GraphicFoo
 			return v1 == condition;
 		}
 
+		#endregion
+
+		public static Dictionary<TKey, TValue> CloneDictionaryCloningValues<TKey, TValue>
+		(Dictionary<TKey, TValue> original) where TValue : ICloneable
+		{
+			Dictionary<TKey, TValue> ret = new Dictionary<TKey, TValue> (original.Count,
+				                               original.Comparer);
+			foreach (KeyValuePair<TKey, TValue> entry in original) {
+				ret.Add (entry.Key, (TValue)entry.Value.Clone ());
+			}
+			return ret;
+		}
+
 		private static void ExecuteProcedureExpansion (Quadruple q)
 		{
 			Procedure p = q.call;
-			Dictionary<int, Quadruple> quadruples = 
-				Quadruple.quadruples.
-				Where (s => s.Key >= p.index && s.Key <= p.end).
-				ToDictionary (dict => dict.Key, dict => dict.Value);
-		
-			// TODO set variables
+			Dictionary<int, Quadruple> quadruples = new Dictionary<int, Quadruple> ();
+			VariableBlock block = new VariableBlock ();
+			clones.Push (block);
+
+			for (int i = p.index; i <= p.end; i++) {
+
+				Quadruple original = Quadruple.quadruples [i];
+				Quadruple clone = new Quadruple (
+					                  original.op,
+					                  CloneOrFindVariable (original.v1),
+					                  CloneOrFindVariable (original.v2),
+					                  CloneOrFindVariable (original.target),
+					                  original.call,
+					                  original.jumpIndex
+				                  );
+				quadruples.Add (i, clone);
+			}
+//			DebugQuadruples (quadruples);
 			programStack.Push (quadruples);
+			return;
+
+//			Dictionary<int, Quadruple> quadruples = 
+//				Quadruple.quadruples.
+//				Where (s => s.Key >= p.index && s.Key <= p.end).
+//				ToDictionary (dict => dict.Key, dict => dict.Value);
+//
+
+
+			// TODO set variables
+			foreach (KeyValuePair<int, Quadruple> pair in quadruples) {
+
+				Quadruple quadruple = pair.Value;
+//				if (quadruple.op != Operators.Param) {
+//				Console.WriteLine (pair.Key);
+				if (quadruple.v1 != null && quadruple.v1.name == "x" && quadruple.op == Operators.Param) {
+					Console.WriteLine (quadruple.v1.value as float?);
+				}
+				quadruple.v1 = CloneOrFindVariable (quadruple.v1, quadruple.op == Operators.Param);
+				if (quadruple.v1 != null && quadruple.v1.name == "x" && quadruple.op == Operators.Param) {
+					Console.WriteLine (quadruple.v1.value as float?);
+				}
+				quadruple.v2 = CloneOrFindVariable (quadruple.v2);
+//				if (quadruple.op != Operators.Param)
+				quadruple.target = CloneOrFindVariable (quadruple.target);
+
+
+//				}
+
+
+
+
+//				if (quadurple.v1 != null) {
+//					quadurple.v1 = ProgramMemory.FindVariable (null, quadurple.v1.name);
+//					if (quadurple.v1 == null)
+//						quadurple.v1 = clones.ReadVariable (quadurple.v1.name);
+//					if (quadurple.v1 == null) {
+//						quadurple.v1 = Variable.Clone (quadurple.v1);
+//					}
+//				}
+//
+//				if (quadurple.v2 != null) {
+//					quadurple.v2 = ProgramMemory.FindVariable (null, quadurple.v2.name);
+//					if (quadurple.v2 == null) {
+//						quadurple.v2 = Variable.Clone (quadurple.v2);
+//					}
+//				}
+//
+//				if (quadurple.target != null) {
+//					quadurple.target = ProgramMemory.FindVariable (null, quadurple.target.name);
+//					if (quadurple.target == null) {
+//						quadurple.target = Variable.Clone (quadurple.target);
+//					}
+//				}
+			}
+			DebugQuadruples (quadruples);
+			programStack.Push (quadruples);
+		}
+
+		private static Variable CloneOrFindVariable (Variable v, bool withValue = false)
+		{
+			if (v != null) {
+				Variable found = ProgramMemory.FindVariable (null, v.name);
+				if (found == null) {
+					Variable read = clones.Peek ().ReadVariable (v.name);
+
+					if (read == null) {
+						v = Variable.Clone (v, withValue);
+						clones.Peek ().AddVariable (v);
+//						Console.WriteLine (v.name + " not found on clones " + clones.GetCount ());
+//						Console.WriteLine ("======\n" + clones.ToString() + "\n=======");
+					} else {
+						if (read.name == "x") {
+							Console.WriteLine ("read val: " + (read.value as float?));
+						}
+						return read;
+					}
+				} else {
+					return v;
+				}
+			}
+			return v;
 		}
 
 		private static void Print (Quadruple q)

@@ -74,6 +74,22 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		public Quadruple (
+			Operators op, 
+			Variable v1, 
+			Variable v2, 
+			Variable target,
+			Procedure call,
+			int jumpIndex)
+		{
+			this.op = op;
+			this.v1 = v1;
+			this.v2 = v2;
+			this.call = call;
+			this.target = target;
+			this.jumpIndex = jumpIndex;
+		}
+
 		public override string ToString ()
 		{
 			return op.ToString () + " " +

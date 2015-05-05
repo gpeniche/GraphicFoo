@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GraphicFoo
 {
@@ -20,9 +21,15 @@ namespace GraphicFoo
 			this.type = ParseType (rawType);
 		}
 
-		public Variable Clone (Variable variable)
+		public static Variable Clone (Variable variable, bool withValue = false)
 		{
-			return new Variable (variable.name, variable.type);
+			Variable v = new Variable (variable.name, variable.type);
+
+			if (withValue) {
+				v.value = variable.value;
+			}
+
+			return v;
 		}
 
 		public override string ToString ()
