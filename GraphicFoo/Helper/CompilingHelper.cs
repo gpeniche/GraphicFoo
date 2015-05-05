@@ -70,6 +70,26 @@ namespace GraphicFoo
 		}
 
 		/// <summary>
+		/// Sends plain code to compile .
+		/// </summary>
+		/// <returns>The plain code to compile .</returns>
+		/// <param name="stringToCompile">String to compile.</param>
+		public static string SendToCompilePlainCode (string stringToCompile)
+		{
+			Scanner scanner = new Scanner (stringToCompile);
+			Parser parser = new Parser (scanner);
+			parser.Parse ();
+			Quadruple.DebugQuadruples ();
+			//				ProgramMemory.DebugProgramMemory ();
+			string errorMessage = 
+				(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
+				parser.errors.errorMessage : 
+				"None";
+			VirtualMachine.Execute ();
+			return errorMessage;
+		}
+
+		/// <summary>
 		/// Adds the text to the compiling string.
 		/// </summary>
 		/// <returns>The text for the compiling string.</returns>

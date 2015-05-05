@@ -122,6 +122,7 @@ namespace GraphicFoo
 			inputOnBlock.AccessibilityLabel = accessibilityLabel;
 			inputOnBlock.TextColor = color;
 			inputOnBlock.Font = UIFont.FromName ("Orange Kid", fontSize);
+			inputOnBlock.TintColor = color;
 			return inputOnBlock;
 		}
 	}
