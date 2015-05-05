@@ -34,6 +34,7 @@ namespace GraphicFoo
 			programText.BackgroundColor = UIColor.Black;
 			programText.Font = UIFont.FromName ("Orange Kid", 22f);
 			programText.TintColor = UIColor.FromRGB (191, 222, 227);
+			programText.KeyboardAppearance = UIKeyboardAppearance.Dark;
 
 			UIButton menuButton = ViewConstructorHelper.LoadMenuButton ();
 			menuButton.TouchUpInside += (sender, e) => SidebarController.ToggleMenu ();
