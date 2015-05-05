@@ -66,6 +66,10 @@ namespace GraphicFoo
 				(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
 				parser.errors.errorMessage : 
 				"None";
+			if (errorMessage == "None") {			
+				VirtualMachine.Execute ();
+				errorMessage = VirtualMachine.output;
+			}
 			return errorMessage;
 		}
 
@@ -85,7 +89,10 @@ namespace GraphicFoo
 				(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
 				parser.errors.errorMessage : 
 				"None";
-			VirtualMachine.Execute ();
+			if (errorMessage == "None") {			
+				VirtualMachine.Execute ();
+				errorMessage = VirtualMachine.output;
+			}
 			return errorMessage;
 		}
 

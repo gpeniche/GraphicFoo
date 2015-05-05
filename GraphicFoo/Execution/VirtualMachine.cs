@@ -17,6 +17,8 @@ namespace GraphicFoo
 		private static Dictionary<int, Quadruple> exec;
 		private static Stack<Variable> returns;
 
+		public static string output;
+
 		private static bool end;
 
 		public static void Execute ()
@@ -43,6 +45,7 @@ namespace GraphicFoo
 //			goSubJumps.Push (startOfMain);
 			exec = new Dictionary<int, Quadruple> ();
 			returns = new Stack<Variable> ();
+			output = "\n";
 			end = false;
 			if (startOfMain == -1) {
 				Console.WriteLine ("Execution error: Main procedure not found");
@@ -424,9 +427,12 @@ namespace GraphicFoo
 			Type printType = q.v1.GetNativeType ();
 
 			if (printType == typeof(float)) {
+				output += "Program Output: " + (q.v1.value as float?) + "\n";
 				Console.WriteLine ("Program Output: " + (q.v1.value as float?));
 			} else if (printType == typeof(bool)) {
+				output += "Program Output: " + (q.v1.value as bool?) + "\n";
 				Console.WriteLine ("Program Output: " + (q.v1.value as bool?));
+				output += "Program Output: " + (q.v1.value as string) + "\n";
 			} else if (printType == typeof(string)) {
 				Console.WriteLine ("Program Output: " + (q.v1.value as string));
 			}
