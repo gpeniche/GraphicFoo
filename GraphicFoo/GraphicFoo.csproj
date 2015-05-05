@@ -133,7 +133,6 @@
     <Compile Include="Blocks\IBlock.cs" />
     <Compile Include="Blocks\LoopHeader.cs" />
     <Compile Include="Controller\BaseController.cs" />
-    <Compile Include="Controller\ContentController.cs" />
     <Compile Include="Controller\IntroController.cs" />
     <Compile Include="Controller\SideMenuController.cs" />
     <Compile Include="View\LineLayout.cs" />
@@ -160,6 +159,7 @@
     </Compile>
     <Compile Include="Blocks\CallFunction.cs" />
     <Compile Include="Blocks\CallAssignFunction.cs" />
+    <Compile Include="Controller\PlainCodeController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Memory\" />
