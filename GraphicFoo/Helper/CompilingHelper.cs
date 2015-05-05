@@ -66,6 +66,33 @@ namespace GraphicFoo
 				(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
 				parser.errors.errorMessage : 
 				"None";
+			if (errorMessage == "None") {			
+				VirtualMachine.Execute ();
+				errorMessage = VirtualMachine.output;
+			}
+			return errorMessage;
+		}
+
+		/// <summary>
+		/// Sends plain code to compile .
+		/// </summary>
+		/// <returns>The plain code to compile .</returns>
+		/// <param name="stringToCompile">String to compile.</param>
+		public static string SendToCompilePlainCode (string stringToCompile)
+		{
+			Scanner scanner = new Scanner (stringToCompile);
+			Parser parser = new Parser (scanner);
+			parser.Parse ();
+			Quadruple.DebugQuadruples ();
+			//				ProgramMemory.DebugProgramMemory ();
+			string errorMessage = 
+				(!string.IsNullOrEmpty (parser.errors.errorMessage)) ? 
+				parser.errors.errorMessage : 
+				"None";
+			if (errorMessage == "None") {			
+				VirtualMachine.Execute ();
+				errorMessage = VirtualMachine.output;
+			}
 			return errorMessage;
 		}
 

@@ -379,6 +379,15 @@ namespace GraphicFoo
 			}
 			Expect ((int)TokenEnum.RightParenthesis);
 			Quadruple.CreateFunctionCallQuadruples (id, parameters);
+
+			if (la.kind == (int)TokenEnum.Assignation) {
+				Get ();
+				Expect ((int)TokenEnum.Id);
+				string varId = GetLastTokenValue ();
+				Quadruple.CreateReturnAssignationQuadruple (id, varId);
+
+			}
+
 			Expect ((int)TokenEnum.Semicolon);
 		}
 

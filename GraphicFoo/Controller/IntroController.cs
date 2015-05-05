@@ -14,6 +14,7 @@ namespace GraphicFoo
 		const float ORIGINY = 70;
 
 		public UIButton lastSelected;
+		public List<UIView> blocksOnView = new List<UIView> ();
 
 		BlocksCollectionViewController blocksCollectionViewController;
 		LineLayout lineLayout;
@@ -22,7 +23,6 @@ namespace GraphicFoo
 		UITextView textOnConsole;
 		float insertPositionY = ORIGINY;
 		float insertPositionX = ORIGINX;
-		List<UIView> blocksOnView = new List<UIView> ();
 		string stringToCompile = "%-1% %0% \n";
 		float scrollViewOriginalWidth;
 		float scrollViewOriginalHeight;
@@ -54,7 +54,6 @@ namespace GraphicFoo
 			NSNotificationCenter.DefaultCenter.AddObserver
 			(UIKeyboard.WillHideNotification, KeyBoardDownNotification);
 
-
 			scrollViewOriginalWidth = (float)View.Frame.Size.Width - 260f;
 			scrollViewOriginalHeight = (float)View.Frame.Size.Height - 200f;
 			scrollView = new UIScrollView ();
@@ -77,13 +76,7 @@ namespace GraphicFoo
 			title.TextColor = UIColor.FromRGB (191, 222, 227);
 			title.Text = "Graphic Foo";
 				
-			UIButton runButton = new UIButton (UIButtonType.Custom);
-			runButton.Frame = new CGRect (580, 20, 70, 80);
-			runButton.SetTitle ("Run", UIControlState.Normal);
-			runButton.SetImage (
-				UIImage.FromBundle ("Graphics/play-button.png"),
-				UIControlState.Normal
-			);
+			UIButton runButton = ViewConstructorHelper.CreatePlayButton ();
 			runButton.TouchUpInside += (sender, e) => {
 				SendToCompile ();
 			};
@@ -101,41 +94,13 @@ namespace GraphicFoo
 				(float)View.Frame.Size.Height
 			);
 
-			consoleView = new UIView ();
-			consoleView.Frame = new CGRect (
+			consoleView = ViewConstructorHelper.CreateConsole (new CGRect (
 				260f,
 				(float)View.Frame.Size.Height - 200f,
 				(float)View.Frame.Size.Width - 260f,
-				200f
+				200f)
 			);
-			consoleView.Layer.BorderWidth = 2.0f;
-			consoleView.Layer.BorderColor = new CGColor (255, 255, 0);
-			consoleView.BackgroundColor = UIColor.Black;
-
-			textOnConsole = new UITextView ();
-			textOnConsole.Frame = new CGRect (
-				0,
-				20,
-				consoleView.Frame.Size.Width,
-				consoleView.Frame.Size.Height - 10f
-			);
-			textOnConsole.TextAlignment = UITextAlignment.Left;
-			textOnConsole.TextColor = UIColor.FromRGB (255, 255, 0);
-			textOnConsole.BackgroundColor = UIColor.Black;
-			textOnConsole.Editable = false;
-			textOnConsole.Font = UIFont.FromName ("Orange Kid", 20f);
-
-			UILabel consoleTitle = new UILabel ();
-			consoleTitle.Frame = new CGRect (
-				4,
-				2,
-				200f,
-				20f
-			);
-			consoleTitle.TextAlignment = UITextAlignment.Left;
-			consoleTitle.TextColor = UIColor.FromRGB (255, 255, 0);
-			consoleTitle.Text = "FooConsole: ";
-			consoleTitle.Font = UIFont.FromName ("Orange Kid", 24f);
+			textOnConsole = ((UITextView)consoleView.Subviews.Where (v => v.Tag == 1).FirstOrDefault ());
 
 			// Line Layout
 			lineLayout = new LineLayout {
@@ -149,9 +114,6 @@ namespace GraphicFoo
 
 			blocksView.Add (blocksCollectionViewController.View);
 
-			consoleView.Add (textOnConsole);
-			consoleView.Add (consoleTitle);
-
 			View.BackgroundColor = UIColor.Black;
 			View.Add (blocksView);
 			View.Add (scrollView);
@@ -162,6 +124,10 @@ namespace GraphicFoo
 
 		}
 
+		/// <summary>
+		/// Keies the board up notification.
+		/// </summary>
+		/// <param name="notification">Notification.</param>
 		private void KeyBoardUpNotification (NSNotification notification)
 		{
 			// get the keyboard size
@@ -194,6 +160,10 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Keies the board down notification.
+		/// </summary>
+		/// <param name="notification">Notification.</param>
 		private void KeyBoardDownNotification (NSNotification notification)
 		{
 			if (moveViewUp) {
@@ -283,8 +253,10 @@ namespace GraphicFoo
 		}
 
 		/// <summary>
-		/// Adds a button to the current view.
+		/// Adds the block to the current view.
 		/// </summary>
+		/// <param name="blockView">Block view which contains the block the user selected.</param>
+		/// <param name="blockcell">Blockcell definition.</param>
 		public void AddBlock (UIView blockView, IBlock blockcell)
 		{
 			if (insertPositionY != 49 || blocksOnView.Count == 0) {
@@ -303,7 +275,12 @@ namespace GraphicFoo
 						RestartView ();
 					}
 				};
-				if (blockcell.Name == "Declaration" || blockcell.Name == "Function Header") {
+				if (blockcell.Name == "Declaration") {
+					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
+						SelectVarType ((UIButton)sender, 0);
+					};
+				}
+				if (blockcell.Name == "Function Header") {
 					((UIButton)blockView.Subviews.FirstOrDefault (b => b.Tag == 3)).TouchUpInside += (sender, e) => {
 						SelectVarType ((UIButton)sender, (int)(blockView.Frame.Width / 2));
 					};
@@ -337,8 +314,6 @@ namespace GraphicFoo
 				}
 				ArrangeSizeOfScrollview (blockView, false);
 				scrollView.AddSubview (blockView);
-			} else if (blocksOnView.Count == 0) {
-				insertPositionX = 0;
 			}
 			insertPositionY = 49;
 		}
@@ -353,14 +328,17 @@ namespace GraphicFoo
 			if (removing) {
 				nfloat maxLeft = blocksOnView.Max (bv => bv.Frame.Left);
 				nfloat maxTop = blocksOnView.Max (bv => bv.Frame.Top);
-				if (blocksOnView.Count > 1 && maxLeft == blockView.Frame.Left && (maxLeft + blockView.Frame.Width) > 508) {
+				if (blocksOnView.Count > 1 &&
+				    maxLeft == blockView.Frame.Left &&
+				    (maxLeft + blockView.Frame.Width) > 508) {
 					UIView secondMax = blocksOnView.OrderByDescending (r => r.Frame.Left).Skip (1).FirstOrDefault ();
 					scrollView.ContentSize = new CGSize (
 						(float)secondMax.Frame.Left + secondMax.Frame.Width - 50f,
 						scrollView.ContentSize.Height
 					);
 				}
-				if (maxTop == blockView.Frame.Top && (maxLeft + blockView.Frame.Height) > 824) {
+				if (maxTop == blockView.Frame.Top &&
+				    (maxLeft + blockView.Frame.Height) > 824) {
 					scrollView.ContentSize = new CGSize (
 						scrollView.ContentSize.Width,
 						(float)scrollView.ContentSize.Height - blockView.Frame.Size.Height
@@ -368,7 +346,8 @@ namespace GraphicFoo
 				}
 
 				nfloat minLeft = blocksOnView.Min (bv => bv.Frame.Left);
-				if (blocksOnView.Count > 1 && minLeft == blockView.Frame.Left && minLeft < 0) {
+				if (blocksOnView.Count > 1 &&
+				    minLeft == blockView.Frame.Left && minLeft < 0) {
 					UIView secondMin = blocksOnView.OrderBy (r => r.Frame.Left).Skip (1).FirstOrDefault ();
 					scrollView.ContentInset = new UIEdgeInsets (0, (secondMin.Frame.Left - ORIGINX) * -1, 0, 0);
 				}

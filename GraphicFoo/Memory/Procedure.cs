@@ -12,6 +12,7 @@ namespace GraphicFoo
 		public int index;
 		public int end;
 		public bool isMain;
+		public int callCount;
 		private VariableBlock parameters;
 		private VariableBlock procedureVariables;
 		private VariableBlock temporaryVariables;
@@ -26,9 +27,11 @@ namespace GraphicFoo
 			this.index = Quadruple.quadruples.Count;
 			this.end = -1;
 			this.isMain = name == "main";
+			this.callCount = 0;
 
 			if (isMain) {
 				VirtualMachine.startOfMain = index;
+				callCount = 1;
 			}
 
 			this.parameters = 

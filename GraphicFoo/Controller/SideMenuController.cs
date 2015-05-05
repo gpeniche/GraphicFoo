@@ -25,7 +25,7 @@ namespace GraphicFoo
 
 			UIButton introButton = new UIButton (UIButtonType.System);
 			introButton.Frame = new CGRect (0, 180, 260, 20);
-			introButton.SetTitle ("Reset", UIControlState.Normal);
+			introButton.SetTitle ("Reset Canvas", UIControlState.Normal);
 			introButton.TouchUpInside += (sender, e) => 
 				SidebarController.ChangeContentView (new IntroController ());
 			introButton.SetTitleColor (UIColor.FromRGB (191, 222, 227), UIControlState.Normal);
@@ -33,9 +33,9 @@ namespace GraphicFoo
 
 			UIButton testButton = new UIButton (UIButtonType.System);
 			testButton.Frame = new CGRect (0, 220, 260, 20);
-			testButton.SetTitle ("TestView", UIControlState.Normal);
+			testButton.SetTitle ("Plain Code", UIControlState.Normal);
 			testButton.TouchUpInside += (sender, e) => 
-				SidebarController.ChangeContentView (new ContentController ());
+				SidebarController.ChangeContentView (new PlainCodeController ());
 			testButton.SetTitleColor (UIColor.FromRGB (191, 222, 227), UIControlState.Normal);
 			testButton.Font = UIFont.FromName ("Orange Kid", 28f);
 

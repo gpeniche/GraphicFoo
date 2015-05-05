@@ -15,7 +15,7 @@ namespace GraphicFoo
 
 		public string Syntax {
 			get {
-				return " %funcName% ; \n";
+				return " function %funcName% ; \n";
 			}
 		}
 
