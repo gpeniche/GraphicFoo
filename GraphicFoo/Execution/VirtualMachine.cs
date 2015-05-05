@@ -14,11 +14,23 @@ namespace GraphicFoo
 		public static int startOfMain;
 		private static Stack<int> goSubJumps;
 		private static Stack<Dictionary<int, Quadruple>> programStack;
+		private static Dictionary<int, Quadruple> exec;
+
+		private static bool end;
 
 		public static void Execute ()
 		{
 			Load ();
 			Run (Quadruple.quadruples, startOfMain);
+			Foo ();
+		}
+
+		private static void Foo ()
+		{
+			Console.WriteLine ("====");
+			Console.WriteLine (goSubJumps.Count);
+			Console.WriteLine (programStack.Count);
+//			Console.WriteLine (exec.Count);
 		}
 
 		private static void Load ()
@@ -27,6 +39,9 @@ namespace GraphicFoo
 			programStack = new Stack<Dictionary<int, Quadruple>> ();
 			clones = new Stack<VariableBlock> ();
 			programStack.Push (Quadruple.quadruples);
+//			goSubJumps.Push (startOfMain);
+			exec = new Dictionary<int, Quadruple> ();
+			end = false;
 			if (startOfMain == -1) {
 				Console.WriteLine ("Execution error: Main procedure not found");
 			}
@@ -42,6 +57,10 @@ namespace GraphicFoo
 			Dictionary<int, Quadruple> quadruples, 
 			int start)
 		{
+			if (end) {
+				Console.WriteLine ("ended");
+				return;
+			}
 			int index = start;
 
 			while (true) {
@@ -120,16 +139,27 @@ namespace GraphicFoo
 				case Operators.GoSub:
 					goSubJumps.Push (index);
 					q.call.callCount++;
-					Run (programStack.Peek (), q.call.index);
+					Console.WriteLine ("Gosub from stack level: " + programStack.Count);
+					exec = programStack.Peek ();
+					Run (exec, q.call.index);
 					index++;
 					break;
 				case Operators.Return:
 					if (goSubJumps.Count == 0) {
 						// TODO End Execution
+						Console.WriteLine ("ending");
+						end = true;
 						index++;
+						try {
+//							programStack.Pop ();
+						} catch (Exception) {
+						}
+//						index = int.MaxValue;
 						return;
 					} else {
 						index = goSubJumps.Pop () + 1;
+//						clones.Pop ();
+						Console.WriteLine ("Returning from stack level: " + programStack.Count);
 						Run (programStack.Pop (), index);
 					}
 					break;
@@ -140,6 +170,10 @@ namespace GraphicFoo
 				default:
 					index++;
 					break;
+				}
+				if (end) {
+					Console.WriteLine ("kill switch");
+					return;
 				}
 			}
 		}
@@ -266,17 +300,6 @@ namespace GraphicFoo
 
 		#endregion
 
-		public static Dictionary<TKey, TValue> CloneDictionaryCloningValues<TKey, TValue>
-		(Dictionary<TKey, TValue> original) where TValue : ICloneable
-		{
-			Dictionary<TKey, TValue> ret = new Dictionary<TKey, TValue> (original.Count,
-				                               original.Comparer);
-			foreach (KeyValuePair<TKey, TValue> entry in original) {
-				ret.Add (entry.Key, (TValue)entry.Value.Clone ());
-			}
-			return ret;
-		}
-
 		private static void ExecuteProcedureExpansion (Quadruple q)
 		{
 			Procedure p = q.call;
@@ -297,8 +320,8 @@ namespace GraphicFoo
 				                  );
 				quadruples.Add (i, clone);
 			}
-//			DebugQuadruples (quadruples);
 			programStack.Push (quadruples);
+//			DebugQuadruples (quadruples);
 			return;
 
 //			Dictionary<int, Quadruple> quadruples = 
