@@ -63,6 +63,19 @@ namespace GraphicFoo
 		private Quadruple (
 			Operators op, 
 			Variable v1, 
+			Procedure call)
+		{
+			this.op = op;
+			this.v1 = v1;
+			this.v2 = null;
+			this.call = call;
+			this.target = null;
+			this.jumpIndex = -1;
+		}
+
+		private Quadruple (
+			Operators op, 
+			Variable v1, 
 			Variable v2, 
 			Variable target)
 		{
@@ -140,6 +153,17 @@ namespace GraphicFoo
 			Variable target = ProgramMemory.FindVariable (scope, targetId);
 			Quadruple quadruple = 
 				new Quadruple (Operators.Assignation, variable, target);
+			PushQuadruple (quadruple);
+		}
+
+		public static void CreateReturnAssignationQuadruple (
+			string variableId, 
+			string targetId)
+		{
+			Procedure variable = ProgramMemory.ReadProcedure (variableId);
+			Variable target = ProgramMemory.FindVariable (scope, targetId);
+			Quadruple quadruple = 
+				new Quadruple (Operators.ReturnAssignation, target, variable);
 			PushQuadruple (quadruple);
 		}
 

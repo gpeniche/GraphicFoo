@@ -15,6 +15,7 @@ namespace GraphicFoo
 		private static Stack<int> goSubJumps;
 		private static Stack<Dictionary<int, Quadruple>> programStack;
 		private static Dictionary<int, Quadruple> exec;
+		private static Stack<Variable> returns;
 
 		private static bool end;
 
@@ -41,6 +42,7 @@ namespace GraphicFoo
 			programStack.Push (Quadruple.quadruples);
 //			goSubJumps.Push (startOfMain);
 			exec = new Dictionary<int, Quadruple> ();
+			returns = new Stack<Variable> ();
 			end = false;
 			if (startOfMain == -1) {
 				Console.WriteLine ("Execution error: Main procedure not found");
@@ -74,6 +76,11 @@ namespace GraphicFoo
 				switch (q.op) {
 				case Operators.Assignation:
 					q.target.value = q.v1.value;
+					index++;
+					break;
+				case Operators.ReturnAssignation:
+					Console.WriteLine ("returns: " + returns.Peek ());
+					q.v1.value = returns.Pop ().value;
 					index++;
 					break;
 				case Operators.Param:
@@ -145,6 +152,12 @@ namespace GraphicFoo
 					index++;
 					break;
 				case Operators.Return:
+
+					if (q.v1 != null) {
+						returns.Push (q.v1);
+						Console.WriteLine ("ret val: " + (q.v1.value as float?));
+					}
+
 					if (goSubJumps.Count == 0) {
 						// TODO End Execution
 						Console.WriteLine ("ending");

@@ -7,6 +7,7 @@ namespace GraphicFoo
 		#region Assignment
 
 		Assignation,
+		ReturnAssignation,
 		#endregion
 
 		#region Additive
