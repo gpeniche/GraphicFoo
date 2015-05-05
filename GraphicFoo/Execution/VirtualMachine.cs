@@ -28,9 +28,9 @@ namespace GraphicFoo
 
 		private static void Foo ()
 		{
-			Console.WriteLine ("====");
-			Console.WriteLine (goSubJumps.Count);
-			Console.WriteLine (programStack.Count);
+//			Console.WriteLine ("====");
+//			Console.WriteLine (goSubJumps.Count);
+//			Console.WriteLine (programStack.Count);
 //			Console.WriteLine (exec.Count);
 		}
 
@@ -60,7 +60,7 @@ namespace GraphicFoo
 			int start)
 		{
 			if (end) {
-				Console.WriteLine ("ended");
+//				Console.WriteLine ("ended");
 				return;
 			}
 			int index = start;
@@ -70,16 +70,16 @@ namespace GraphicFoo
 					return;
 				}
 				Quadruple q = quadruples [index];
-				Console.WriteLine (
-					"Executing [" + index + "/" + (quadruples.Count - 1) + "]"
-				);
+//				Console.WriteLine (
+//					"Executing [" + index + "/" + (quadruples.Count - 1) + "]"
+//				);
 				switch (q.op) {
 				case Operators.Assignation:
 					q.target.value = q.v1.value;
 					index++;
 					break;
 				case Operators.ReturnAssignation:
-					Console.WriteLine ("returns: " + returns.Peek ());
+//					Console.WriteLine ("returns: " + returns.Peek ());
 					q.v1.value = returns.Pop ().value;
 					index++;
 					break;
@@ -146,7 +146,7 @@ namespace GraphicFoo
 				case Operators.GoSub:
 					goSubJumps.Push (index);
 					q.call.callCount++;
-					Console.WriteLine ("Gosub from stack level: " + programStack.Count);
+//					Console.WriteLine ("Gosub from stack level: " + programStack.Count);
 					exec = programStack.Peek ();
 					Run (exec, q.call.index);
 					index++;
@@ -155,12 +155,12 @@ namespace GraphicFoo
 
 					if (q.v1 != null) {
 						returns.Push (q.v1);
-						Console.WriteLine ("ret val: " + (q.v1.value as float?));
+//						Console.WriteLine ("ret val: " + (q.v1.value as float?));
 					}
 
 					if (goSubJumps.Count == 0) {
 						// TODO End Execution
-						Console.WriteLine ("ending");
+//						Console.WriteLine ("ending");
 						end = true;
 						index++;
 						try {
@@ -172,7 +172,7 @@ namespace GraphicFoo
 					} else {
 						index = goSubJumps.Pop () + 1;
 //						clones.Pop ();
-						Console.WriteLine ("Returning from stack level: " + programStack.Count);
+//						Console.WriteLine ("Returning from stack level: " + programStack.Count);
 						Run (programStack.Pop (), index);
 					}
 					break;
@@ -185,7 +185,7 @@ namespace GraphicFoo
 					break;
 				}
 				if (end) {
-					Console.WriteLine ("kill switch");
+//					Console.WriteLine ("kill switch");
 					return;
 				}
 			}
@@ -203,7 +203,7 @@ namespace GraphicFoo
 			float? v2Value = CastToNumeric (q.v2);
 
 			if (v1Value == null || v2Value == null) {
-				Console.WriteLine ("Execution error: Number cast failed");
+//				Console.WriteLine ("Execution error: Number cast failed");
 				//TODO return?
 			}
 
@@ -224,10 +224,10 @@ namespace GraphicFoo
 				try {
 					q.target.value = v1Value / v2Value;
 				} catch (DivideByZeroException) {
-					Console.WriteLine (
-						"Execution error: Division of {0} by zero.", 
-						v1Value
-					);
+//					Console.WriteLine (
+//						"Execution error: Division of {0} by zero.", 
+//						v1Value
+//					);
 				}
 				break;
 			}
@@ -239,7 +239,7 @@ namespace GraphicFoo
 			float? v2Value = CastToNumeric (q.v2);
 
 			if (v1Value == null || v2Value == null) {
-				Console.WriteLine ("Execution error: Number cast failed");
+//				Console.WriteLine ("Execution error: Number cast failed");
 				//TODO return?
 			}
 
@@ -280,7 +280,7 @@ namespace GraphicFoo
 			bool v1, v2;
 
 			if (v1Value == null || v2Value == null) {
-				Console.WriteLine ("Execution error: Boolean cast failed");
+//				Console.WriteLine ("Execution error: Boolean cast failed");
 				//TODO return?
 			}
 
@@ -303,7 +303,7 @@ namespace GraphicFoo
 			bool v1;
 
 			if (v1Value == null) {
-				Console.WriteLine ("Execution error: Boolean cast failed");
+//				Console.WriteLine ("Execution error: Boolean cast failed");
 				//TODO return?
 			}
 
@@ -351,11 +351,11 @@ namespace GraphicFoo
 //				if (quadruple.op != Operators.Param) {
 //				Console.WriteLine (pair.Key);
 				if (quadruple.v1 != null && quadruple.v1.name == "x" && quadruple.op == Operators.Param) {
-					Console.WriteLine (quadruple.v1.value as float?);
+//					Console.WriteLine (quadruple.v1.value as float?);
 				}
 				quadruple.v1 = CloneOrFindVariable (quadruple.v1, quadruple.op == Operators.Param);
 				if (quadruple.v1 != null && quadruple.v1.name == "x" && quadruple.op == Operators.Param) {
-					Console.WriteLine (quadruple.v1.value as float?);
+//					Console.WriteLine (quadruple.v1.value as float?);
 				}
 				quadruple.v2 = CloneOrFindVariable (quadruple.v2);
 //				if (quadruple.op != Operators.Param)
@@ -408,7 +408,7 @@ namespace GraphicFoo
 //						Console.WriteLine ("======\n" + clones.ToString() + "\n=======");
 					} else {
 						if (read.name == "x") {
-							Console.WriteLine ("read val: " + (read.value as float?));
+//							Console.WriteLine ("read val: " + (read.value as float?));
 						}
 						return read;
 					}
