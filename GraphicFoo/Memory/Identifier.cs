@@ -2,8 +2,16 @@
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Identifier.
+	/// </summary>
 	public abstract class Identifier
 	{
+		/// <summary>
+		/// Parses a type to a GraphicFooType.
+		/// </summary>
+		/// <returns>The type.</returns>
+		/// <param name="type">Type.</param>
 		protected GraphicFooType ParseType (string type) 
 		{
 			try {

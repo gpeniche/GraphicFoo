@@ -3,12 +3,18 @@ using System.Collections;
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Association rules.
+	/// </summary>
 	public static class AssociationRules
 	{
 
 		const int varCount = 5;
 		static Hashtable[,] rules;
 
+		/// <summary>
+		/// Initialize this instance.
+		/// </summary>
 		public static void Initialize ()
 		{
 			rules = new Hashtable[varCount, varCount];
@@ -192,6 +198,13 @@ namespace GraphicFoo
 
 		}
 
+		/// <summary>
+		/// Gets the type of the operation by searching on the rules hash.
+		/// </summary>
+		/// <returns>The operation type.</returns>
+		/// <param name="op">Op.</param>
+		/// <param name="t1">T1.</param>
+		/// <param name="t2">T2.</param>
 		public static GraphicFooType GetOperationType (
 			Operators op,
 			GraphicFooType t1,

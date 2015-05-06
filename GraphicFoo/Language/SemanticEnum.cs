@@ -2,6 +2,9 @@
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Semantic enum.
+	/// </summary>
 	public enum SemanticEnum
 	{
 		Variable,
