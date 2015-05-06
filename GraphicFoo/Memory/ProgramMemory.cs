@@ -145,11 +145,11 @@ namespace GraphicFoo
 				return variable;
 			}
 
-//			Console.WriteLine (
-//				"Variable {0} not found on scope {1}", 
-//				id, 
-//				(scope == null) ? "global" : scope.name
-//			);
+			Console.WriteLine (
+				"Variable {0} not found on scope {1}", 
+				id, 
+				(scope == null) ? "global" : scope.name
+			);
 			return variable;
 		}
 

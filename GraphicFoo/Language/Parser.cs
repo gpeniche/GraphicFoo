@@ -349,6 +349,10 @@ namespace GraphicFoo
 			Quadruple.CreatePrintQuadruple (temp);
 		}
 
+		/// <summary>
+		/// Parser function that generates function call quadruples.
+		/// While checking semantics.
+		/// </summary>
 		void CallFunction ()
 		{
 			Expect ((int)TokenEnum.Function);
@@ -387,7 +391,6 @@ namespace GraphicFoo
 				Quadruple.CreateReturnAssignationQuadruple (id, varId);
 
 			}
-
 			Expect ((int)TokenEnum.Semicolon);
 		}
 
