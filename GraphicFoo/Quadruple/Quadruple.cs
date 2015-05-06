@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Quadruple.
+	/// </summary>
 	public class Quadruple
 	{
 		public static Procedure scope = null;
@@ -23,6 +26,11 @@ namespace GraphicFoo
 
 		#region Class Methods
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphicFoo.Quadruple"/> class.
+		/// </summary>
+		/// <param name="op">Op.</param>
+		/// <param name="call">Call.</param>
 		private Quadruple (
 			Operators op,
 			Procedure call)
@@ -35,6 +43,11 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphicFoo.Quadruple"/> class.
+		/// </summary>
+		/// <param name="op">Op.</param>
+		/// <param name="v1">V1.</param>
 		private Quadruple (
 			Operators op,
 			Variable v1)
@@ -47,6 +60,12 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphicFoo.Quadruple"/> class.
+		/// </summary>
+		/// <param name="op">Op.</param>
+		/// <param name="v1">V1.</param>
+		/// <param name="target">Target.</param>
 		private Quadruple (
 			Operators op, 
 			Variable v1, 
@@ -60,6 +79,12 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphicFoo.Quadruple"/> class.
+		/// </summary>
+		/// <param name="op">Op.</param>
+		/// <param name="v1">V1.</param>
+		/// <param name="call">Call.</param>
 		private Quadruple (
 			Operators op, 
 			Variable v1, 
@@ -73,6 +98,13 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphicFoo.Quadruple"/> class.
+		/// </summary>
+		/// <param name="op">Op.</param>
+		/// <param name="v1">V1.</param>
+		/// <param name="v2">V2.</param>
+		/// <param name="target">Target.</param>
 		private Quadruple (
 			Operators op, 
 			Variable v1, 
@@ -87,6 +119,16 @@ namespace GraphicFoo
 			this.jumpIndex = -1;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GraphicFoo.Quadruple"/> class.
+		/// Only public method, used for memory allocation
+		/// </summary>
+		/// <param name="op">Op.</param>
+		/// <param name="v1">V1.</param>
+		/// <param name="v2">V2.</param>
+		/// <param name="target">Target.</param>
+		/// <param name="call">Call.</param>
+		/// <param name="jumpIndex">Jump index.</param>
 		public Quadruple (
 			Operators op, 
 			Variable v1, 
@@ -103,6 +145,10 @@ namespace GraphicFoo
 			this.jumpIndex = jumpIndex;
 		}
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents the current <see cref="GraphicFoo.Quadruple"/>.
+		/// </summary>
+		/// <returns>A <see cref="System.String"/> that represents the current <see cref="GraphicFoo.Quadruple"/>.</returns>
 		public override string ToString ()
 		{
 			return op.ToString () + " " +
@@ -113,6 +159,9 @@ namespace GraphicFoo
 			((jumpIndex != -1) ? jumpIndex.ToString () : "");
 		}
 
+		/// <summary>
+		/// Debugs the quadruples.
+		/// </summary>
 		public static void DebugQuadruples ()
 		{
 			string output = "\n=====\nGenerated Quadruples\n=====";
@@ -126,6 +175,9 @@ namespace GraphicFoo
 
 		#region Static Methods
 
+		/// <summary>
+		/// Initialize this instance.
+		/// </summary>
 		public static void Initialize ()
 		{
 			// Stacks
@@ -138,6 +190,10 @@ namespace GraphicFoo
 			AssociationRules.Initialize ();
 		}
 
+		/// <summary>
+		/// Pushes a quadruple to the main dictionary.
+		/// </summary>
+		/// <param name="quaduple">Quaduple.</param>
 		public static void PushQuadruple (Quadruple quaduple)
 		{
 			quadruples.Add (quadruples.Count, quaduple);
@@ -145,6 +201,11 @@ namespace GraphicFoo
 
 		#region Assigantion Quadruples
 
+		/// <summary>
+		/// Creates an assignation quadruple.
+		/// </summary>
+		/// <param name="variableId">Variable identifier.</param>
+		/// <param name="targetId">Target identifier.</param>
 		public static void CreateAssignationQuadruple (
 			string variableId, 
 			string targetId)
@@ -156,6 +217,11 @@ namespace GraphicFoo
 			PushQuadruple (quadruple);
 		}
 
+		/// <summary>
+		/// Creates a return assignation quadruple.
+		/// </summary>
+		/// <param name="variableId">Variable identifier.</param>
+		/// <param name="targetId">Target identifier.</param>
 		public static void CreateReturnAssignationQuadruple (
 			string variableId, 
 			string targetId)
@@ -171,38 +237,51 @@ namespace GraphicFoo
 
 		#region Expression Quadruples
 
+		/// <summary>
+		/// Creates an expression quadruple.
+		/// </summary>
+		/// <param name="operators">Operators.</param>
 		private static void CreateExpressionQuadruple (
 			Operators[] operators)
 		{
+			// Get index of fake bottom
 			int index = (hierarchyStack.Count > 0) ? hierarchyStack.Peek () : 0;
 			if (operatorStack.Count > index &&
 			    operators.Contains (operatorStack.Peek ())) {
+				// Pop types
 				GraphicFooType t2 = typeStack.Pop ();
 				GraphicFooType t1 = typeStack.Pop ();
 
 				if (t1 != GraphicFooType.Invalid &&
 				    t2 != GraphicFooType.Invalid) {
 
+					// Pop operands
 					string id2 = operandStack.Pop ();
 					string id1 = operandStack.Pop ();
 
+					// Find variables
 					Variable v1 = ProgramMemory.FindVariable (scope, id1);
 					Variable v2 = ProgramMemory.FindVariable (scope, id2);
 
+					// Pop operator
 					Operators op = operatorStack.Pop ();
 
+					// Check association rules
 					GraphicFooType resultingType = 
 						AssociationRules.GetOperationType (op, t1, t2);
 
+					// Create new temporary variable
 					Variable temp;
 					if (scope == null) {
 						temp = ProgramMemory.AddGlobalTemporary (resultingType);
 					} else {
 						temp = scope.AddTemporaryVariable (resultingType);
 					}
+					// Push temp
 					operandStack.Push (temp.name);
 					typeStack.Push (temp.type);
 
+					// Create quadruple
 					Quadruple qudruple = new Quadruple (
 						                     op, 
 						                     v1, 
@@ -214,6 +293,9 @@ namespace GraphicFoo
 			} 
 		}
 
+		/// <summary>
+		/// Creates an additive quadruple.
+		/// </summary>
 		public static void CreateAdditiveQuadruple ()
 		{
 			CreateExpressionQuadruple (
@@ -224,6 +306,9 @@ namespace GraphicFoo
 				});
 		}
 
+		/// <summary>
+		/// Creates an multiplicative quadruple.
+		/// </summary>
 		public static void CreateMultiplicativeQuadruple ()
 		{
 			CreateExpressionQuadruple (
@@ -234,6 +319,9 @@ namespace GraphicFoo
 				});
 		}
 
+		/// <summary>
+		/// Creates a relational quadruple.
+		/// </summary>
 		public static void CreateRelationalQuadruple ()
 		{
 			CreateExpressionQuadruple (
@@ -249,6 +337,11 @@ namespace GraphicFoo
 
 		#region Jump Quadruples
 
+		/// <summary>
+		/// Creates a jump quadruple.
+		/// </summary>
+		/// <param name="goTo">Go to.</param>
+		/// <param name="condition">Condition.</param>
 		private static void CreateJumpQuadruple (
 			Operators goTo, 
 			Variable condition = null)
@@ -257,11 +350,19 @@ namespace GraphicFoo
 			PushQuadruple (quadruple);
 		}
 
+		/// <summary>
+		/// Pushes a jump.
+		/// </summary>
 		public static void PushJump ()
 		{
 			jumpStack.Push (quadruples.Count - 1);
 		}
 
+		/// <summary>
+		/// Pops a jump.
+		/// </summary>
+		/// <returns><c>true</c>, if jump was poped, <c>false</c> otherwise.</returns>
+		/// <param name="offset">Offset.</param>
 		public static bool PopJump (int offset = 0)
 		{
 			try {
@@ -273,6 +374,9 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Pops two jumps, used on if-else blocks.
+		/// </summary>
 		public static void PopTwoJumps ()
 		{
 			int firstJump = jumpStack.Pop ();
@@ -281,11 +385,18 @@ namespace GraphicFoo
 			quadruples [quadruples.Count - 1].jumpIndex = secondJump + 1;
 		}
 
+		/// <summary>
+		/// Creates a goto quadruple.
+		/// </summary>
 		public static void CreateGotoQuadruple ()
 		{
 			CreateJumpQuadruple (Operators.Goto);
 		}
 
+		/// <summary>
+		/// Creates a goto false quadruple.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
 		public static void CreateGotoFalseQuadruple (string id)
 		{
 			Variable condition = ProgramMemory.FindVariable (scope, id);
@@ -297,10 +408,16 @@ namespace GraphicFoo
 
 		#region Procedure Quadruples
 
+		/// <summary>
+		/// Matchs the function parameters.
+		/// </summary>
+		/// <param name="procedure">Procedure.</param>
+		/// <param name="parameters">Parameters.</param>
 		private static void MatchParameters (
 			Procedure procedure, 
 			VariableBlock parameters)
 		{
+			// Check parameter count consistency
 			int procedureParameterCount = procedure.GetParameterCount ();
 			int parameterCallCount = parameters.GetCount ();
 
@@ -316,7 +433,8 @@ namespace GraphicFoo
 			List<Variable> parameterList = parameters.ToList ();
 			List<Variable> procedureParameterList = 
 				procedure.GetParameters ().ToList ();
-			
+
+			// Assign parameters
 			for (int i = 0; i < parameterCallCount; i++) {
 				if (parameterList [i].type == procedureParameterList [i].type) {
 					// TODO define paramX
@@ -343,12 +461,18 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Creates a return quadruple.
+		/// </summary>
+		/// <returns>The return quadruple.</returns>
+		/// <param name="id">Identifier.</param>
 		public static SemanticEnum CreateReturnQuadruple (string id)
 		{
 			Variable returnVariable = null;
 			if (id != "") {
 				returnVariable = ProgramMemory.FindVariable (scope, id);
 			}
+			// Validate return type
 			SemanticEnum returnStatus = Semantics.ValidateReturn (scope.type, returnVariable);
 			if (returnStatus == SemanticEnum.ValidReturn) {
 				scope.SetEnd (Quadruple.quadruples.Count);
@@ -359,16 +483,22 @@ namespace GraphicFoo
 			return returnStatus;
 		}
 
+		/// <summary>
+		/// Creates the function call quadruples.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="parameters">Parameters.</param>
 		public static void CreateFunctionCallQuadruples (
 			string id, 
 			VariableBlock parameters)
 		{
 			Procedure procedure = ProgramMemory.ReadProcedure (id);
+			// Expand procedure
 			Quadruple expand = new Quadruple (Operators.Expand, procedure);
 			PushQuadruple (expand);
-
+			// Assign parameters
 			MatchParameters (procedure, parameters);
-
+			// Go subroutine
 			Quadruple goSub = new Quadruple (Operators.GoSub, procedure);
 			PushQuadruple (goSub);
 		}
@@ -377,6 +507,10 @@ namespace GraphicFoo
 
 		#region Other Quadruples
 
+		/// <summary>
+		/// Creates a print quadruple.
+		/// </summary>
+		/// <param name="exprId">Expr identifier.</param>
 		public static void CreatePrintQuadruple (string exprId)
 		{
 			Variable expression = ProgramMemory.FindVariable (scope, exprId);

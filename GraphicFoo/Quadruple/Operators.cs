@@ -2,6 +2,9 @@
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Operators enum.
+	/// </summary>
 	public enum Operators
 	{
 		#region Assignment

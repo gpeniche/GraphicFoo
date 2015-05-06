@@ -2,6 +2,9 @@
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Token enum.
+	/// </summary>
 	public enum TokenEnum
 	{
 		EOF,

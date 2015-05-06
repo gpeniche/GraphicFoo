@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace GraphicFoo
 {
+	/// <summary>
+	/// Virtual machine.
+	/// </summary>
 	public static class VirtualMachine
 	{
 
@@ -21,6 +24,9 @@ namespace GraphicFoo
 
 		private static bool end;
 
+		/// <summary>
+		/// Executes the virtual machine.
+		/// </summary>
 		public static void Execute ()
 		{
 			Load ();
@@ -36,6 +42,9 @@ namespace GraphicFoo
 //			Console.WriteLine (exec.Count);
 		}
 
+		/// <summary>
+		/// Load this instance.
+		/// </summary>
 		private static void Load ()
 		{
 			goSubJumps = new Stack<int> ();
@@ -53,11 +62,19 @@ namespace GraphicFoo
 			LoadConstants ();
 		}
 
+		/// <summary>
+		/// Loads the program constants.
+		/// </summary>
 		private static void LoadConstants ()
 		{
 			ProgramMemory.LoadConstants ();
 		}
 
+		/// <summary>
+		/// Run the specified quadruples at start.
+		/// </summary>
+		/// <param name="quadruples">Quadruples.</param>
+		/// <param name="start">Start.</param>
 		private static void Run (
 			Dictionary<int, Quadruple> quadruples, 
 			int start)
@@ -200,6 +217,10 @@ namespace GraphicFoo
 
 		#region add
 
+		/// <summary>
+		/// Executes an arithmetic operation.
+		/// </summary>
+		/// <param name="q">Q.</param>
 		private static void ExecuteArithmeticOperation (Quadruple q)
 		{
 			float? v1Value = CastToNumeric (q.v1);
@@ -236,6 +257,10 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Executes a relational operation.
+		/// </summary>
+		/// <param name="q">Q.</param>
 		private static void ExecuteRelationalOperation (Quadruple q)
 		{
 			float? v1Value = CastToNumeric (q.v1);
@@ -256,6 +281,10 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Executes an equality operation.
+		/// </summary>
+		/// <param name="q">Q.</param>
 		private static void ExecuteEqualityOperation (Quadruple q)
 		{
 			// TODO sanitize nulls
@@ -275,6 +304,10 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Executes a logical operation.
+		/// </summary>
+		/// <param name="q">Q.</param>
 		private static void ExecuteLogicalOperation (Quadruple q)
 		{
 			bool? v1Value = CastToBoolean (q.v1);
@@ -300,6 +333,12 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Executes a goto operation.
+		/// </summary>
+		/// <returns><c>true</c>, if goto operation was executed, <c>false</c> otherwise.</returns>
+		/// <param name="q">Q.</param>
+		/// <param name="condition">If set to <c>true</c> condition.</param>
 		private static bool ExecuteGotoOperation (Quadruple q, bool condition)
 		{
 			bool? v1Value = CastToBoolean (q.v1);
@@ -316,6 +355,10 @@ namespace GraphicFoo
 
 		#endregion
 
+		/// <summary>
+		/// Executes a procedure expansion.
+		/// </summary>
+		/// <param name="q">Q.</param>
 		private static void ExecuteProcedureExpansion (Quadruple q)
 		{
 			Procedure p = q.call;
@@ -397,6 +440,12 @@ namespace GraphicFoo
 			programStack.Push (quadruples);
 		}
 
+		/// <summary>
+		/// Clones or finds a variable to expand or allocate memory.
+		/// </summary>
+		/// <returns>The or find variable.</returns>
+		/// <param name="v">V.</param>
+		/// <param name="withValue">If set to <c>true</c> with value.</param>
 		private static Variable CloneOrFindVariable (Variable v, bool withValue = false)
 		{
 			if (v != null) {
@@ -422,6 +471,10 @@ namespace GraphicFoo
 			return v;
 		}
 
+		/// <summary>
+		/// Prints program output.
+		/// </summary>
+		/// <param name="q">Q.</param>
 		private static void Print (Quadruple q)
 		{
 			Type printType = q.v1.GetNativeType ();
@@ -442,6 +495,11 @@ namespace GraphicFoo
 
 		#region Casting
 
+		/// <summary>
+		/// Casts to boolean.
+		/// </summary>
+		/// <returns>The to boolean.</returns>
+		/// <param name="v">V.</param>
 		private static bool? CastToBoolean (Variable v)
 		{
 			Type type = v.GetNativeType ();
@@ -468,6 +526,11 @@ namespace GraphicFoo
 			}
 		}
 
+		/// <summary>
+		/// Casts to numeric.
+		/// </summary>
+		/// <returns>The to numeric.</returns>
+		/// <param name="v">V.</param>
 		private static float? CastToNumeric (Variable v)
 		{
 			Type type = v.GetNativeType ();
@@ -496,6 +559,10 @@ namespace GraphicFoo
 
 		#region Debug
 
+		/// <summary>
+		/// Debugs quadruples.
+		/// </summary>
+		/// <param name="quadruples">Quadruples.</param>
 		private static void DebugQuadruples (
 			Dictionary<int, Quadruple> quadruples)
 		{
