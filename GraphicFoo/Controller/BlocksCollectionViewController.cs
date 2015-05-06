@@ -270,13 +270,43 @@ namespace GraphicFoo
 		void Custom ()
 		{
 			// Put all your custom menu behavior code here
-			new UIAlertView (
-				blockCell.Name,
-				blockCell.Explanation,
-				null,
+			UIAlertController actionSheetAlert = UIAlertController.Create (
+				                                     blockCell.Name,
+				                                     blockCell.Explanation,
+				                                     UIAlertControllerStyle.ActionSheet
+			                                     );
+
+			// Add Actions
+			actionSheetAlert.AddAction (UIAlertAction.Create (
 				"Got it!",
+				UIAlertActionStyle.Default,
 				null
-			).Show ();
+			));
+
+			actionSheetAlert.AddAction (UIAlertAction.Create (
+				"Cancel",
+				UIAlertActionStyle.Cancel,
+				null
+			));
+
+			// Required for iPad - You must specify a source for the Action Sheet since it is
+			// displayed as a popover
+			UIPopoverPresentationController presentationPopover = 
+				actionSheetAlert.PopoverPresentationController;
+			if (presentationPopover != null) {
+				presentationPopover.SourceView = introController.View;
+				presentationPopover.SourceRect = new CGRect (
+					introController.View.Frame.Width / 2,
+					introController.View.Frame.Height / 2,
+					0,
+					0
+				);
+				presentationPopover.BackgroundColor = UIColor.DarkGray;
+				presentationPopover.PermittedArrowDirections = 0;
+			}
+			// Display the alert
+			actionSheetAlert.View.TintColor = UIColor.FromRGB (191, 222, 227);
+			introController.PresentViewController (actionSheetAlert, true, null);
 		}
 
 		public override bool CanPerform (Selector action, NSObject withSender)

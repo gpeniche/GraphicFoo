@@ -26,7 +26,8 @@ namespace GraphicFoo
 
 		public string Explanation {
 			get {
-				return "endWhile";
+				return "Statement that closes and defines where your" +
+				" function ends";
 			}
 		}
 

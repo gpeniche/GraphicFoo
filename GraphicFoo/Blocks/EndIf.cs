@@ -26,7 +26,8 @@ namespace GraphicFoo
 
 		public string Explanation {
 			get {
-				return "EndLoop";
+				return "Statement that closes and defines where your" +
+				" function ends";
 			}
 		}
 
