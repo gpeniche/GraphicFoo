@@ -483,6 +483,7 @@ namespace GraphicFoo
 				presentationPopover.BackgroundColor = UIColor.DarkGray;
 				presentationPopover.PermittedArrowDirections = UIPopoverArrowDirection.Up;
 			}
+			actionSheetAlert.View.TintColor = UIColor.FromRGB (191, 222, 227);
 			// Display the alert
 			this.PresentViewController (actionSheetAlert, true, null);
 		}
