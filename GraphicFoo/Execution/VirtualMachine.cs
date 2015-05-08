@@ -69,10 +69,8 @@ namespace GraphicFoo
 			Dictionary<int, Quadruple> quadruples, 
 			int start)
 		{
-			if (end) {
-				Console.WriteLine ("Ended");
-				return;
-			}
+		
+			end = false;
 			int index = start;
 
 			while (true) {
@@ -89,7 +87,11 @@ namespace GraphicFoo
 					index++;
 					break;
 				case Operators.ReturnAssignation:
-					q.v1.value = returns.Pop ().value;
+					try {
+						q.v1.value = returns.Pop ().value;
+						Console.WriteLine (q.v1.value as float?);
+					} catch (InvalidOperationException) {
+					}
 					index++;
 					break;
 				case Operators.Param:
@@ -165,7 +167,7 @@ namespace GraphicFoo
 					index++;
 					break;
 				}
-				if (end) {
+				if (end && index == (quadruples.Count)) {
 					Console.WriteLine ("kill switch");
 					return;
 				}
@@ -175,8 +177,6 @@ namespace GraphicFoo
 		#endregion
 
 		#region Operations
-
-		#region add
 
 		/// <summary>
 		/// Executes an arithmetic operation.
@@ -290,8 +290,6 @@ namespace GraphicFoo
 			return v1 == condition;
 		}
 
-		#endregion
-
 		/// <summary>
 		/// Executes a procedure expansion.
 		/// </summary>
@@ -361,9 +359,9 @@ namespace GraphicFoo
 			} else if (printType == typeof(bool)) {
 				output += "Program Output: " + (q.v1.value as bool?) + "\n";
 				Console.WriteLine ("Program Output: " + (q.v1.value as bool?));
-				output += "Program Output: " + (q.v1.value as string) + "\n";
 			} else if (printType == typeof(string)) {
 				Console.WriteLine ("Program Output: " + (q.v1.value as string));
+				output += "Program Output: " + (q.v1.value as string) + "\n";
 			}
 		}
 
